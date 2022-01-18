@@ -17,13 +17,17 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+  private SendableChooser<Command> m_autonomousChooser = new SendableChooser<>();
 
+  // The robot's subsystems and commands are defined here...
   
+  private final Command m_defaultAutonomous = new PrintCommand("No Autonomous Selected");
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    configureAutonomousRoutines();
   }
 
   /**
@@ -33,6 +37,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {}
+  /**Configures the autonomous sendable chooser */
+  private void configureAutonomousRoutines(){
+    m_autonomousChooser.setDefaultOption("NO AUTONOMOUS", m_defaultAutonomous);
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -41,6 +49,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new PrintCommand("No autonomous Selected");
+    return m_autonomousChooser.getSelected();
   }
 }
