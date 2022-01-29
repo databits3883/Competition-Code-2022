@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import static frc.robot.Constants.ClimbConstants.*;
+
+
 public class ClimbArm extends SubsystemBase {
   final MotorController m_armLengthWinchMotor;
   final MotorController m_armAngleWinchMotor;
@@ -34,10 +37,33 @@ public class ClimbArm extends SubsystemBase {
   double armLengthTarget;
   double armAngleTarget;
 
-
+  double currentAngleMeasurement;
+  double lastAngleMeasurement;
+  double lastAngleMeasureTime;
 
   /** Creates a new ClimbArm. */
   public ClimbArm() {}
+
+  public void setTargetArmLength(double length){
+    armAngleTarget = length;
+  }
+  public void setAngleTarget(double angle){
+    armAngleTarget = angle;
+  }
+
+  public double measureArmLength(){
+    return m_armLengthEncoder.getDistance();
+  }
+
+  public double measureArmAngle(){
+
+    double winchLength = m_armAngleEncoder.getDistance();
+
+    return Math.acos(
+      (ARM_HEIGHT_TO_WINCH*ARM_HEIGHT_TO_WINCH + ARM_LENGTH_TO_WINCH*ARM_LENGTH_TO_WINCH - winchLength*winchLength)
+      / (2*ARM_LENGTH_TO_WINCH*ARM_HEIGHT_TO_WINCH)
+    );
+  }
 
   @Override
   public void periodic() {
@@ -46,7 +72,7 @@ public class ClimbArm extends SubsystemBase {
     TrapezoidProfile.State targetAngle = new TrapezoidProfile.State(armAngleTarget,0);
     TrapezoidProfile.State targetLength = new TrapezoidProfile.State(armLengthTarget,0);
     //measure current states
-    TrapezoidProfile.State currentAngle = new TrapezoidProfile.State(m_armAngleEncoder.getDistance(),m_armAngleEncoder.getRate());
+    TrapezoidProfile.State currentAngle = new TrapezoidProfile.State(measureArmAngle(),m_armAngleEncoder.getRate());
     TrapezoidProfile.State currentLength = new TrapezoidProfile.State(m_armLengthEncoder.getDistance(),m_armLengthEncoder.getRate());
     //create new profiles based on current state and target
     m_armAngleProfile = new TrapezoidProfile(m_armAngleConstraints,targetAngle,currentAngle);
