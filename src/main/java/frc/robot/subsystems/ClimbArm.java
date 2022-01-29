@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,6 +22,8 @@ public class ClimbArm extends SubsystemBase {
   final Encoder m_armLengthEncoder;
   final Encoder m_armAngleEncoder;
 
+  final DigitalInput m_springHookDetector;
+
   
 
   /** Creates a new ClimbArm. */
@@ -33,6 +36,9 @@ public class ClimbArm extends SubsystemBase {
 
   public double measureArmWinchLength(){
     return m_armAngleEncoder.getDistance();
+  }
+  public boolean getHookDetector(){
+    return m_springHookDetector.get();
   }
 
   @Override
