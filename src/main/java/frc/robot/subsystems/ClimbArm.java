@@ -21,72 +21,22 @@ public class ClimbArm extends SubsystemBase {
   final Encoder m_armLengthEncoder;
   final Encoder m_armAngleEncoder;
 
-  final ArmFeedforward m_armAngleController;
-  final PIDController m_armAngleAdjustor;
-
-  final ElevatorFeedforward m_armLenghtController;
-  final PIDController m_armLengthAdjustor;
-
-  final TrapezoidProfile.Constraints m_armAngleConstraints;
-  final TrapezoidProfile.Constraints m_armLengthConstraints;
   
-
-  TrapezoidProfile m_armLengthProfile;
-  TrapezoidProfile m_armAngleProfile;
-
-  double armLengthTarget;
-  double armAngleTarget;
-
-  double currentAngleMeasurement;
-  double lastAngleMeasurement;
-  double lastAngleMeasureTime;
 
   /** Creates a new ClimbArm. */
   public ClimbArm() {}
 
-  public void setTargetArmLength(double length){
-    armAngleTarget = length;
-  }
-  public void setAngleTarget(double angle){
-    armAngleTarget = angle;
-  }
 
   public double measureArmLength(){
     return m_armLengthEncoder.getDistance();
   }
 
-  public double measureArmAngle(){
-
-    double winchLength = m_armAngleEncoder.getDistance();
-
-    return Math.acos(
-      (ARM_HEIGHT_TO_WINCH*ARM_HEIGHT_TO_WINCH + ARM_LENGTH_TO_WINCH*ARM_LENGTH_TO_WINCH - winchLength*winchLength)
-      / (2*ARM_LENGTH_TO_WINCH*ARM_HEIGHT_TO_WINCH)
-    );
+  public double measureArmWinchLength(){
+    return m_armAngleEncoder.getDistance();
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    //create final target states
-    TrapezoidProfile.State targetAngle = new TrapezoidProfile.State(armAngleTarget,0);
-    TrapezoidProfile.State targetLength = new TrapezoidProfile.State(armLengthTarget,0);
-    //measure current states
-    TrapezoidProfile.State currentAngle = new TrapezoidProfile.State(measureArmAngle(),m_armAngleEncoder.getRate());
-    TrapezoidProfile.State currentLength = new TrapezoidProfile.State(m_armLengthEncoder.getDistance(),m_armLengthEncoder.getRate());
-    //create new profiles based on current state and target
-    m_armAngleProfile = new TrapezoidProfile(m_armAngleConstraints,targetAngle,currentAngle);
-    m_armLengthProfile = new TrapezoidProfile(m_armLengthConstraints,targetLength,currentLength);
-    //calculate current setpoints 
-    TrapezoidProfile.State referenceAngle = m_armAngleProfile.calculate(0.02);
-    TrapezoidProfile.State referenceLength = m_armLengthProfile.calculate(0.02);
-    //calculate new voltage outputs with feedforward and PID correction
-    double angleVoltage = m_armAngleController.calculate(referenceAngle.position, referenceAngle.velocity)
-      + m_armAngleAdjustor.calculate(currentAngle.position, referenceAngle.position);
-    double lengthVoltage = m_armLenghtController.calculate(referenceLength.velocity)
-      + m_armLengthAdjustor.calculate(currentLength.position, referenceLength.position);
-    //set output voltages
-    m_armAngleWinchMotor.setVoltage(angleVoltage);
-    m_armLengthWinchMotor.setVoltage(lengthVoltage);
+    
   }
 }
