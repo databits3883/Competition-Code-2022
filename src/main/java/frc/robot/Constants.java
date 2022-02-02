@@ -18,4 +18,9 @@ public final class Constants {
         public static final double ARM_HEIGHT_TO_WINCH = 1;
         public static final double ARM_LENGTH_TO_WINCH = 1;
     }
+
+    public static class IntakeConstants{
+        public static final int intakeMotorChannel = 0;
+        public static final double spinSpeed = 0.3;
+    }
 }

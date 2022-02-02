@@ -4,11 +4,25 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
+  private final PWMSparkMax motor = new PWMSparkMax(Constants.IntakeConstants.intakeMotorChannel);
+
   /** Creates a new Intake. */
-  public Intake() {}
+  public Intake() {
+
+  }
+
+  public void setMotorSpeed(double speed){
+    motor.set(speed);
+  }
+
+  
+
+
 
   @Override
   public void periodic() {
