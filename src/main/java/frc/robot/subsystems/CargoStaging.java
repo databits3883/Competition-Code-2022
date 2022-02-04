@@ -16,7 +16,9 @@ public class CargoStaging extends SubsystemBase {
 
 
   /** Creates a new CargoStaging. */
-  public CargoStaging() {}
+  public CargoStaging() {
+    
+  }
 
   public void SetMotorSpeed(int direction){
     motor.set(Constants.StagingConstants.motorSpeed * direction);
