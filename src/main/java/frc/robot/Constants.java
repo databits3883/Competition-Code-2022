@@ -12,8 +12,16 @@ package frc.robot;
  */
 public final class Constants {
     public static class ClimbConstants{
-        public static final double ARM_HEIGHT_TO_WINCH = 1;
-        public static final double ARM_LENGTH_TO_WINCH = 1;
+        public static final int LENGTH_WINCH_CHANNEL = 13;
+        public static final int LENGTH_WINCH_FOLLOWER_CHANNEL = 14;
+
+        public static final int ANGLE_WINCH_CHANNEL = 1;
+        public static final int SPRING_HOOK_SWITCH_CHANNEL = 0;
+
+        public static final double LENGTH_WINCH_GEARING = 1;
+        public static final double LENGTH_WINCH_CIRCUMFRENCE = 1;
+
+        public static final int ANGLE_WINCH_PD_SLOT = 0;
     }
     public static class IntakeConstants{
         public static final int intakeMotorChannel = 0;
