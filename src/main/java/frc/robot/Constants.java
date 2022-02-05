@@ -15,6 +15,7 @@ public final class Constants {
         public static final int LENGTH_WINCH_CHANNEL = 13;
         public static final int LENGTH_WINCH_FOLLOWER_CHANNEL = 14;
 
+
         public static final int ANGLE_WINCH_CHANNEL = 1;
         public static final int SPRING_HOOK_SWITCH_CHANNEL = 0;
 
@@ -23,6 +24,12 @@ public final class Constants {
 
         public static final int ANGLE_WINCH_PD_SLOT = 0;
     }
+
+    public final class LauncherContants{
+        public static final int SPARK_MAX_CHANNEL = 13; //change later
+        public static final double ENCODER_POSITIONAL_CONVERSION = 1/3;
+    }
+    
     public static class IntakeConstants{
         public static final int intakeMotorChannel = 0;
         public static final int RAISE_LOWER_CHANNEL = 1;
