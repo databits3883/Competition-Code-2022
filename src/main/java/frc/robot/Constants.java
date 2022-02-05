@@ -2,6 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
+
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -24,6 +26,8 @@ public final class Constants {
 
         public static final int ANGLE_WINCH_PD_SLOT = 0;
         public static final double WINCH_CURRENT_THRESHOLD = 1; //change later
+
+        public static final double CLIMB_ARM_EXTEND_SPEED = 0.5;
     }
 
     public final class LauncherContants{
