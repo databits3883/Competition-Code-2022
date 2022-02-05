@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.RunIntake;
+import frc.robot.commands.StageCargo;
+import frc.robot.subsystems.CargoStaging;
 import frc.robot.subsystems.Intake;
 
 /**
@@ -28,12 +30,17 @@ public class RobotContainer {
   private final Command m_defaultAutonomous = new PrintCommand("No Autonomous Selected");
   private final Joystick m_stick = new Joystick(0);
   private final Intake m_intake = new Intake();
+  private final CargoStaging m_staging = new CargoStaging();
 
   private final JoystickButton m_intakeButton = new JoystickButton(m_stick, 3);
   private final JoystickButton m_outtakeButton = new JoystickButton(m_stick, 2);
+  private final JoystickButton m_stageInButton = new JoystickButton(m_stick, 4);
+  private final JoystickButton m_stageOutButton = new JoystickButton(m_stick, 5);
 
   private final RunIntake m_takeIn = new RunIntake(m_intake,1);
   private final RunIntake m_takeOut = new RunIntake(m_intake,-1);
+  private final StageCargo m_stageIn = new StageCargo(m_staging, 1,0.4);
+  private final StageCargo m_stageOut = new StageCargo(m_staging, -1,0.4);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -53,6 +60,8 @@ public class RobotContainer {
 
     m_intakeButton.whenHeld(m_takeIn);
     m_outtakeButton.whenHeld(m_takeOut);
+    m_stageInButton.whenHeld(m_stageIn);
+    m_stageOutButton.whenHeld(m_stageOut);
 
   }
   /**Configures the autonomous sendable chooser */
