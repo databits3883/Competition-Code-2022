@@ -30,7 +30,6 @@ public class ClimbArm extends SubsystemBase {
   final CANSparkMax m_lengthWinchFollower;
 
   final RelativeEncoder m_lengthEncoder;
-  final SparkMaxPIDController m_lengthController;
 
   final MotorController m_angleWinchMotor;
 
@@ -47,8 +46,6 @@ public class ClimbArm extends SubsystemBase {
     m_lengthEncoder = m_lengthWinchLeader.getEncoder();
     m_lengthEncoder.setPositionConversionFactor(LENGTH_WINCH_GEARING*LENGTH_WINCH_CIRCUMFRENCE);
 
-    m_lengthController = m_lengthWinchLeader.getPIDController();
-
     m_angleWinchMotor = new Talon(ANGLE_WINCH_CHANNEL);
     m_springHookDetector = new DigitalInput(SPRING_HOOK_SWITCH_CHANNEL);
 
@@ -56,8 +53,8 @@ public class ClimbArm extends SubsystemBase {
 
   }
 
-  public void setArmLengthTarget(double length){
-    m_lengthController.setReference(length, ControlType.kPosition);
+  public void setExtensionSpeed(double speed){
+    m_lengthWinchLeader.set(speed);
   }
   public void setAngleWinchSpeed(double speed){
     m_angleWinchMotor.set(speed);
