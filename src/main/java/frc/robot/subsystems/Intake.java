@@ -4,28 +4,94 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.AsynchronousInterrupt;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import static frc.robot.Constants.IntakeConstants.*;
 
 public class Intake extends SubsystemBase {
-  private final PWMSparkMax motor = new PWMSparkMax(Constants.IntakeConstants.intakeMotorChannel);
+  private final PWMSparkMax takeMotor = new PWMSparkMax(intakeMotorChannel);
+  private final MotorController raiseAndLowerMotor = new PWMSparkMax(RAISE_LOWER_CHANNEL);
+  private final DigitalInput extendLimit = new DigitalInput(EXTEND_LIMIT_CHANNEL);
+  private final DigitalInput retractLimit = new DigitalInput(RETRACT_LIMIT_CHANNEL);
+  private final AsynchronousInterrupt retractStopInterrupt;
+  private final AsynchronousInterrupt extendStopInterrupt; 
+  private boolean isRetracted = true;
+  private boolean isExtended = false;
+
+
+
+
+
+
 
   /** Creates a new Intake. */
   public Intake() {
-
+    retractStopInterrupt = new AsynchronousInterrupt(retractLimit, this::stopRetract);
+    extendStopInterrupt = new AsynchronousInterrupt(extendLimit, this::stopExtend);
   }
 
-  public void setMotorSpeed(double speed){
-    motor.set(speed);
+  public void takeInOurOut(double speed){
+    takeMotor.set(speed);
   }
 
+  public void startExtend(){
+    raiseAndLowerMotor.set(extendSpeed);
+    isExtended = false;
+    isRetracted = false;
+    extendStopInterrupt.enable();
+  }
+  public void startRetract(){
+    raiseAndLowerMotor.set(retractSpeed);
+    isExtended = false;
+    isRetracted = false;
+    retractStopInterrupt.enable();
+  }
   
 
+  public void disableExtendMotor(){
 
+    retractStopInterrupt.disable();
+    extendStopInterrupt.disable();
+    raiseAndLowerMotor.set(0.0);
+  }
+
+  public void disableRetractMotor(){
+
+    retractStopInterrupt.disable();
+    extendStopInterrupt.disable();
+    raiseAndLowerMotor.set(0.0);
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  public boolean getExtended(){
+    return isExtended;
+  }
+
+  public boolean getRetracted(){
+    return isRetracted;
+  }
+
+
+  public void stopExtend(boolean risingEdge, boolean fallingEdge){
+    raiseAndLowerMotor.set(0);
+    isExtended = true;
+    isRetracted = false;
+    extendStopInterrupt.disable();
+
+  }
+  public void stopRetract(boolean risingEdge, boolean fallingEdge){
+    raiseAndLowerMotor.set(0);
+    isExtended = false;
+    isRetracted = true;
+    retractStopInterrupt.disable();
+  }
+
+
 }
