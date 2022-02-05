@@ -17,7 +17,18 @@ public final class Constants {
     }
     public static class IntakeConstants{
         public static final int intakeMotorChannel = 0;
+        public static final int RAISE_LOWER_CHANNEL = 1;
+        public static final int EXTEND_LIMIT_CHANNEL = 0;
+        public static final int RETRACT_LIMIT_CHANNEL=1;
+
         public static final double spinSpeed = 0.3;
+
+        public static final double extendSpeed = 0.3;
+        public static final double retractSpeed = -0.3;
+
+        public static final double EXTENSION_TIMEOUT=3;
+        public static final double RETRACT_TIMEOUT=3;
+
     }
 
     public static class StagingConstants{

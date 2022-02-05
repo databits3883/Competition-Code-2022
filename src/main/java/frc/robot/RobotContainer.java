@@ -39,8 +39,8 @@ public class RobotContainer {
 
   private final RunIntake m_takeIn = new RunIntake(m_intake,1);
   private final RunIntake m_takeOut = new RunIntake(m_intake,-1);
-  private final StageCargo m_stageIn = new StageCargo(m_staging, 1);
-  private final StageCargo m_stageOut = new StageCargo(m_staging, -1);
+  private final StageCargo m_stageIn = new StageCargo(m_staging, 1,0.4);
+  private final StageCargo m_stageOut = new StageCargo(m_staging, -1,0.4);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
