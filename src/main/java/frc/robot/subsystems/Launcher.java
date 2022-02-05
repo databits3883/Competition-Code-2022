@@ -4,14 +4,35 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import static frc.robot.Constants.LauncherContants.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Launcher extends SubsystemBase {
+  private final CANSparkMax m_launchMotor;
+  private final SparkMaxPIDController m_controller;
+  
+  private final RelativeEncoder m_encoder;
   /** Creates a new Launcher. */
-  public Launcher() {}
+  public Launcher() {
+    m_launchMotor = new CANSparkMax(SPARK_MAX_CHANNEL, MotorType.kBrushless);
+    m_controller = m_launchMotor.getPIDController();
+    m_encoder = m_launchMotor.getEncoder();
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+    m_encoder.setPositionConversionFactor(ENCODER_POSITIONAL_CONVERSION);
   }
+
+  public void SetShooterSpeed(double rpm){
+    //m_controller.setReference(rpm, ControlType.kVelocity);
+    m_controller.setReference(rpm, ControlType.kVelocity);
+
+  }
+  
+
+  
 }

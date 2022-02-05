@@ -19,6 +19,11 @@ public final class Constants {
         public static final double ARM_LENGTH_TO_WINCH = 1;
     }
 
+    public final class LauncherContants{
+        public static final int SPARK_MAX_CHANNEL = 13; //change later
+        public static final double ENCODER_POSITIONAL_CONVERSION = 1/3;
+    }
+
     public static class IntakeConstants{
         public static final int intakeMotorChannel = 0;
         public static final double spinSpeed = 0.3;
