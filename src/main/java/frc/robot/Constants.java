@@ -29,6 +29,8 @@ public final class Constants {
 
         public static final double CLIMB_ARM_EXTEND_SPEED = 0.5;
 
+        public static final double HOOK_RELEASE_DISTANCE = 0.1;
+        public static final double FULL_EXTENSION_DISTANCE = 1;
 
         public static final double ARM_DROP_SPEED=0.3;
         public static final double ARM_DROP_TIME=0.5;
