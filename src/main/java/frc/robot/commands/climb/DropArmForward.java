@@ -19,7 +19,7 @@ public class DropArmForward extends CommandBase {
     m_climbArm = climbArm;
 
 
-    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(climbArm);
   }
 
   // Called when the command is initially scheduled.
