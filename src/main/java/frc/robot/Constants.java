@@ -28,6 +28,11 @@ public final class Constants {
         public static final double WINCH_CURRENT_THRESHOLD = 1; //change later
 
         public static final double CLIMB_ARM_EXTEND_SPEED = 0.5;
+
+
+        public static final double WINCH_DESLACK_SPEED = 0.1;
+        public static final double ARM_PULL_FAST_SPEED=0.7;
+        public static final double ARM_PULL_SLOW_SPEED = 0.4;
     }
 
     public final class LauncherContants{
