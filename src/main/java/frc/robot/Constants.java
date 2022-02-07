@@ -30,6 +30,10 @@ public final class Constants {
         public static final double CLIMB_ARM_EXTEND_SPEED = 0.5;
 
 
+        public static final double ARM_DROP_SPEED=0.3;
+        public static final double ARM_DROP_TIME=0.5;
+
+
         public static final double WINCH_DESLACK_SPEED = 0.1;
         public static final double ARM_PULL_FAST_SPEED=0.7;
         public static final double ARM_PULL_SLOW_SPEED = 0.4;
