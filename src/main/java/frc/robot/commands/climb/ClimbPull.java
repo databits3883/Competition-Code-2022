@@ -5,28 +5,79 @@
 package frc.robot.commands.climb;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ClimbArm;
+
+import static frc.robot.Constants.ClimbConstants.*;
 
 public class ClimbPull extends CommandBase {
+  final ClimbArm m_arm;
+
+  private boolean m_previousSwitchState;
+  private boolean m_currentSwitchState;
+  State m_currentState;
   /** Creates a new ClimbPull. */
-  public ClimbPull() {
+  public ClimbPull(ClimbArm arm) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_arm=arm;
+    addRequirements(m_arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_arm.setAngleWinchSpeed(WINCH_DESLACK_SPEED);
+    
+    m_previousSwitchState = m_arm.getHookDetector();
+    m_currentState = State.kFast;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    transitionState();
+    m_arm.setExtensionSpeed(m_currentState.motorSpeed);
+  }
+
+  void transitionState(){
+    m_currentSwitchState = m_arm.getHookDetector();
+    switch(m_currentState){
+      case kFast:
+        if(m_currentSwitchState & !m_previousSwitchState){
+          m_currentState = State.kSlow;
+        }
+        break;
+      case kSlow:
+        if(!m_currentSwitchState & m_previousSwitchState){
+          m_currentState = State.kFast;
+        }
+        break;
+      case kStop:
+        m_currentState = State.kStop;
+    }
+    m_previousSwitchState = m_currentSwitchState;
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_arm.setExtensionSpeed(0.0);
+    m_arm.setAngleWinchSpeed(0.0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_currentState==State.kStop;
+  }
+
+  static enum State{
+    kFast(ARM_PULL_FAST_SPEED), 
+    kSlow(ARM_PULL_SLOW_SPEED), 
+    kStop(0.0);
+
+    double motorSpeed;
+    State(double speed){
+      motorSpeed = speed;
+    }
   }
 }

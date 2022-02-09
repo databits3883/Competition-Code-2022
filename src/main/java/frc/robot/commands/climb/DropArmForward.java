@@ -8,26 +8,24 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimbArm;
 
+import static frc.robot.Constants.ClimbConstants.*;
+
 public class DropArmForward extends CommandBase {
   /** Creates a new DropArmForward. */
   private final ClimbArm m_climbArm;
-  private final double m_speed;
-  private final double m_waitTime;
   private double startTime;
   private double currentTime;
-  public DropArmForward(ClimbArm climbArm, double speed, double waitTime) {
+  public DropArmForward(ClimbArm climbArm) {
     m_climbArm = climbArm;
-    m_speed = speed;
-    m_waitTime = waitTime;
 
 
-    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(climbArm);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_climbArm.setAngleWinchSpeed(m_speed);
+    m_climbArm.setAngleWinchSpeed(ARM_DROP_SPEED);
     startTime = Timer.getFPGATimestamp();
   }
 
@@ -47,7 +45,7 @@ public class DropArmForward extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(currentTime - startTime > m_waitTime){
+    if(currentTime - startTime > ARM_DROP_TIME){
       return true;
     }
     else{
