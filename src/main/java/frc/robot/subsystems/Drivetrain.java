@@ -70,6 +70,10 @@ public class Drivetrain extends SubsystemBase {
     }
   }
 
+  public boolean getAllCalibrated(){
+    return m_allCalibrated;
+  }
+
   public void startCalibration(){
     m_currentlyCalibrating = true;
     for(Module m : m_modules){
