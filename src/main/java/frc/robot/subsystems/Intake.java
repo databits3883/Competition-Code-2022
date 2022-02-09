@@ -11,8 +11,12 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.IntakeConstants.*;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 public class Intake extends SubsystemBase {
-  private final PWMSparkMax takeMotor = new PWMSparkMax(intakeMotorChannel);
+  private final CANSparkMax takeMotor = new CANSparkMax(intakeMotorChannel,MotorType.kBrushless);
+  
   private final MotorController raiseAndLowerMotor = new PWMSparkMax(RAISE_LOWER_CHANNEL);
   private final DigitalInput extendLimit = new DigitalInput(EXTEND_LIMIT_CHANNEL);
   private final DigitalInput retractLimit = new DigitalInput(RETRACT_LIMIT_CHANNEL);
@@ -27,12 +31,12 @@ public class Intake extends SubsystemBase {
 
 
 
-  /** Creates a new Intake. */
+  
   public Intake() {
     retractStopInterrupt = new AsynchronousInterrupt(retractLimit, this::stopRetract);
     extendStopInterrupt = new AsynchronousInterrupt(extendLimit, this::stopExtend);
   }
-
+  
   public void takeInOurOut(double speed){
     takeMotor.set(speed);
   }
@@ -92,6 +96,7 @@ public class Intake extends SubsystemBase {
     isRetracted = true;
     retractStopInterrupt.disable();
   }
+  
 
 
 }
