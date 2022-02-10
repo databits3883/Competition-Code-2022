@@ -12,12 +12,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.IntakeConstants.*;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Intake extends SubsystemBase {
-  private final CANSparkMax takeMotor = new CANSparkMax(intakeMotorChannel,MotorType.kBrushless);
+  private final CANSparkMax takeMotor = new CANSparkMax(INTAKE_CHANNEL,MotorType.kBrushed);
   
-  private final MotorController raiseAndLowerMotor = new PWMSparkMax(RAISE_LOWER_CHANNEL);
+  private final MotorController raiseAndLowerMotor = new CANSparkMax(RAISE_LOWER_CHANNEL,MotorType.kBrushed);
   private final DigitalInput extendLimit = new DigitalInput(EXTEND_LIMIT_CHANNEL);
   private final DigitalInput retractLimit = new DigitalInput(RETRACT_LIMIT_CHANNEL);
   private final AsynchronousInterrupt retractStopInterrupt;
@@ -33,6 +34,7 @@ public class Intake extends SubsystemBase {
 
   
   public Intake() {
+    takeMotor.setIdleMode(IdleMode.kBrake);
     retractStopInterrupt = new AsynchronousInterrupt(retractLimit, this::stopRetract);
     extendStopInterrupt = new AsynchronousInterrupt(extendLimit, this::stopExtend);
   }

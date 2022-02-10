@@ -20,7 +20,7 @@ public class Launcher extends SubsystemBase {
   private final RelativeEncoder m_encoder;
   /** Creates a new Launcher. */
   public Launcher() {
-    m_launchMotor = new CANSparkMax(SPARK_MAX_CHANNEL, MotorType.kBrushless);
+    m_launchMotor = new CANSparkMax(LEADER_CHANNEL, MotorType.kBrushless);
     m_controller = m_launchMotor.getPIDController();
     m_encoder = m_launchMotor.getEncoder();
 
@@ -32,7 +32,8 @@ public class Launcher extends SubsystemBase {
     m_controller.setReference(rpm, ControlType.kVelocity);
 
   }
-  
 
-  
+  public void setDutyCycle(double dutyCycle){
+    m_launchMotor.set(dutyCycle);
+  }
 }
