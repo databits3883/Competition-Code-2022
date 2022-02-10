@@ -42,13 +42,14 @@ public final class Constants {
     }
 
     public final class LauncherContants{
-        public static final int SPARK_MAX_CHANNEL = 13; //change later
+        public static final int LEADER_CHANNEL = 20;
+        public static final int FOLLOWER_CHANNEL = 21;
         public static final double ENCODER_POSITIONAL_CONVERSION = 1/3;
     }
 
     public static class IntakeConstants{
-        public static final int intakeMotorChannel = 0;
-        public static final int RAISE_LOWER_CHANNEL = 1;
+        public static final int INTAKE_CHANNEL = 30;
+        public static final int RAISE_LOWER_CHANNEL = 31;
         public static final int EXTEND_LIMIT_CHANNEL = 0;
         public static final int RETRACT_LIMIT_CHANNEL=1;
 
