@@ -19,6 +19,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -75,10 +76,14 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void startCalibration(){
+    m_gyro.calibrate();
     m_currentlyCalibrating = true;
     for(Module m : m_modules){
       m.startCalibration();
     }
+  }
+  public void resetGyro(){
+    m_gyro.reset();
   }
 
   @Override
@@ -87,9 +92,10 @@ public class Drivetrain extends SubsystemBase {
     if(m_currentlyCalibrating){
       boolean doneCalibrating = true;
       for(Module m : m_modules){
-        doneCalibrating &=m.isCalibrated();
+        doneCalibrating &= m.isCalibrated();
       }
       if(doneCalibrating){
+        m_allCalibrated = true;
         m_currentlyCalibrating = false;
       }
     }
@@ -121,15 +127,29 @@ public class Drivetrain extends SubsystemBase {
       m_rotationEncoder.setPositionConversionFactor(ROTATION_GEARING * Math.PI*2);
       m_rotationController.setFeedbackDevice(m_rotationEncoder);
 
+      m_rotationController.setP(0.6);
+      m_rotationController.setI(0);
+      m_rotationController.setD(0);
+      m_rotationController.setFF(0);
+
       m_velocityMotor = new CANSparkMax(velocityChannel, MotorType.kBrushless);
       m_velocityEncoder = m_velocityMotor.getEncoder();
       m_velocityController = m_velocityMotor.getPIDController();
 
-      m_velocityEncoder.setVelocityConversionFactor(VELOCITY_GEARING*WHEEL_CIRCUMFRENCE * (1/60.0));
+      m_velocityEncoder.setVelocityConversionFactor(VELOCITY_GEARING*WHEEL_CIRCUMFRENCE * (1.0/60.0));
+
+      m_velocityController.setP(0.22);
+      m_velocityController.setI(0);
+      m_velocityController.setD(1.2);
+      m_velocityController.setFF(0.23);
 
       m_calibrationSwitch = m_velocityMotor.getReverseLimitSwitch(Type.kNormallyOpen);
-      m_calibrator = new Calibrator(m_rotationMotor, m_velocityEncoder, m_calibrationSwitch, calibrationSwitchLocation);
+      m_calibrator = new Calibrator(m_rotationMotor, m_rotationEncoder, m_calibrationSwitch, calibrationSwitchLocation);
       m_calibratorThread = new Thread(m_calibrator);
+
+
+      //TODO: remove
+      Shuffleboard.getTab("Tab 5").addNumber("Rotation encoder "+m_rotationMotor.getDeviceId(), m_rotationEncoder::getPosition);
     }
 
     public SwerveModuleState measureState(){
@@ -141,7 +161,7 @@ public class Drivetrain extends SubsystemBase {
       m_velocityController.setReference(state.speedMetersPerSecond, ControlType.kVelocity);
       m_rotationController.setReference(
         mapAngleToNearContinuous(state.angle.getRadians()),
-        ControlType.kVelocity);
+        ControlType.kPosition);
     }
 
     double mapAngleToNearContinuous(double newAngle){
@@ -184,10 +204,10 @@ public class Drivetrain extends SubsystemBase {
 
   }
   class Calibrator implements Runnable{
-    private final SparkMaxLimitSwitch m_calibrationSwitch;
-    private final CANSparkMax m_motor;
-    private final RelativeEncoder m_encoder;
-    private final double m_trueSwitchLocation;
+    private SparkMaxLimitSwitch m_calibrationSwitch;
+    private CANSparkMax m_motor;
+    private RelativeEncoder m_encoder;
+    private double m_trueSwitchLocation;
 
     volatile boolean m_calibrated;
     private double m_riseLocation;
@@ -222,7 +242,7 @@ public class Drivetrain extends SubsystemBase {
               m_riseLocation = m_encoder.getPosition();
               riseCalibrated = true;
             }
-          }else{
+          }else if(!fallCalibrated){
             if(lastSwitchValue & !currentSwitchValue){
               m_fallLocation = m_encoder.getPosition();
               fallCalibrated =true;
@@ -239,14 +259,13 @@ public class Drivetrain extends SubsystemBase {
           }
         }
         m_motor.set(0);
-        if(riseCalibrated &&fallCalibrated){
           double switchCenter = (m_fallLocation+m_riseLocation)/2;
           double stopLocation = m_encoder.getPosition() - switchCenter;
-          m_encoder.setPosition(m_trueSwitchLocation+stopLocation);
+          m_encoder.setPosition((new Rotation2d(m_trueSwitchLocation+stopLocation)).getRadians());
 
           m_calibrated = true;
           m_allowCalibration = false;
-        }
+        
       }
     }
 

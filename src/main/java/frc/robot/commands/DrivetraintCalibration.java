@@ -14,9 +14,13 @@ public class DrivetraintCalibration extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
   }
+  @Override
+  public void initialize(){
+    m_drivetrain.startCalibration();
+  }
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !m_drivetrain.getAllCalibrated();
+    return m_drivetrain.getAllCalibrated();
   }
 }
