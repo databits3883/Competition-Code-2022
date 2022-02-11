@@ -13,11 +13,15 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,6 +39,10 @@ public class Drivetrain extends SubsystemBase {
   final Module[] m_modules = new Module[4];
   final AHRS m_gyro;
 
+
+  final SwerveDriveOdometry m_odometry;
+  SwerveModuleState[] m_lastMeasuredStates = new SwerveModuleState[4];
+
   /** Creates a new Drivetrain. */
   public Drivetrain() {
     m_kinematics = new SwerveDriveKinematics(
@@ -50,6 +58,8 @@ public class Drivetrain extends SubsystemBase {
     m_modules[3] = new Module(CANChannels.FRONT_LEFT_VELOCITY, CANChannels.FRONT_LEFT_ROTATION, CalibrationConstants.FRONT_LEFT_SWITCH_LOCATION);
 
     m_gyro = new AHRS(I2C.Port.kMXP,(byte)200);
+
+    m_odometry = new SwerveDriveOdometry(m_kinematics, m_gyro.getRotation2d());
   }
 
   public void setSpeedFieldRelative(ChassisSpeeds speeds){
@@ -84,11 +94,21 @@ public class Drivetrain extends SubsystemBase {
   }
   public void resetGyro(){
     m_gyro.reset();
+    m_odometry.resetPosition(new Pose2d(), m_gyro.getRotation2d());
+  }
+
+  void measureCurrentStates(){
+    for(int i=0;i<4;i++){
+      m_lastMeasuredStates[i] = m_modules[i].measureState();
+    }
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    measureCurrentStates();
+    m_odometry.update(m_gyro.getRotation2d(), m_lastMeasuredStates);
+
     if(m_currentlyCalibrating){
       boolean doneCalibrating = true;
       for(Module m : m_modules){
@@ -99,6 +119,14 @@ public class Drivetrain extends SubsystemBase {
         m_currentlyCalibrating = false;
       }
     }
+  }
+
+  //TODO:
+  @Override
+  public void initSendable(SendableBuilder builder){
+    super.initSendable(builder);
+    builder.addDoubleProperty("X location", ()->m_odometry.getPoseMeters().getX(), null);
+    builder.addDoubleProperty("Y location", ()->m_odometry.getPoseMeters().getY(), null);
   }
 
   private class Module{
