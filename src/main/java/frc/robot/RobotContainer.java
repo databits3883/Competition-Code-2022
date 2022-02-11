@@ -14,10 +14,9 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.DrivetraintCalibration;
-import frc.robot.commands.JoystickDrive;
-import frc.robot.commands.RunIntake;
-import frc.robot.commands.StageCargo;
+import frc.robot.commands.*;
+import frc.robot.commands.drive.*;
+import frc.robot.commands.climb.*;
 import frc.robot.subsystems.CargoStaging;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -55,7 +54,7 @@ public class RobotContainer {
 
   private final Command m_manualDrive = new JoystickDrive(m_drivetrain, m_stick);
 
-  private final Command m_calibrateDrivetrain = new DrivetraintCalibration(m_drivetrain);
+  private final Command m_calibrateDrivetrain = new DrivetrainCalibration(m_drivetrain);
   private final RunIntake m_takeIn = new RunIntake(m_intake,1);
   private final RunIntake m_takeOut = new RunIntake(m_intake,-1);
   // private final StageCargo m_stageIn = new StageCargo(m_staging, 1,0.4);
