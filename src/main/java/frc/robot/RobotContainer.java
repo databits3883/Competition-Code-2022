@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DrivetraintCalibration;
+import frc.robot.commands.JoystickDrive;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.StageCargo;
 import frc.robot.subsystems.CargoStaging;
@@ -52,13 +53,7 @@ public class RobotContainer {
 
   private final JoystickButton m_basicLaunchToggle = new JoystickButton(m_copilot, 3);
 
-  private final RunCommand m_manualDrive = new RunCommand(()->{
-    double vxMeters = -m_stick.getY();
-    double vyMeters = m_stick.getX();
-    double omegaRadians = m_stick.getTwist();
-    m_drivetrain.setChassisSpeed(new ChassisSpeeds(vxMeters,vyMeters,omegaRadians));
-
-  }, m_drivetrain);
+  private final Command m_manualDrive = new JoystickDrive(m_drivetrain, m_stick);
 
   private final Command m_calibrateDrivetrain = new DrivetraintCalibration(m_drivetrain);
   private final RunIntake m_takeIn = new RunIntake(m_intake,1);

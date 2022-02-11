@@ -78,6 +78,8 @@ public final class Constants {
 
         public static final double MAX_WHEEL_SPEED = 4.28;
 
+        public static final double MAX_TURN_SPEED = MAX_WHEEL_SPEED * (Math.sqrt(DRIVE_TRACK_LENGTH*DRIVE_TRACK_LENGTH+DRIVE_TRACK_WIDTH*DRIVE_TRACK_WIDTH));
+
         public static class CANChannels{
             public static final int FRONT_RIGHT_VELOCITY = 1;
             public static final int FRONT_RIGHT_ROTATION = 2;
