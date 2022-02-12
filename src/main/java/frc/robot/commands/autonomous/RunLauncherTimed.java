@@ -2,24 +2,34 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.autonomous;
 
+import java.sql.Time;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Launcher;
 
-public class RunLauncher extends CommandBase {
+public class RunLauncherTimed extends CommandBase {
   /** Creates a new RunLauncher. */
   private final Launcher m_launcher;
   private double m_rpm;
-  public RunLauncher(Launcher launcher, double rpm) {
+  private Timer timer = new Timer();
+  private double m_time;
+
+
+  public RunLauncherTimed(Launcher launcher, double rpm, double time) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_launcher = launcher;
     m_rpm = rpm;
+    m_time = time;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    timer.reset();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -34,6 +44,6 @@ public class RunLauncher extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return timer.hasElapsed(m_time);
   }
 }
