@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.*;
+import frc.robot.commands.autonomous.BasicAutonomous;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowBase;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.*;
@@ -64,7 +65,7 @@ public class RobotContainer {
   private final Command m_manualDrive = new JoystickDrive(m_drivetrain, m_stick);
 
   private final Command m_calibrateDrivetrain = new DrivetrainCalibration(m_drivetrain);
-
+  private final Command m_simpleAutonomous = new BasicAutonomous(m_launcher, m_drivetrain, m_intake);
 
   //Needs a more descriptive name
   private final Trajectory m_trajectory = TrajectoryGenerator.generateTrajectory(
@@ -122,6 +123,7 @@ public class RobotContainer {
   private void configureAutonomousRoutines(){
     m_autonomousChooser.setDefaultOption("NO AUTONOMOUS", m_defaultAutonomous);
     m_autonomousChooser.addOption("Base Autonomous", m_followTrajectory);
+    m_autonomousChooser.addOption("Simple Autonomous", m_simpleAutonomous);
 
     Shuffleboard.getTab("Game Screen").add(m_autonomousChooser);
   }

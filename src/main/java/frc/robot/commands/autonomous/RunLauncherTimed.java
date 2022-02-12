@@ -14,7 +14,7 @@ public class RunLauncherTimed extends CommandBase {
   /** Creates a new RunLauncher. */
   private final Launcher m_launcher;
   private double m_rpm;
-  private Timer timer = new Timer();
+  private Timer m_timer = new Timer();
   private double m_time;
 
 
@@ -23,12 +23,13 @@ public class RunLauncherTimed extends CommandBase {
     m_launcher = launcher;
     m_rpm = rpm;
     m_time = time;
+    addRequirements(m_launcher);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.reset();
+    m_timer.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,6 +45,8 @@ public class RunLauncherTimed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(m_time);
+    System.out.println("Launched: " + m_timer.hasElapsed(m_time));
+
+    return m_timer.hasElapsed(m_time);
   }
 }
