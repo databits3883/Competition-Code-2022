@@ -4,17 +4,26 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import java.util.List;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.*;
+import frc.robot.commands.autonomous.drive.TrajectoryFollowBase;
+import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.*;
 import frc.robot.commands.climb.*;
 import frc.robot.subsystems.CargoStaging;
@@ -55,6 +64,20 @@ public class RobotContainer {
   private final Command m_manualDrive = new JoystickDrive(m_drivetrain, m_stick);
 
   private final Command m_calibrateDrivetrain = new DrivetrainCalibration(m_drivetrain);
+
+
+  //Needs a more descriptive name
+  private final Trajectory m_trajectory = TrajectoryGenerator.generateTrajectory(
+    new Pose2d(0,0, new Rotation2d(0)), 
+
+    List.of(
+      new Translation2d(1.5,1)
+    ),
+
+    new Pose2d(3,0,Rotation2d.fromDegrees(90)),
+    DriveConstants.CONFIG);
+
+  private final TrajectoryFollowRelative m_followTrajectory = new TrajectoryFollowRelative(m_trajectory, m_drivetrain);
   private final RunIntake m_takeIn = new RunIntake(m_intake,1);
   private final RunIntake m_takeOut = new RunIntake(m_intake,-1);
   // private final StageCargo m_stageIn = new StageCargo(m_staging, 1,0.4);
@@ -98,6 +121,9 @@ public class RobotContainer {
   /**Configures the autonomous sendable chooser */
   private void configureAutonomousRoutines(){
     m_autonomousChooser.setDefaultOption("NO AUTONOMOUS", m_defaultAutonomous);
+    m_autonomousChooser.addOption("Base Autonomous", m_followTrajectory);
+
+    Shuffleboard.getTab("Game Screen").add(m_autonomousChooser);
   }
 
   /**

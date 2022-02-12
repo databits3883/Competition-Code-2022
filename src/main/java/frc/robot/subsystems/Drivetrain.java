@@ -13,23 +13,22 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
 
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-
 import static frc.robot.Constants.DriveConstants.*;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+
+
 public class Drivetrain extends SubsystemBase {
 
   boolean m_allCalibrated = false;
@@ -43,6 +42,10 @@ public class Drivetrain extends SubsystemBase {
   final SwerveDriveOdometry m_odometry;
   SwerveModuleState[] m_lastMeasuredStates = new SwerveModuleState[4];
 
+  private Pose2d m_relativePoseOffset = new Pose2d();
+
+private final Field2d m_fieldTracker;
+
   /** Creates a new Drivetrain. */
   public Drivetrain() {
     m_kinematics = KINEMATICS;
@@ -55,12 +58,18 @@ public class Drivetrain extends SubsystemBase {
     m_gyro = new AHRS(I2C.Port.kMXP,(byte)200);
 
     m_odometry = new SwerveDriveOdometry(m_kinematics, m_gyro.getRotation2d());
+    m_fieldTracker = new Field2d();
+    addChild("Field Position",m_fieldTracker);
   }
 
   public void setSpeedFieldRelative(ChassisSpeeds speeds){
     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond,
      speeds.omegaRadiansPerSecond, Rotation2d.fromDegrees(m_gyro.getYaw()));
      setChassisSpeed(speeds);
+  }
+
+  public void setDisplayTrajectory(Trajectory t){
+    m_fieldTracker.getObject("traj").setTrajectory(t);
   }
 
   public void setChassisSpeed(ChassisSpeeds speeds){
@@ -87,6 +96,15 @@ public class Drivetrain extends SubsystemBase {
       m.startCalibration();
     }
   }
+
+  public Pose2d getPoseRelative(){
+    return m_odometry.getPoseMeters().relativeTo(m_relativePoseOffset);
+  }
+
+  public void setPoseRelative(){
+    m_relativePoseOffset = m_odometry.getPoseMeters();
+  }
+
   public void resetGyro(){
     m_gyro.reset();
     m_odometry.resetPosition(new Pose2d(), m_gyro.getRotation2d());
@@ -107,8 +125,9 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     measureCurrentStates();
-    m_odometry.update(m_gyro.getRotation2d(), m_lastMeasuredStates);
+    m_odometry.update(Rotation2d.fromDegrees(m_gyro.getAngle()), m_lastMeasuredStates);
 
+    m_fieldTracker.setRobotPose(getPoseRelative());
     if(m_currentlyCalibrating){
       boolean doneCalibrating = true;
       for(Module m : m_modules){
