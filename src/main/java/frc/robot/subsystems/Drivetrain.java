@@ -45,12 +45,7 @@ public class Drivetrain extends SubsystemBase {
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
-    m_kinematics = new SwerveDriveKinematics(
-      new Translation2d(DRIVE_TRACK_LENGTH/2, DRIVE_TRACK_WIDTH/2), //fron right 
-      new Translation2d(-DRIVE_TRACK_LENGTH/2, DRIVE_TRACK_WIDTH/2), //rear right
-      new Translation2d(-DRIVE_TRACK_LENGTH/2, -DRIVE_TRACK_WIDTH/2), //rear left
-      new Translation2d(DRIVE_TRACK_LENGTH/2, -DRIVE_TRACK_WIDTH/2) //front left
-    );
+    m_kinematics = KINEMATICS;
     
     m_modules[0] = new Module(CANChannels.FRONT_RIGHT_VELOCITY, CANChannels.FRONT_RIGHT_ROTATION, CalibrationConstants.FRONT_RIGHT_SWITCH_LOCATION);
     m_modules[1] = new Module(CANChannels.REAR_RIGHT_VELOCITY, CANChannels.REAR_RIGHT_ROTATION, CalibrationConstants.REAR_RIGHT_SWITCH_LOCATION);
@@ -72,7 +67,7 @@ public class Drivetrain extends SubsystemBase {
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
     setStates(states);
   }
-  private void setStates(SwerveModuleState[] states){
+  public void setStates(SwerveModuleState[] states){
     if(!m_currentlyCalibrating){
       SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_WHEEL_SPEED);
       for(int i=0;i<4;i++){
@@ -96,6 +91,11 @@ public class Drivetrain extends SubsystemBase {
     m_gyro.reset();
     m_odometry.resetPosition(new Pose2d(), m_gyro.getRotation2d());
   }
+
+  public Pose2d getCurrentPoseEstimate(){
+    return m_odometry.getPoseMeters();
+  }
+
 
   void measureCurrentStates(){
     for(int i=0;i<4;i++){

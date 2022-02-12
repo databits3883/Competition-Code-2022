@@ -3,6 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.constraint.SwerveDriveKinematicsConstraint;
+import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -76,9 +81,19 @@ public final class Constants {
         public static final double DRIVE_TRACK_WIDTH = 0.43;
         public static final double DRIVE_TRACK_LENGTH = 0.73;
 
+        public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
+            new Translation2d(DRIVE_TRACK_LENGTH/2, DRIVE_TRACK_WIDTH/2), //fron right 
+            new Translation2d(-DRIVE_TRACK_LENGTH/2, DRIVE_TRACK_WIDTH/2), //rear right
+            new Translation2d(-DRIVE_TRACK_LENGTH/2, -DRIVE_TRACK_WIDTH/2), //rear left
+            new Translation2d(DRIVE_TRACK_LENGTH/2, -DRIVE_TRACK_WIDTH/2) //front left
+          );
+        
+        
         public static final double MAX_WHEEL_SPEED = 4.28;
 
         public static final double MAX_TURN_SPEED = MAX_WHEEL_SPEED * (Math.sqrt(DRIVE_TRACK_LENGTH*DRIVE_TRACK_LENGTH+DRIVE_TRACK_WIDTH*DRIVE_TRACK_WIDTH));
+
+        public static final TrajectoryConstraint CONSTRAINT = new SwerveDriveKinematicsConstraint(KINEMATICS, MAX_WHEEL_SPEED);
 
         public static class CANChannels{
             public static final int FRONT_RIGHT_VELOCITY = 1;
