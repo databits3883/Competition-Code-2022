@@ -70,8 +70,11 @@ public final class Constants {
     }
 
     public static class StagingConstants{
-        public static final int motorChannel = 0;
-        public static final double motorSpeed = 0.5;
+        public static final int MOTOR_CHANNEL = 0;
+        public static final int SENSOR_CHANNEL = 0;
+        public static final double IN_SPEED = 0.5;
+        public static final double OUT_SPEED = -0.5;
+
     }
 
     public static class DriveConstants{
