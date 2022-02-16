@@ -6,25 +6,26 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.ClimbConstants.*;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
 public class ClimbArm extends SubsystemBase {
-  final CANSparkMax m_lengthWinchLeader;
-  final CANSparkMax m_lengthWinchFollower;
+  final MotorControllerGroup m_liftWinch;
 
-  final RelativeEncoder m_lengthEncoder;
+  final Encoder m_lengthEncoder;
 
-  final MotorController m_angleWinchMotor;
+  final CANSparkMax m_angleWinchMotor;
 
   final DigitalInput m_springHookDetector;
 
@@ -32,14 +33,15 @@ public class ClimbArm extends SubsystemBase {
   final PowerDistribution m_distributionBoard;
   /** Creates a new ClimbArm. */
   public ClimbArm() {
-    m_lengthWinchLeader = new CANSparkMax(LENGTH_WINCH_CHANNEL,MotorType.kBrushless);
-    m_lengthWinchFollower = new CANSparkMax(LENGTH_WINCH_FOLLOWER_CHANNEL, MotorType.kBrushless);
+    PWMSparkMax follower = new PWMSparkMax(LENGTH_WINCH_FOLLOWER_CHANNEL);
+    follower.setInverted(true);
+    m_liftWinch = new MotorControllerGroup(
+      new PWMSparkMax(LENGTH_WINCH_CHANNEL),
+      follower);
 
-    m_lengthWinchFollower.follow(m_lengthWinchLeader);
-    m_lengthEncoder = m_lengthWinchLeader.getEncoder();
-    m_lengthEncoder.setPositionConversionFactor(LENGTH_WINCH_GEARING*LENGTH_WINCH_CIRCUMFRENCE);
+    m_lengthEncoder = new Encoder(LENGTH_ENCODER_A, LENGTH_ENCODER_B);
 
-    m_angleWinchMotor = new Talon(ANGLE_WINCH_CHANNEL);
+    m_angleWinchMotor = new CANSparkMax(ANGLE_WINCH_CHANNEL, MotorType.kBrushless);
     m_springHookDetector = new DigitalInput(SPRING_HOOK_SWITCH_CHANNEL);
 
     m_distributionBoard = new PowerDistribution();
@@ -47,7 +49,7 @@ public class ClimbArm extends SubsystemBase {
   }
 
   public void setExtensionSpeed(double speed){
-    m_lengthWinchLeader.set(speed);
+    m_liftWinch.set(speed);
   }
   public void setAngleWinchSpeed(double speed){
     m_angleWinchMotor.set(speed);
@@ -59,7 +61,7 @@ public class ClimbArm extends SubsystemBase {
 
 
   public double measureArmLength(){
-    return m_lengthEncoder.getPosition();
+    return m_lengthEncoder.get();
   }
 
   public boolean getHookDetector(){

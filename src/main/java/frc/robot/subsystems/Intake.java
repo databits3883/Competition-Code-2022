@@ -10,94 +10,83 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.IntakeConstants.*;
 
+import com.fasterxml.jackson.databind.type.ResolvedRecursiveType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Intake extends SubsystemBase {
-  private final CANSparkMax takeMotor = new CANSparkMax(INTAKE_CHANNEL,MotorType.kBrushed);
+  private final CANSparkMax m_takeMotor;
   
-  private final MotorController raiseAndLowerMotor = new CANSparkMax(RAISE_LOWER_CHANNEL,MotorType.kBrushed);
-  private final DigitalInput extendLimit = new DigitalInput(EXTEND_LIMIT_CHANNEL);
-  private final DigitalInput retractLimit = new DigitalInput(RETRACT_LIMIT_CHANNEL);
-  private final AsynchronousInterrupt retractStopInterrupt;
-  private final AsynchronousInterrupt extendStopInterrupt; 
-  private boolean isRetracted = true;
-  private boolean isExtended = false;
+  private final CANSparkMax m_raiseMotor;
+  private final RelativeEncoder m_raiseEncoder;
+
+  private final SparkMaxPIDController m_raiseController;
+
+  static final int RAISE_SLOT = 0;
+  static final int LOWER_SLOT =0;
 
 
-
-
-
-
-
-  
   public Intake() {
-    takeMotor.setIdleMode(IdleMode.kBrake);
-    retractStopInterrupt = new AsynchronousInterrupt(retractLimit, this::stopRetract);
-    extendStopInterrupt = new AsynchronousInterrupt(extendLimit, this::stopExtend);
+    m_takeMotor  = new CANSparkMax(INTAKE_CHANNEL,MotorType.kBrushless);
+    m_takeMotor.setIdleMode(IdleMode.kBrake);
+
+
+    m_raiseMotor = new CANSparkMax(RAISE_LOWER_CHANNEL, MotorType.kBrushless);
+    m_raiseEncoder = m_raiseMotor.getEncoder();
+    m_raiseController = m_raiseMotor.getPIDController();
+
+    m_raiseMotor.setIdleMode(IdleMode.kBrake);
+
+    m_raiseController.setSmartMotionMaxAccel(MAX_RAISE_ACCEL, RAISE_SLOT);
+    m_raiseController.setSmartMotionMaxAccel(MAX_LOWER_ACCEL, LOWER_SLOT);
+    m_raiseController.setSmartMotionMaxVelocity(MAX_RAISE_VEL, RAISE_SLOT);
+    m_raiseController.setSmartMotionMaxAccel(MAX_LOWER_VEL, LOWER_SLOT);
+
+
+    m_raiseController.setP(0,RAISE_SLOT);
+    m_raiseController.setI(0,RAISE_SLOT);
+    m_raiseController.setD(0,RAISE_SLOT);
+    m_raiseController.setFF(0,RAISE_SLOT);
+
+    m_raiseController.setP(0,LOWER_SLOT);
+    m_raiseController.setI(0,LOWER_SLOT);
+    m_raiseController.setD(0,LOWER_SLOT);
+    m_raiseController.setFF(0,LOWER_SLOT);
+    
+
   }
   
   public void takeInOurOut(double speed){
-    takeMotor.set(speed);
+    m_takeMotor.set(speed);
   }
 
-  public void startExtend(){
-    raiseAndLowerMotor.set(extendSpeed);
-    isExtended = false;
-    isRetracted = false;
-    extendStopInterrupt.enable();
-  }
-  public void startRetract(){
-    raiseAndLowerMotor.set(retractSpeed);
-    isExtended = false;
-    isRetracted = false;
-    retractStopInterrupt.enable();
-  }
-  
-
-  public void disableExtendMotor(){
-
-    retractStopInterrupt.disable();
-    extendStopInterrupt.disable();
-    raiseAndLowerMotor.set(0.0);
+  private REVLibError setHeight(double height){
+    if(height >=m_raiseEncoder.getPosition()){
+      return m_raiseController.setReference(height, ControlType.kSmartMotion, RAISE_SLOT);
+    }else{
+      return m_raiseController.setReference(height, ControlType.kSmartMotion,LOWER_SLOT);
+    }
   }
 
-  public void disableRetractMotor(){
-
-    retractStopInterrupt.disable();
-    extendStopInterrupt.disable();
-    raiseAndLowerMotor.set(0.0);
+  public REVLibError extend(){
+    return setHeight(EXTEND_LEVEL);
+  }
+  public REVLibError retract(){
+    return setHeight(RETRACT_LEVEL);
+  }
+  public REVLibError setToMid(){
+    return setHeight(MID_LEVEL);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
-
-  public boolean getExtended(){
-    return isExtended;
-  }
-
-  public boolean getRetracted(){
-    return isRetracted;
-  }
-
-
-  public void stopExtend(boolean risingEdge, boolean fallingEdge){
-    raiseAndLowerMotor.set(0);
-    isExtended = true;
-    isRetracted = false;
-    extendStopInterrupt.disable();
-
-  }
-  public void stopRetract(boolean risingEdge, boolean fallingEdge){
-    raiseAndLowerMotor.set(0);
-    isExtended = false;
-    isRetracted = true;
-    retractStopInterrupt.disable();
-  }
-  
 
 
 }

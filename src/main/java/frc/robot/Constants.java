@@ -23,6 +23,9 @@ public final class Constants {
         public static final int LENGTH_WINCH_CHANNEL = 13;
         public static final int LENGTH_WINCH_FOLLOWER_CHANNEL = 14;
 
+        public static final int LENGTH_ENCODER_A = 0;
+        public static final int LENGTH_ENCODER_B = 1;
+
 
         public static final int ANGLE_WINCH_CHANNEL = 1;
         public static final int SPRING_HOOK_SWITCH_CHANNEL = 0;
@@ -61,11 +64,15 @@ public final class Constants {
 
         public static final double spinSpeed = -1;
 
-        public static final double extendSpeed = 0.3;
-        public static final double retractSpeed = -0.3;
+        public static final double EXTEND_LEVEL = 1;
+        public static final double RETRACT_LEVEL = 1;
+        public static final double MID_LEVEL = 1;
 
-        public static final double EXTENSION_TIMEOUT=3;
-        public static final double RETRACT_TIMEOUT=3;
+        public static final double MAX_RAISE_ACCEL = 0;
+        public static final double MAX_RAISE_VEL = 0;
+        public static final double MAX_LOWER_ACCEL = 0;
+        public static final double MAX_LOWER_VEL = 0;
+        
 
     }
 

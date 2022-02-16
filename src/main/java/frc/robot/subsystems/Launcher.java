@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -30,6 +31,13 @@ public class Launcher extends SubsystemBase {
   /** Creates a new Launcher. */
   public Launcher() {
     m_launchMotor = new CANSparkMax(LEADER_CHANNEL, MotorType.kBrushless);
+
+    CANSparkMax follower = new CANSparkMax(FOLLOWER_CHANNEL, MotorType.kBrushless);
+    follower.follow(m_launchMotor,true);
+
+    m_launchMotor.setIdleMode(IdleMode.kCoast);
+    follower.setIdleMode(IdleMode.kCoast);
+
     m_controller = m_launchMotor.getPIDController();
     m_encoder = m_launchMotor.getEncoder();
 
