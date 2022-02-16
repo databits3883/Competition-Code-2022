@@ -122,7 +122,7 @@ public class RobotContainer {
   /**Configures the autonomous sendable chooser */
   private void configureAutonomousRoutines(){
     m_autonomousChooser.setDefaultOption("NO AUTONOMOUS", m_defaultAutonomous);
-    m_autonomousChooser.addOption("Base Autonomous", m_followTrajectory);
+    m_autonomousChooser.addOption("Follow Trajectory", m_followTrajectory);
     m_autonomousChooser.addOption("Simple Autonomous", m_simpleAutonomous);
 
     Shuffleboard.getTab("Game Screen").add(m_autonomousChooser);

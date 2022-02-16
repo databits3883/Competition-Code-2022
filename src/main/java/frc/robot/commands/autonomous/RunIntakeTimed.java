@@ -31,6 +31,7 @@ public class RunIntakeTimed extends CommandBase {
   public void initialize() {
     m_intake.takeInOurOut(Constants.IntakeConstants.spinSpeed * m_direction);
     m_timer.reset();
+    m_timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,7 +51,6 @@ public class RunIntakeTimed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println("Intaked: " + m_timer.hasElapsed(m_time));
     return m_timer.hasElapsed(m_time);
   }
 }
