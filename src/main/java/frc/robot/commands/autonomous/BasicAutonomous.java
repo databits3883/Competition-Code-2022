@@ -9,8 +9,10 @@ import java.util.List;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.RunIntake;
@@ -32,22 +34,21 @@ public class BasicAutonomous extends SequentialCommandGroup {
       new Translation2d(0.3 ,-1)
     ),
 
-    new Pose2d(0.7,-2.1,Rotation2d.fromDegrees(90)),
+    new Pose2d(0.7,-2.1,Rotation2d.fromDegrees(0.0)),
     DriveConstants.CONFIG);
-
-    private final Trajectory zeroTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(new Translation2d(0 ,0)), new  Pose2d(0, 0, new Rotation2d(0)), DriveConstants.CONFIG);
 
   /** Creates a new BasicAutonomous. */
   public BasicAutonomous(Launcher m_launcher, Drivetrain m_drivetrain, Intake m_intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new TrajectoryFollowRelative(zeroTrajectory , m_drivetrain),
+      //new TrajectoryFollowRelative(zeroTrajectory , m_drivetrain),
       new DrivetrainCalibration(m_drivetrain),
       new RunLauncherTimed(m_launcher, 1000, 3),
       new RunIntakeTimed(m_intake, 1,3),
       new RunLauncherTimed(m_launcher, 0, 1),
-      new TrajectoryFollowRelative(trajectory1, m_drivetrain)
+      new TrajectoryFollowRelative(trajectory1, m_drivetrain),
+      new InstantCommand(()->m_drivetrain.setChassisSpeed(new ChassisSpeeds()), m_drivetrain)
      
       
     );
