@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.RunIntake;
+import frc.robot.commands.autonomous.drive.TrajectoryFollowBase;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.DrivetrainCalibration;
 import frc.robot.subsystems.Drivetrain;
@@ -27,14 +28,24 @@ import frc.robot.subsystems.Launcher;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class BasicAutonomous extends SequentialCommandGroup {
 
-  private final Trajectory trajectory1 = TrajectoryGenerator.generateTrajectory(
+  private final Trajectory cargoTwoTrajectory = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
       new Translation2d(0.3 ,-1)
     ),
 
-    new Pose2d(0.7,-2.1,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(0.76,-2.15,Rotation2d.fromDegrees(0.0)),
+    DriveConstants.CONFIG);
+
+    private final Trajectory originTrajectory = TrajectoryGenerator.generateTrajectory(
+    new Pose2d(0,0, new Rotation2d(0)), 
+
+    List.of(
+      new Translation2d(-0.3 ,1)
+    ),
+
+    new Pose2d(-0.76,2.15,Rotation2d.fromDegrees(0.0)),
     DriveConstants.CONFIG);
 
   /** Creates a new BasicAutonomous. */
@@ -44,11 +55,19 @@ public class BasicAutonomous extends SequentialCommandGroup {
     addCommands(
       //new TrajectoryFollowRelative(zeroTrajectory , m_drivetrain),
       new DrivetrainCalibration(m_drivetrain),
-      new RunLauncherTimed(m_launcher, 1000, 3),
-      new RunIntakeTimed(m_intake, 1,3),
-      new RunLauncherTimed(m_launcher, 0, 1),
-      new TrajectoryFollowRelative(trajectory1, m_drivetrain),
-      new InstantCommand(()->m_drivetrain.setChassisSpeed(new ChassisSpeeds()), m_drivetrain)
+      new RunLauncherTimed(m_launcher, 1000, 1),
+      new SetIntakeRunning(m_intake, -1),
+      new RunLauncherTimed(m_launcher, 1000, 1),
+      new RunLauncherTimed(m_launcher, 0, 0.01),
+      new TrajectoryFollowRelative(cargoTwoTrajectory, m_drivetrain),
+      new RunIntakeTimed(m_intake, 1,0.75),
+      new TrajectoryFollowRelative(originTrajectory, m_drivetrain),
+      new RunLauncherTimed(m_launcher, 1000, 1),
+      new RunIntakeTimed(m_intake, -1, 0.25),
+      new RunIntakeTimed(m_intake, 1, 1),
+      new RunLauncherTimed(m_launcher, 0, 0.01)
+      
+      
      
       
     );
