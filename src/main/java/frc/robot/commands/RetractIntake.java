@@ -9,28 +9,25 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Intake;
 
-import static frc.robot.Constants.IntakeConstants.RETRACT_TIMEOUT;
-
-
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class RetractIntake extends ParallelRaceGroup {
+  Intake m_intake;
   /** Creates a new RetractIntake. */
   public RetractIntake(Intake intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-      new WaitCommand(RETRACT_TIMEOUT),
-      new FunctionalCommand(intake::startRetract,
-       ()->{return;},
-       (interrupted)->{
-         if(interrupted){
-           intake.disableRetractMotor();
-         }
-       },
-       intake::getRetracted, 
-       intake)
-    );
+    m_intake = intake;
+    addRequirements(intake);
+  }
+
+  @Override
+  public void initialize(){
+    m_intake.retract();
+  }
+  @Override
+  public boolean isFinished(){
+    return m_intake.atTarget();
   }
 }

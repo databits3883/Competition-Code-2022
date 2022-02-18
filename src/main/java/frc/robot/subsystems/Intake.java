@@ -83,6 +83,10 @@ public class Intake extends SubsystemBase {
     return setHeight(MID_LEVEL);
   }
 
+  public boolean atTarget(){
+    return Math.abs(m_raiseMotor.getAppliedOutput()) <=MAX_LEVEL_STABLE_OUTPUT;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

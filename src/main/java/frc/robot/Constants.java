@@ -67,6 +67,7 @@ public final class Constants {
         public static final double EXTEND_LEVEL = 1;
         public static final double RETRACT_LEVEL = 1;
         public static final double MID_LEVEL = 1;
+        public static final double MAX_LEVEL_STABLE_OUTPUT = 0.05;
 
         public static final double MAX_RAISE_ACCEL = 0;
         public static final double MAX_RAISE_VEL = 0;
@@ -81,6 +82,8 @@ public final class Constants {
         public static final int SENSOR_CHANNEL = 0;
         public static final double IN_SPEED = 0.5;
         public static final double OUT_SPEED = -0.5;
+
+        public static final double RUN_TIME = 0.5;
 
     }
 
@@ -117,10 +120,10 @@ public final class Constants {
             public static final int FRONT_LEFT_VELOCITY = 7;
             public static final int FRONT_LEFT_ROTATION = 8;
 
-            public static final int FRONT_RIGHT_CALIBRATION =0;
-            public static final int REAR_RIGHT_CALIBRATION =0;
-            public static final int REAR_LEFT_CALIBRATION =0;
-            public static final int FRONT_LEFT_CALIBRATION =0;
+            public static final int FRONT_RIGHT_CALIBRATION =9;
+            public static final int REAR_RIGHT_CALIBRATION =10;
+            public static final int REAR_LEFT_CALIBRATION =11;
+            public static final int FRONT_LEFT_CALIBRATION =12;
         }
 
         public static class CalibrationConstants{
