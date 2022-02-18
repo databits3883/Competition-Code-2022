@@ -85,7 +85,7 @@ public final class Constants {
     }
 
     public static class DriveConstants{
-        public static final double ROTATION_GEARING = 1.0;
+        public static final double ROTATION_GEARING = 1.0/6.75;
         public static final double VELOCITY_GEARING = 1.0/6.86;
         public static final double WHEEL_CIRCUMFRENCE = Math.PI * 4*2.54 *0.01;
 
@@ -116,6 +116,11 @@ public final class Constants {
             public static final int REAR_LEFT_ROTATION = 6;
             public static final int FRONT_LEFT_VELOCITY = 7;
             public static final int FRONT_LEFT_ROTATION = 8;
+
+            public static final int FRONT_RIGHT_CALIBRATION =0;
+            public static final int REAR_RIGHT_CALIBRATION =0;
+            public static final int REAR_LEFT_CALIBRATION =0;
+            public static final int FRONT_LEFT_CALIBRATION =0;
         }
 
         public static class CalibrationConstants{

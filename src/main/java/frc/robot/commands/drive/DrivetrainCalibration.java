@@ -17,7 +17,7 @@ public class DrivetrainCalibration extends CommandBase {
   @Override
   public void initialize(){
     if(!m_drivetrain.getAllCalibrated()){
-      m_drivetrain.startCalibration();
+      m_drivetrain.calibrate();
     }else{
       m_drivetrain.resetGyro();
     }
