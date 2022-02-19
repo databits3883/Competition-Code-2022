@@ -6,17 +6,18 @@ package frc.robot.commands.autonomous;
 
 import java.util.List;
 
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.RunIntake;
-import frc.robot.commands.autonomous.drive.TrajectoryFollowBase;
+
+
 import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.DrivetrainCalibration;
 import frc.robot.subsystems.Drivetrain;
@@ -26,7 +27,9 @@ import frc.robot.subsystems.Launcher;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class BasicAutonomous extends SequentialCommandGroup {
+public class LeftTwoBallAutonomous extends SequentialCommandGroup {
+
+
 
   private final Trajectory cargoTwoTrajectory = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0,0, new Rotation2d(0)), 
@@ -49,7 +52,7 @@ public class BasicAutonomous extends SequentialCommandGroup {
     DriveConstants.CONFIG);
 
   /** Creates a new BasicAutonomous. */
-  public BasicAutonomous(Launcher m_launcher, Drivetrain m_drivetrain, Intake m_intake) {
+  public LeftTwoBallAutonomous(Launcher m_launcher, Drivetrain m_drivetrain, Intake m_intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -66,9 +69,7 @@ public class BasicAutonomous extends SequentialCommandGroup {
       new RunIntakeTimed(m_intake, -1, 0.25),
       new RunIntakeTimed(m_intake, 1, 1),
       new RunLauncherTimed(m_launcher, 0, 0.01)
-      
-      
-     
+           
       
     );
   }

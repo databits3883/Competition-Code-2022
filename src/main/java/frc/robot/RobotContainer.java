@@ -17,16 +17,18 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.*;
-import frc.robot.commands.autonomous.BasicAutonomous;
+import frc.robot.commands.autonomous.CenterTwoBallAutonomous;
+import frc.robot.commands.autonomous.LeftTwoBallAutonomous;
+import frc.robot.commands.autonomous.RightTwoBallAutonomous;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowBase;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.*;
-import frc.robot.commands.climb.*;
 import frc.robot.subsystems.CargoStaging;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -65,10 +67,15 @@ public class RobotContainer {
   private final Command m_manualDrive = new JoystickDrive(m_drivetrain, m_stick);
 
   private final Command m_calibrateDrivetrain = new DrivetrainCalibration(m_drivetrain);
-  private final Command m_simpleAutonomous = new BasicAutonomous(m_launcher, m_drivetrain, m_intake);
+
+  private final Command m_twoBallLeftAutonomous = new LeftTwoBallAutonomous(m_launcher, m_drivetrain, m_intake);
+  private final Command m_twoBallCenterAutonomous = new CenterTwoBallAutonomous(m_launcher, m_drivetrain, m_intake);
+  private final Command m_twoBallRightAutonomous = new RightTwoBallAutonomous(m_launcher, m_drivetrain, m_intake);
+
+
 
   //Needs a more descriptive name
-  private final Trajectory m_trajectory = TrajectoryGenerator.generateTrajectory(
+  private final Trajectory m_tarmacExitTrajectory = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
@@ -78,7 +85,7 @@ public class RobotContainer {
     new Pose2d(3,0,Rotation2d.fromDegrees(90)),
     DriveConstants.CONFIG);
 
-  private final TrajectoryFollowRelative m_followTrajectory = new TrajectoryFollowRelative(m_trajectory, m_drivetrain);
+  private final TrajectoryFollowRelative m_exitTarmac = new TrajectoryFollowRelative(m_tarmacExitTrajectory, m_drivetrain);
   private final RunIntake m_takeIn = new RunIntake(m_intake,1);
   private final RunIntake m_takeOut = new RunIntake(m_intake,-1);
   // private final StageCargo m_stageIn = new StageCargo(m_staging, 1,0.4);
@@ -118,12 +125,16 @@ public class RobotContainer {
     m_calibrationButton.whenPressed(m_calibrateDrivetrain);
     m_basicLaunchToggle.toggleWhenPressed(m_basicShoot);
 
+    
+
   }
   /**Configures the autonomous sendable chooser */
   private void configureAutonomousRoutines(){
     m_autonomousChooser.setDefaultOption("NO AUTONOMOUS", m_defaultAutonomous);
-    m_autonomousChooser.addOption("Follow Trajectory", m_followTrajectory);
-    m_autonomousChooser.addOption("Simple Autonomous", m_simpleAutonomous);
+    m_autonomousChooser.addOption("Exit Tarmac", m_exitTarmac);
+    m_autonomousChooser.addOption("2 Ball Left", m_twoBallLeftAutonomous);
+    m_autonomousChooser.addOption("2 Ball Center", m_twoBallCenterAutonomous);
+    m_autonomousChooser.addOption("2 Ball Right", m_twoBallRightAutonomous);
 
     Shuffleboard.getTab("Game Screen").add(m_autonomousChooser);
   }
