@@ -81,7 +81,7 @@ public final class Constants {
 
     public static class StagingConstants{
         public static final int MOTOR_CHANNEL = 19;
-        public static final int SENSOR_CHANNEL = 0;
+        public static final int SENSOR_CHANNEL = 2;
         public static final double IN_SPEED = 0.5;
         public static final double OUT_SPEED = -0.5;
 
@@ -90,8 +90,8 @@ public final class Constants {
     }
 
     public static class DriveConstants{
-        public static final double ROTATION_GEARING = 1.0/6.75;
-        public static final double VELOCITY_GEARING = 1.0/6.86;
+        public static final double ROTATION_GEARING = 1.0/12.8;
+        public static final double VELOCITY_GEARING = 1.0/6.75;
         public static final double WHEEL_CIRCUMFRENCE = Math.PI * 4*2.54 *0.01;
 
         public static final double DRIVE_TRACK_WIDTH = 0.43;
@@ -99,9 +99,9 @@ public final class Constants {
 
         public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
             new Translation2d(DRIVE_TRACK_LENGTH/2, DRIVE_TRACK_WIDTH/2), //fron right 
-            new Translation2d(-DRIVE_TRACK_LENGTH/2, DRIVE_TRACK_WIDTH/2), //rear right
+            new Translation2d(DRIVE_TRACK_LENGTH/2, -DRIVE_TRACK_WIDTH/2), //rear right
             new Translation2d(-DRIVE_TRACK_LENGTH/2, -DRIVE_TRACK_WIDTH/2), //rear left
-            new Translation2d(DRIVE_TRACK_LENGTH/2, -DRIVE_TRACK_WIDTH/2) //front left
+            new Translation2d(-DRIVE_TRACK_LENGTH/2, DRIVE_TRACK_WIDTH/2) //front left
           );
         
         
@@ -113,14 +113,14 @@ public final class Constants {
         public static final TrajectoryConfig CONFIG = new TrajectoryConfig(MAX_WHEEL_SPEED,4);
 
         public static class CANChannels{
-            public static final int FRONT_RIGHT_VELOCITY = 1;
-            public static final int FRONT_RIGHT_ROTATION = 2;
-            public static final int REAR_RIGHT_VELOCITY = 3;
-            public static final int REAR_RIGHT_ROTATION = 4;
-            public static final int REAR_LEFT_VELOCITY = 5;
-            public static final int REAR_LEFT_ROTATION = 6;
-            public static final int FRONT_LEFT_VELOCITY = 7;
-            public static final int FRONT_LEFT_ROTATION = 8;
+            public static final int FRONT_RIGHT_VELOCITY = 2;
+            public static final int FRONT_RIGHT_ROTATION = 1;
+            public static final int REAR_RIGHT_VELOCITY = 4;
+            public static final int REAR_RIGHT_ROTATION = 3;
+            public static final int REAR_LEFT_VELOCITY = 6;
+            public static final int REAR_LEFT_ROTATION = 5;
+            public static final int FRONT_LEFT_VELOCITY = 8;
+            public static final int FRONT_LEFT_ROTATION = 7;
 
             public static final int FRONT_RIGHT_CALIBRATION =9;
             public static final int REAR_RIGHT_CALIBRATION =10;

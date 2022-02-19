@@ -55,7 +55,7 @@ private final Field2d m_fieldTracker;
     m_modules[2] = new Module(CANChannels.REAR_LEFT_VELOCITY, CANChannels.REAR_LEFT_ROTATION, CANChannels.REAR_LEFT_CALIBRATION);
     m_modules[3] = new Module(CANChannels.FRONT_LEFT_VELOCITY, CANChannels.FRONT_LEFT_ROTATION, CANChannels.FRONT_LEFT_CALIBRATION);
 
-    m_gyro = new AHRS(I2C.Port.kMXP,(byte)200);
+    m_gyro = new AHRS(I2C.Port.kOnboard,(byte)200);
 
     m_odometry = new SwerveDriveOdometry(m_kinematics, m_gyro.getRotation2d());
     m_fieldTracker = new Field2d();
@@ -106,7 +106,8 @@ private final Field2d m_fieldTracker;
   }
 
   public void resetGyro(){
-    m_gyro.reset();
+    //m_gyro.reset();
+    m_gyro.zeroYaw();
     m_odometry.resetPosition(new Pose2d(), m_gyro.getRotation2d());
   }
 
@@ -149,13 +150,17 @@ private final Field2d m_fieldTracker;
 
     private CANCoder m_calibrateEncoder;
 
-    Module(int velocityChannel, int rotationChannel, int calibrationChannel){
+    Module(int velocityChannel,int rotationChannel, int calibrationChannel){
       m_rotationMotor = new CANSparkMax(rotationChannel, MotorType.kBrushless);
       m_rotationEncoder = m_rotationMotor.getEncoder();
       m_rotationController = m_rotationMotor.getPIDController();
 
-      m_rotationMotor.setInverted(true);
-      m_rotationEncoder.setInverted(true);
+
+      if(rotationChannel==1 || rotationChannel==5){
+        //m_rotationMotor.setInverted(true);
+      }
+      //m_rotationMotor.setInverted(true);
+      // m_rotationEncoder.setInverted(true);
       m_rotationEncoder.setPositionConversionFactor(ROTATION_GEARING * Math.PI*2);
       m_rotationController.setFeedbackDevice(m_rotationEncoder);
 
@@ -177,8 +182,10 @@ private final Field2d m_fieldTracker;
 
 
       m_calibrateEncoder = new CANCoder(calibrationChannel);
+      
       //TODO: remove
       Shuffleboard.getTab("Tab 5").addNumber("Rotation encoder "+m_rotationMotor.getDeviceId(), m_rotationEncoder::getPosition);
+      Shuffleboard.getTab("Tab 5").addNumber("Calibrate encoder "+m_rotationMotor.getDeviceId(), m_calibrateEncoder::getAbsolutePosition);
     }
 
     public SwerveModuleState measureState(){

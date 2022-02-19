@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
@@ -49,23 +50,27 @@ public class RobotContainer {
 
 
   private final Intake m_intake = new Intake();
+  private final CargoStaging m_staging = new CargoStaging();
   private final Launcher m_launcher = new Launcher();
-  //private final CargoStaging m_staging = new CargoStaging();
   private final Drivetrain m_drivetrain = new Drivetrain();
+
+
 
   private final JoystickButton m_intakeButton = new JoystickButton(m_copilot, 1);
   private final JoystickButton m_outtakeButton = new JoystickButton(m_copilot, 2);
-  private final JoystickButton m_stageInButton = new JoystickButton(m_stick, 4);
-  private final JoystickButton m_stageOutButton = new JoystickButton(m_stick, 5);
+  private final JoystickButton m_stageInButton = new JoystickButton(m_copilot, 7);
+  private final JoystickButton m_stageOutButton = new JoystickButton(m_copilot, 2);
 
   private final JoystickButton m_calibrationButton = new JoystickButton(m_stick, 8);
 
   private final JoystickButton m_basicLaunchToggle = new JoystickButton(m_copilot, 3);
 
+
+
   private final Command m_manualDrive = new JoystickDrive(m_drivetrain, m_stick);
 
   private final Command m_calibrateDrivetrain = new DrivetrainCalibration(m_drivetrain);
-  private final Command m_simpleAutonomous = new BasicAutonomous(m_launcher, m_drivetrain, m_intake);
+  //private final Command m_simpleAutonomous = new BasicAutonomous(m_launcher, m_drivetrain, m_intake);
 
   //Needs a more descriptive name
   private final Trajectory m_trajectory = TrajectoryGenerator.generateTrajectory(
@@ -81,8 +86,14 @@ public class RobotContainer {
   private final TrajectoryFollowRelative m_followTrajectory = new TrajectoryFollowRelative(m_trajectory, m_drivetrain);
   private final RunIntake m_takeIn = new RunIntake(m_intake,1);
   private final RunIntake m_takeOut = new RunIntake(m_intake,-1);
-  // private final StageCargo m_stageIn = new StageCargo(m_staging, 1,0.4);
-  // private final StageCargo m_stageOut = new StageCargo(m_staging, -1,0.4);
+
+  private final AutoStage m_autoStage = new AutoStage(m_staging);
+  //TODO:remove
+  private final StartEndCommand m_manualStageIn = new StartEndCommand(
+    m_staging::runIn, m_staging::stop, m_staging);
+  private final StartEndCommand m_manualStageOut = new StartEndCommand(
+      m_staging::runOut, m_staging::stop, m_staging);
+  //end remove
 
   private final Command m_basicShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.3),()->m_launcher.setDutyCycle(0), m_launcher);
 
@@ -95,6 +106,7 @@ public class RobotContainer {
     configureAutonomousRoutines();
 
     m_drivetrain.setDefaultCommand(m_manualDrive);
+    //m_staging.setDefaultCommand(m_autoStage);
   }
 
   /**
@@ -112,8 +124,8 @@ public class RobotContainer {
 
     m_intakeButton.whenHeld(m_takeIn);
     m_outtakeButton.whenHeld(m_takeOut);
-    // m_stageInButton.whenHeld(m_stageIn);
-    // m_stageOutButton.whenHeld(m_stageOut);
+    m_stageInButton.whenHeld(m_manualStageIn);
+    m_stageOutButton.whenHeld(m_manualStageOut);
 
     m_calibrationButton.whenPressed(m_calibrateDrivetrain);
     m_basicLaunchToggle.toggleWhenPressed(m_basicShoot);
@@ -123,7 +135,7 @@ public class RobotContainer {
   private void configureAutonomousRoutines(){
     m_autonomousChooser.setDefaultOption("NO AUTONOMOUS", m_defaultAutonomous);
     m_autonomousChooser.addOption("Base Autonomous", m_followTrajectory);
-    m_autonomousChooser.addOption("Simple Autonomous", m_simpleAutonomous);
+    //m_autonomousChooser.addOption("Simple Autonomous", m_simpleAutonomous);
 
     Shuffleboard.getTab("Game Screen").add(m_autonomousChooser);
   }
