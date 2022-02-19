@@ -21,28 +21,22 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
 public class ClimbArm extends SubsystemBase {
-  final MotorControllerGroup m_liftWinch;
+  final MotorController m_liftWinch;
 
   final Encoder m_lengthEncoder;
 
   final CANSparkMax m_angleWinchMotor;
 
-  final DigitalInput m_springHookDetector;
 
   
   final PowerDistribution m_distributionBoard;
   /** Creates a new ClimbArm. */
   public ClimbArm() {
-    PWMSparkMax follower = new PWMSparkMax(LENGTH_WINCH_FOLLOWER_CHANNEL);
-    follower.setInverted(true);
-    m_liftWinch = new MotorControllerGroup(
-      new PWMSparkMax(LENGTH_WINCH_CHANNEL),
-      follower);
+    m_liftWinch = new PWMSparkMax(LENGTH_WINCH_CHANNEL);
 
     m_lengthEncoder = new Encoder(LENGTH_ENCODER_A, LENGTH_ENCODER_B);
 
     m_angleWinchMotor = new CANSparkMax(ANGLE_WINCH_CHANNEL, MotorType.kBrushless);
-    m_springHookDetector = new DigitalInput(SPRING_HOOK_SWITCH_CHANNEL);
 
     m_distributionBoard = new PowerDistribution();
 
@@ -62,10 +56,6 @@ public class ClimbArm extends SubsystemBase {
 
   public double measureArmLength(){
     return m_lengthEncoder.get();
-  }
-
-  public boolean getHookDetector(){
-    return m_springHookDetector.get();
   }
 
   @Override

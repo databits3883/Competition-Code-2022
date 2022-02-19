@@ -12,8 +12,6 @@ import static frc.robot.Constants.ClimbConstants.*;
 public class ClimbPull extends CommandBase {
   final ClimbArm m_arm;
 
-  private boolean m_previousSwitchState;
-  private boolean m_currentSwitchState;
   State m_currentState;
   /** Creates a new ClimbPull. */
   public ClimbPull(ClimbArm arm) {
@@ -26,8 +24,6 @@ public class ClimbPull extends CommandBase {
   @Override
   public void initialize() {
     m_arm.setAngleWinchSpeed(WINCH_DESLACK_SPEED);
-    
-    m_previousSwitchState = m_arm.getHookDetector();
     m_currentState = State.kFast;
   }
 
@@ -39,22 +35,20 @@ public class ClimbPull extends CommandBase {
   }
 
   void transitionState(){
-    m_currentSwitchState = m_arm.getHookDetector();
     switch(m_currentState){
       case kFast:
-        if(m_currentSwitchState & !m_previousSwitchState){
+        if(m_arm.measureArmLength() > LIFT_SLOW_HEIGHT){
           m_currentState = State.kSlow;
         }
         break;
       case kSlow:
-        if(!m_currentSwitchState & m_previousSwitchState){
-          m_currentState = State.kFast;
+        if(m_arm.measureArmLength() > ON_BAR_HEIGHT){
+          m_currentState = State.kStop;
         }
         break;
       case kStop:
         m_currentState = State.kStop;
     }
-    m_previousSwitchState = m_currentSwitchState;
   }
 
   // Called once the command ends or is interrupted.

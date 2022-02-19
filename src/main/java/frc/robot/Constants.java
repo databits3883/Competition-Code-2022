@@ -20,15 +20,13 @@ import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
  */
 public final class Constants {
     public static class ClimbConstants{
-        public static final int LENGTH_WINCH_CHANNEL = 13;
-        public static final int LENGTH_WINCH_FOLLOWER_CHANNEL = 14;
+        public static final int LENGTH_WINCH_CHANNEL = 0;
 
         public static final int LENGTH_ENCODER_A = 0;
         public static final int LENGTH_ENCODER_B = 1;
 
 
-        public static final int ANGLE_WINCH_CHANNEL = 1;
-        public static final int SPRING_HOOK_SWITCH_CHANNEL = 0;
+        public static final int ANGLE_WINCH_CHANNEL = 20;
 
         public static final double LENGTH_WINCH_GEARING = 1;
         public static final double LENGTH_WINCH_CIRCUMFRENCE = 1;
@@ -48,17 +46,21 @@ public final class Constants {
         public static final double WINCH_DESLACK_SPEED = 0.1;
         public static final double ARM_PULL_FAST_SPEED=0.7;
         public static final double ARM_PULL_SLOW_SPEED = 0.4;
+
+
+        public static final double LIFT_SLOW_HEIGHT =0;
+        public static final double ON_BAR_HEIGHT =0;
     }
 
     public final class LauncherContants{
-        public static final int LEADER_CHANNEL = 20;
-        public static final int FOLLOWER_CHANNEL = 21;
+        public static final int LEADER_CHANNEL = 13;
+        public static final int FOLLOWER_CHANNEL = 14;
         public static final double ENCODER_POSITIONAL_CONVERSION = 1.0/3.0;
     }
 
     public static class IntakeConstants{
         public static final int INTAKE_CHANNEL = 16;
-        public static final int RAISE_LOWER_CHANNEL = 17;
+        public static final int RAISE_LOWER_CHANNEL = 15;
         public static final int EXTEND_LIMIT_CHANNEL = 0;
         public static final int RETRACT_LIMIT_CHANNEL=1;
 
@@ -78,7 +80,7 @@ public final class Constants {
     }
 
     public static class StagingConstants{
-        public static final int MOTOR_CHANNEL = 0;
+        public static final int MOTOR_CHANNEL = 19;
         public static final int SENSOR_CHANNEL = 0;
         public static final double IN_SPEED = 0.5;
         public static final double OUT_SPEED = -0.5;
