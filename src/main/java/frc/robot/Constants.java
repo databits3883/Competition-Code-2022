@@ -98,10 +98,10 @@ public final class Constants {
         public static final double DRIVE_TRACK_LENGTH = 0.73;
 
         public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
-            new Translation2d(DRIVE_TRACK_LENGTH/2, DRIVE_TRACK_WIDTH/2), //fron right 
-            new Translation2d(DRIVE_TRACK_LENGTH/2, -DRIVE_TRACK_WIDTH/2), //rear right
-            new Translation2d(-DRIVE_TRACK_LENGTH/2, -DRIVE_TRACK_WIDTH/2), //rear left
-            new Translation2d(-DRIVE_TRACK_LENGTH/2, DRIVE_TRACK_WIDTH/2) //front left
+            new Translation2d(DRIVE_TRACK_LENGTH/2, -DRIVE_TRACK_WIDTH/2), //fron right 
+            new Translation2d(-DRIVE_TRACK_LENGTH/2, -DRIVE_TRACK_WIDTH/2), //rear right
+            new Translation2d(-DRIVE_TRACK_LENGTH/2, DRIVE_TRACK_WIDTH/2), //rear left
+            new Translation2d(DRIVE_TRACK_LENGTH/2, DRIVE_TRACK_WIDTH/2) //front left
           );
         
         
@@ -115,17 +115,17 @@ public final class Constants {
         public static class CANChannels{
             public static final int FRONT_RIGHT_VELOCITY = 2;
             public static final int FRONT_RIGHT_ROTATION = 1;
-            public static final int REAR_RIGHT_VELOCITY = 4;
-            public static final int REAR_RIGHT_ROTATION = 3;
+            public static final int REAR_RIGHT_VELOCITY = 8;
+            public static final int REAR_RIGHT_ROTATION = 7;
             public static final int REAR_LEFT_VELOCITY = 6;
             public static final int REAR_LEFT_ROTATION = 5;
-            public static final int FRONT_LEFT_VELOCITY = 8;
-            public static final int FRONT_LEFT_ROTATION = 7;
+            public static final int FRONT_LEFT_VELOCITY = 4;
+            public static final int FRONT_LEFT_ROTATION = 3;
 
             public static final int FRONT_RIGHT_CALIBRATION =9;
-            public static final int REAR_RIGHT_CALIBRATION =10;
+            public static final int REAR_RIGHT_CALIBRATION =12;
             public static final int REAR_LEFT_CALIBRATION =11;
-            public static final int FRONT_LEFT_CALIBRATION =12;
+            public static final int FRONT_LEFT_CALIBRATION =10;
         }
 
         public static class CalibrationConstants{

@@ -156,10 +156,9 @@ private final Field2d m_fieldTracker;
       m_rotationController = m_rotationMotor.getPIDController();
 
 
-      if(rotationChannel==1 || rotationChannel==5){
-        //m_rotationMotor.setInverted(true);
-      }
       //m_rotationMotor.setInverted(true);
+      m_rotationMotor.setInverted(false);
+
       // m_rotationEncoder.setInverted(true);
       m_rotationEncoder.setPositionConversionFactor(ROTATION_GEARING * Math.PI*2);
       m_rotationController.setFeedbackDevice(m_rotationEncoder);
@@ -172,6 +171,8 @@ private final Field2d m_fieldTracker;
       m_velocityMotor = new CANSparkMax(velocityChannel, MotorType.kBrushless);
       m_velocityEncoder = m_velocityMotor.getEncoder();
       m_velocityController = m_velocityMotor.getPIDController();
+
+      m_velocityMotor.setInverted(false);
 
       m_velocityEncoder.setVelocityConversionFactor(VELOCITY_GEARING*WHEEL_CIRCUMFRENCE * (1.0/60.0));
 
@@ -193,7 +194,7 @@ private final Field2d m_fieldTracker;
     }
 
     public void setState(SwerveModuleState state){
-      state = SwerveModuleState.optimize(state, new Rotation2d(m_rotationEncoder.getPosition()));
+      //state = SwerveModuleState.optimize(state, new Rotation2d(m_rotationEncoder.getPosition()));
       m_velocityController.setReference(state.speedMetersPerSecond, ControlType.kVelocity);
       m_rotationController.setReference(
         mapAngleToNearContinuous(state.angle.getRadians()),
@@ -202,6 +203,7 @@ private final Field2d m_fieldTracker;
 
     public void calibrate(){
       m_rotationEncoder.setPosition(m_calibrateEncoder.getAbsolutePosition()*Math.PI/180.0);
+      System.out.println("Calibrated wheel"+m_rotationMotor.getDeviceId()+" to "+m_rotationEncoder.getPosition());
     }
 
     double mapAngleToNearContinuous(double newAngle){

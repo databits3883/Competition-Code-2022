@@ -25,8 +25,8 @@ public class JoystickDrive extends CommandBase {
   public JoystickDrive(Drivetrain drivetrain, Joystick stick) {
     m_drivetrain = drivetrain;
     m_forwardAxis = ()->-stick.getY();
-    m_sideAxis = stick::getX;
-    m_rotateAxis = stick::getTwist;
+    m_sideAxis = ()->-stick.getX();
+    m_rotateAxis =()-> -stick.getTwist();
     addRequirements(drivetrain);
   }
 
