@@ -64,7 +64,7 @@ private final Field2d m_fieldTracker;
 
   public void setSpeedFieldRelative(ChassisSpeeds speeds){
     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond,
-     speeds.omegaRadiansPerSecond, Rotation2d.fromDegrees(m_gyro.getYaw()));
+     speeds.omegaRadiansPerSecond, Rotation2d.fromDegrees(-m_gyro.getYaw()));
      setChassisSpeed(speeds);
   }
 
@@ -126,7 +126,7 @@ private final Field2d m_fieldTracker;
   public void periodic() {
     // This method will be called once per scheduler run
     measureCurrentStates();
-    m_odometry.update(Rotation2d.fromDegrees(m_gyro.getAngle()), m_lastMeasuredStates);
+    m_odometry.update(Rotation2d.fromDegrees(-m_gyro.getAngle()), m_lastMeasuredStates);
 
     m_fieldTracker.setRobotPose(getPoseRelative());
   }
