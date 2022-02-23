@@ -29,6 +29,7 @@ import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.*;
 import frc.robot.commands.climb.*;
 import frc.robot.subsystems.CargoStaging;
+import frc.robot.subsystems.ClimbArm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
@@ -53,8 +54,7 @@ public class RobotContainer {
   private final CargoStaging m_staging = new CargoStaging();
   private final Launcher m_launcher = new Launcher();
   private final Drivetrain m_drivetrain = new Drivetrain();
-
-
+  private final ClimbArm m_climbArm = new ClimbArm();
 
   private final JoystickButton m_intakeButton = new JoystickButton(m_copilot, 1);
   private final JoystickButton m_outtakeButton = new JoystickButton(m_copilot, 2);
@@ -64,8 +64,10 @@ public class RobotContainer {
   private final JoystickButton m_calibrationButton = new JoystickButton(m_stick, 8);
 
   private final JoystickButton m_basicLaunchToggle = new JoystickButton(m_copilot, 3);
-
-
+  private final JoystickButton m_lengthExtendButton = new JoystickButton(m_copilot, 11);
+  private final JoystickButton m_lengthRetractButton = new JoystickButton(m_copilot, 16);
+  private final JoystickButton m_angleExtendButton = new JoystickButton(m_copilot, 12);
+  private final JoystickButton m_angleRetractButton = new JoystickButton(m_copilot, 15);
 
   private final Command m_manualDrive = new JoystickDrive(m_drivetrain, m_stick);
 
@@ -86,6 +88,10 @@ public class RobotContainer {
   private final TrajectoryFollowRelative m_followTrajectory = new TrajectoryFollowRelative(m_trajectory, m_drivetrain);
   private final RunIntake m_takeIn = new RunIntake(m_intake,1);
   private final RunIntake m_takeOut = new RunIntake(m_intake,-1);
+  private final RunLength m_lengthExtend = new RunLength(m_climbArm, 0.4);
+  private final RunLength m_lengthRetract = new RunLength(m_climbArm, -1.0);
+  private final RunAngle m_angleExtend = new RunAngle(m_climbArm, -0.4);
+  private final RunAngle m_angleRetract = new RunAngle(m_climbArm, 0.4);
 
   private final AutoStage m_autoStage = new AutoStage(m_staging);
   //TODO:remove
@@ -126,7 +132,10 @@ public class RobotContainer {
     m_outtakeButton.whenHeld(m_takeOut);
     m_stageInButton.whenHeld(m_manualStageIn);
     m_stageOutButton.whenHeld(m_manualStageOut);
-
+    m_lengthExtendButton.whenHeld(m_lengthExtend);
+    m_lengthRetractButton.whenHeld(m_lengthRetract);
+    m_angleExtendButton.whenHeld(m_angleExtend);
+    m_angleRetractButton.whenHeld(m_angleRetract);
     m_calibrationButton.whenPressed(m_calibrateDrivetrain);
     m_basicLaunchToggle.toggleWhenPressed(m_basicShoot);
 

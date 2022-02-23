@@ -5,25 +5,27 @@
 package frc.robot.subsystems;
 
 
-import edu.wpi.first.wpilibj.DigitalInput;
+// import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+// import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
+// import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.ClimbConstants.*;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 
 public class ClimbArm extends SubsystemBase {
   final MotorController m_liftWinch;
 
   final Encoder m_lengthEncoder;
+  final RelativeEncoder m_angleEncoder;
 
   final CANSparkMax m_angleWinchMotor;
 
@@ -37,9 +39,12 @@ public class ClimbArm extends SubsystemBase {
     m_lengthEncoder = new Encoder(LENGTH_ENCODER_A, LENGTH_ENCODER_B);
 
     m_angleWinchMotor = new CANSparkMax(ANGLE_WINCH_CHANNEL, MotorType.kBrushless);
-
+    m_angleEncoder = m_angleWinchMotor.getEncoder();
     m_distributionBoard = new PowerDistribution();
-
+    m_liftWinch.set(0.0);
+    m_angleWinchMotor.set(0.0);
+    m_angleEncoder.setPosition(0.0);
+    m_lengthEncoder.reset();
   }
 
   public void setExtensionSpeed(double speed){
@@ -53,7 +58,10 @@ public class ClimbArm extends SubsystemBase {
     return m_distributionBoard.getCurrent(ANGLE_WINCH_PD_SLOT);
   }
 
-
+  public double getAngleWinchLength() {
+    return m_angleEncoder.getPosition();
+  }
+  
   public double measureArmLength(){
     return m_lengthEncoder.get();
   }
