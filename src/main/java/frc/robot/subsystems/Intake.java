@@ -28,7 +28,7 @@ public class Intake extends SubsystemBase {
   private final SparkMaxPIDController m_raiseController;
 
   static final int RAISE_SLOT = 0;
-  static final int LOWER_SLOT =0;
+  static final int LOWER_SLOT =1;
 
 
   public Intake() {
@@ -67,9 +67,9 @@ public class Intake extends SubsystemBase {
 
   private REVLibError setHeight(double height){
     if(height >=m_raiseEncoder.getPosition()){
-      return m_raiseController.setReference(height, ControlType.kSmartMotion, RAISE_SLOT);
+      return m_raiseController.setReference(height, ControlType.kPosition, RAISE_SLOT);
     }else{
-      return m_raiseController.setReference(height, ControlType.kSmartMotion,LOWER_SLOT);
+      return m_raiseController.setReference(height, ControlType.kPosition,LOWER_SLOT);
     }
   }
 
