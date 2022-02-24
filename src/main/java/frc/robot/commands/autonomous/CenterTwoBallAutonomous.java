@@ -28,20 +28,23 @@ public class CenterTwoBallAutonomous extends SequentialCommandGroup {
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
-      new Translation2d(1.7/2 ,-1.5/2)
+      new Translation2d(1.9/2 ,-1.7/2)
     ),
 
-    new Pose2d(0.76,-2.15,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(1.9,-1.7,Rotation2d.fromDegrees(0.0)),
     DriveConstants.CONFIG);
+
+
+
 
     private final Trajectory originTrajectory = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
-      new Translation2d(-1.7/2 ,1.5/2)
+      new Translation2d(-1.9/2 ,1.7/2)
     ),
 
-    new Pose2d(-1.7,1.5,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(-1.9,1.7,Rotation2d.fromDegrees(0.0)),
     DriveConstants.CONFIG);
 
 

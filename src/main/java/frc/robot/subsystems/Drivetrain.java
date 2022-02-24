@@ -140,7 +140,6 @@ private final Field2d m_fieldTracker;
     }
   }
 
-  //TODO:
   @Override
   public void initSendable(SendableBuilder builder){
     super.initSendable(builder);
