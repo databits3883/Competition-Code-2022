@@ -50,6 +50,12 @@ public final class Constants {
 
         public static final double LIFT_SLOW_HEIGHT =0;
         public static final double ON_BAR_HEIGHT =0;
+
+
+        public static final double MANUAL_PULL_SPEED = -1;
+        public static final double MANUAL_EXTEND_SPEED = -1;
+        public static final double MANUAL_TILT_SPEED = 0.5;
+
     }
 
     public final class LauncherContants{
