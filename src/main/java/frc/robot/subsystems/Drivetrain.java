@@ -16,6 +16,7 @@ import com.revrobotics.SparkMaxLimitSwitch.Type;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -44,7 +45,7 @@ public class Drivetrain extends SubsystemBase {
 
   private Pose2d m_relativePoseOffset = new Pose2d();
 
-private final Field2d m_fieldTracker;
+  private final Field2d m_fieldTracker;
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -83,6 +84,16 @@ private final Field2d m_fieldTracker;
         m_modules[i].setState(states[i]);
       }
     }
+  }
+
+  public void setChassisOffCenter(ChassisSpeeds speeds, Translation2d centerOfRotation){
+    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds,centerOfRotation);
+    setStates(states);
+  }
+  public void setSpeedFieldRelativeOffCenter(ChassisSpeeds speeds, Translation2d centerOfRotation){
+    speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, 
+    Rotation2d.fromDegrees(-m_gyro.getYaw()));
+    setChassisOffCenter(speeds, centerOfRotation);
   }
 
   public boolean getAllCalibrated(){

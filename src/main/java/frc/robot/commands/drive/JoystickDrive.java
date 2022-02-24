@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import java.util.function.DoubleSupplier;
 
@@ -13,7 +13,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class JoystickDrive extends CommandBase {
-  private final Drivetrain m_drivetrain;
+  protected final Drivetrain m_drivetrain;
 
   private final DoubleSupplier m_forwardAxis;
   private final DoubleSupplier m_sideAxis;
@@ -31,10 +31,7 @@ public class JoystickDrive extends CommandBase {
   }
 
 
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
+  void getCommandedSpeed(){
     double vx = m_forwardAxis.getAsDouble();
     double vy = m_sideAxis.getAsDouble();
 
@@ -53,6 +50,13 @@ public class JoystickDrive extends CommandBase {
     m_target.vxMetersPerSecond = vx;
     m_target.vyMetersPerSecond = vy;
     m_target.omegaRadiansPerSecond = omega;
+  }
+
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    getCommandedSpeed();
     m_drivetrain.setSpeedFieldRelative(m_target);;
   }
 
@@ -65,4 +69,7 @@ public class JoystickDrive extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+ 
 }
+
+
