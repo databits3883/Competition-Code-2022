@@ -132,8 +132,8 @@ public class RobotContainer {
   );
   private final Command m_tiltOntoBar = new RetractIntoBar(m_climb);
 
-  private final Command m_pullClimbToZero = new StartEndCommand(()->{m_climb.setAngleWinchSpeed(0.5);m_climb.setExtensionSpeed(-0.4);},
-  ()->{m_climb.setAngleWinchSpeed(0);m_climb.setExtensionSpeed(0);}, m_climb);
+  /*private final Command m_pullClimbToZero = new StartEndCommand(()->{m_climb.setAngleWinchSpeed(0.5);m_climb.setExtensionSpeed(-0.4);},
+  ()->{m_climb.setAngleWinchSpeed(0);m_climb.setExtensionSpeed(0);}, m_climb);*/
   private final JoystickButton m_zeroClimbButton = new JoystickButton(m_copilot, 16);
  
 
@@ -192,7 +192,7 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_raiseOverMidButton.whileActiveOnce(m_perpIntakeForClimb);
     m_pullOntoNextBarButton.whileActiveOnce(m_pullOntoBar);
     m_nextBarButton.whileActiveOnce(m_prepNextBar);
-    m_zeroClimbButton.whileActiveOnce(m_pullClimbToZero);
+    //m_zeroClimbButton.whileActiveOnce(m_pullClimbToZero);
     m_tiltOntoBarButton.whileActiveOnce(m_tiltOntoBar);
   }
   /**Configures the autonomous sendable chooser */
