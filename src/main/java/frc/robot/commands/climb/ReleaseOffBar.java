@@ -18,7 +18,7 @@ public class ReleaseOffBar extends NotifierCommand {
 
     super(()->{
       if(arm.measureArmLength() < OFF_BAR_HEIGHT){
-        arm.setExtensionSpeed(ARM_EXTEND_SPEED);
+        arm.setExtensionSpeed(ARM_EXTEND_SPEED/4.0);
       }else{
         arm.setExtensionSpeed(0);
       }

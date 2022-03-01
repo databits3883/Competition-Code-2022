@@ -46,15 +46,15 @@ public final class Constants {
 
 
         //public static final double LIFT_SLOW_HEIGHT =0;
-        public static final double OVER_MID_BAR_HEIGHT = 3600;
-        public static final double ON_BAR_HEIGHT = 10;
-        public static final double OFF_BAR_HEIGHT = 1099;
-        public static final double FULL_EXTENSION_HEIGHT = 4374;
+        public static final double OVER_MID_BAR_HEIGHT = 3321;
+        public static final double ON_BAR_HEIGHT = -200;
+        public static final double OFF_BAR_HEIGHT = 700;
+        public static final double FULL_EXTENSION_HEIGHT = 4527;
 
-        public static final double PAST_NEXT_BAR_ANGLE = -100.45;
-        public static final double ON_NEXT_BAR_ANGLE = -79.45;
+        public static final double PAST_NEXT_BAR_ANGLE = -98;
+        public static final double ON_NEXT_BAR_ANGLE = -77;
 
-        public static final double AUTOCLIMB_CHECK_PERIOD = 0.0005;
+        public static final double AUTOCLIMB_CHECK_PERIOD = 0.0002;
 
 
         public static final double MANUAL_PULL_SPEED = -1;
