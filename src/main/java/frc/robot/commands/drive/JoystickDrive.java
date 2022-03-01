@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import java.util.function.DoubleSupplier;
 
@@ -38,12 +38,28 @@ public class JoystickDrive extends CommandBase {
     double vx = m_forwardAxis.getAsDouble();
     double vy = m_sideAxis.getAsDouble();
 
+    //deadbanding at less than 7 percent usage
+    if(Math.abs(vx)<0.07){
+      vx=0;
+    }else{
+      vx = Math.copySign((Math.abs(vx)-0.07)/(1-0.07), vx);
+    }
+    if(Math.abs(vy)<0.07){
+      vy=0;
+    }else{
+      vy = Math.copySign((Math.abs(vy)-0.07)/(1-0.07), vy);
+    }
+
+
+    //cut off corner saturation but preserve direction
     double squareMag = vx*vx+vy*vy;
     if(squareMag > 1){
       double mag = Math.sqrt(squareMag);
       vx/=mag;
       vy/=mag;
     }
+
+    //command percentages to real speeds
     vy*=Constants.DriveConstants.MAX_WHEEL_SPEED;
     vx*=Constants.DriveConstants.MAX_WHEEL_SPEED;
 
