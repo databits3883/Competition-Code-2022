@@ -120,7 +120,7 @@ public class RobotContainer {
   //end remove
 
   private final Command m_basicShootLow = new StartEndCommand(()->m_launcher.setDutyCycle(0.25),()->m_launcher.setDutyCycle(0), m_launcher);
-  private final Command m_basicShootHigh = new StartEndCommand(()->m_launcher.setDutyCycle(0.5),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_basicShootHigh = new StartEndCommand(()->m_launcher.setDutyCycle(0.41),()->m_launcher.setDutyCycle(0), m_launcher);
 
 
   private final RaiseOverMid m_raiseClimbOverMid = new RaiseOverMid(m_climb);
