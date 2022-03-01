@@ -75,7 +75,8 @@ public class RobotContainer {
 
   private final JoystickButton m_calibrationButton = new JoystickButton(m_stick, 8);
 
-  private final JoystickButton m_basicLaunchToggle = new JoystickButton(m_copilot, 3);
+  private final JoystickButton m_basicLaunchToggleLow = new JoystickButton(m_copilot, 3);
+  private final JoystickButton m_basicLaunchToggleHigh = new JoystickButton(m_copilot, 4);
 
   
 
@@ -118,7 +119,8 @@ public class RobotContainer {
       m_staging::runOut, m_staging::stop, m_staging);
   //end remove
 
-  private final Command m_basicShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.3),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_basicShootLow = new StartEndCommand(()->m_launcher.setDutyCycle(0.25),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_basicShootHigh = new StartEndCommand(()->m_launcher.setDutyCycle(0.5),()->m_launcher.setDutyCycle(0), m_launcher);
 
 
   private final RaiseOverMid m_raiseClimbOverMid = new RaiseOverMid(m_climb);
@@ -181,9 +183,10 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_stageOutButton.whenHeld(m_manualStageOut);
 
     m_calibrationButton.whenPressed(m_calibrateDrivetrain);
-    m_basicLaunchToggle.toggleWhenPressed(m_basicShoot);
-
-    m_toggleClimb.toggleWhenPressed(m_manualClimb, false);
+    m_basicLaunchToggleLow.toggleWhenPressed(m_basicShootLow, false);
+    m_basicLaunchToggleHigh.toggleWhenPressed(m_basicShootHigh, false);
+    m_manualClimb.schedule();
+    //m_toggleClimb.toggleWhenPressed(m_manualClimb, false);
 
     m_raiseOverMidButton.whileActiveOnce(m_raiseClimbOverMid);
     m_raiseOverMidButton.whileActiveOnce(m_perpIntakeForClimb);
