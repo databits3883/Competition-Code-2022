@@ -34,22 +34,33 @@ public final class Constants {
         public static final int ANGLE_WINCH_PD_SLOT = 0;
         public static final double WINCH_CURRENT_THRESHOLD = 1; //change later
 
-        public static final double CLIMB_ARM_EXTEND_SPEED = 0.5;
 
-        public static final double HOOK_RELEASE_DISTANCE = 0.1;
-        public static final double FULL_EXTENSION_DISTANCE = 1;
+       
+        
+        public static final double ARM_DROP_SPEED=-0.4;
+        public static final double ARM_IN_SPEED = 0.5;
 
-        public static final double ARM_DROP_SPEED=0.3;
-        public static final double ARM_DROP_TIME=0.5;
-
-
-        public static final double WINCH_DESLACK_SPEED = 0.1;
-        public static final double ARM_PULL_FAST_SPEED=0.7;
-        public static final double ARM_PULL_SLOW_SPEED = 0.4;
+        public static final double WINCH_DESLACK_SPEED = 0.4;
+        public static final double ARM_PULL_SPEED=-1;
+        public static final double ARM_EXTEND_SPEED = 1;
 
 
-        public static final double LIFT_SLOW_HEIGHT =0;
-        public static final double ON_BAR_HEIGHT =0;
+        //public static final double LIFT_SLOW_HEIGHT =0;
+        public static final double OVER_MID_BAR_HEIGHT = 3321;
+        public static final double ON_BAR_HEIGHT = -200;
+        public static final double OFF_BAR_HEIGHT = 700;
+        public static final double FULL_EXTENSION_HEIGHT = 4527;
+
+        public static final double PAST_NEXT_BAR_ANGLE = -98;
+        public static final double ON_NEXT_BAR_ANGLE = -77;
+
+        public static final double AUTOCLIMB_CHECK_PERIOD = 0.0002;
+
+
+        public static final double MANUAL_PULL_SPEED = -1;
+        public static final double MANUAL_EXTEND_SPEED = 0.4;
+        public static final double MANUAL_TILT_SPEED = -0.4;
+
     }
 
     public final class LauncherContants{
@@ -68,7 +79,7 @@ public final class Constants {
 
         public static final double EXTEND_LEVEL = 1;
         public static final double RETRACT_LEVEL = 1;
-        public static final double MID_LEVEL = 1;
+        public static final double MID_LEVEL = 145.06;
         public static final double MAX_LEVEL_STABLE_OUTPUT = 0.05;
 
         public static final double MAX_RAISE_ACCEL = 0;

@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AsynchronousInterrupt;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.IntakeConstants.*;
 
@@ -41,6 +42,7 @@ public class Intake extends SubsystemBase {
     m_raiseController = m_raiseMotor.getPIDController();
 
     m_raiseMotor.setIdleMode(IdleMode.kBrake);
+    m_raiseEncoder.setPosition(0);
 
     m_raiseController.setSmartMotionMaxAccel(MAX_RAISE_ACCEL, RAISE_SLOT);
     m_raiseController.setSmartMotionMaxAccel(MAX_LOWER_ACCEL, LOWER_SLOT);
@@ -58,7 +60,7 @@ public class Intake extends SubsystemBase {
     m_raiseController.setD(0,LOWER_SLOT);
     m_raiseController.setFF(0,LOWER_SLOT);
     
-
+    Shuffleboard.getTab("tab5").addNumber("Intake angle", m_raiseEncoder::getPosition);
   }
   
   public void takeInOurOut(double speed){
@@ -85,6 +87,13 @@ public class Intake extends SubsystemBase {
 
   public boolean atTarget(){
     return Math.abs(m_raiseMotor.getAppliedOutput()) <=MAX_LEVEL_STABLE_OUTPUT;
+  }
+
+  public void runDrawAtSpeed(double speed){
+    m_raiseMotor.set(speed);
+  }
+  public double getDrawHeight(){
+    return m_raiseEncoder.getPosition();
   }
 
   @Override
