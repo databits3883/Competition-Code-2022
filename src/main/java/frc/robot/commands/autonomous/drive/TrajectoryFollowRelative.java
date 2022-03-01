@@ -5,8 +5,7 @@
 package frc.robot.commands.autonomous.drive;
 
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+
 import frc.robot.subsystems.Drivetrain;
 
 public class TrajectoryFollowRelative extends TrajectoryFollowBase {

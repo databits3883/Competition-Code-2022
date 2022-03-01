@@ -27,7 +27,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.*;
-import frc.robot.commands.autonomous.BasicAutonomous;
+import frc.robot.commands.autonomous.CenterTwoBallAutonomous;
+import frc.robot.commands.autonomous.LeftTwoBallAutonomous;
+import frc.robot.commands.autonomous.RightTwoBallAutonomous;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowBase;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.*;
@@ -59,6 +61,10 @@ public class RobotContainer {
   private final Launcher m_launcher = new Launcher();
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final ClimbArm m_climb = new ClimbArm();
+
+  private final Command m_leftTwoBallAutonomous = new LeftTwoBallAutonomous(m_launcher, m_drivetrain, m_intake,m_staging);
+  private final Command m_middleTwoBallAutonomous = new CenterTwoBallAutonomous(m_launcher, m_drivetrain, m_intake,m_staging);
+  private final Command m_rightTwoBallAutonomous = new RightTwoBallAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
 
 
 
@@ -94,7 +100,7 @@ public class RobotContainer {
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
-      new Translation2d(1.5,1)
+      new Translation2d(1.5,0)
     ),
 
     new Pose2d(3,0,Rotation2d.fromDegrees(90)),
@@ -189,7 +195,10 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
   /**Configures the autonomous sendable chooser */
   private void configureAutonomousRoutines(){
     m_autonomousChooser.setDefaultOption("NO AUTONOMOUS", m_defaultAutonomous);
-    m_autonomousChooser.addOption("Base Autonomous", m_followTrajectory);
+    m_autonomousChooser.addOption("Exit Tarmac", m_followTrajectory);
+    m_autonomousChooser.addOption("Left Two Ball", m_leftTwoBallAutonomous);
+    m_autonomousChooser.addOption("Center Two Ball", m_middleTwoBallAutonomous);
+    m_autonomousChooser.addOption("Right Two Ball", m_rightTwoBallAutonomous);
     //m_autonomousChooser.addOption("Simple Autonomous", m_simpleAutonomous);
 
     Shuffleboard.getTab("Game Screen").add(m_autonomousChooser);
