@@ -20,6 +20,7 @@ import frc.robot.Constants.DriveConstants;
 
 import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.DrivetrainCalibration;
+import frc.robot.subsystems.CargoStaging;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
@@ -35,39 +36,38 @@ public class LeftTwoBallAutonomous extends SequentialCommandGroup {
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
-      new Translation2d(0.3 ,-1)
+      new Translation2d(2.15/2 , -0.76/2)
     ),
 
-    new Pose2d(0.76,-2.15,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(2.15,-0.76,Rotation2d.fromDegrees(0.0)),
     DriveConstants.CONFIG);
 
     private final Trajectory originTrajectory = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
-      new Translation2d(-0.3 ,1)
+      new Translation2d(-2.15/2 ,0.76/2)
     ),
 
-    new Pose2d(-0.76,2.15,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(-2.15,0.76,Rotation2d.fromDegrees(0.0)),
     DriveConstants.CONFIG);
 
   /** Creates a new BasicAutonomous. */
-  public LeftTwoBallAutonomous(Launcher m_launcher, Drivetrain m_drivetrain, Intake m_intake) {
+  public LeftTwoBallAutonomous(Launcher m_launcher, Drivetrain m_drivetrain, Intake m_intake, CargoStaging m_staging) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       //new TrajectoryFollowRelative(zeroTrajectory , m_drivetrain),
       new DrivetrainCalibration(m_drivetrain),
       new RunLauncherTimed(m_launcher, 1000, 1),
-      new SetIntakeRunning(m_intake, -1),
+      new SetStageingRunning(m_staging, 1),
       new RunLauncherTimed(m_launcher, 1000, 1),
       new RunLauncherTimed(m_launcher, 0, 0.01),
       new TrajectoryFollowRelative(cargoTwoTrajectory, m_drivetrain),
       new RunIntakeTimed(m_intake, 1,0.75),
       new TrajectoryFollowRelative(originTrajectory, m_drivetrain),
       new RunLauncherTimed(m_launcher, 1000, 1),
-      new RunIntakeTimed(m_intake, -1, 0.25),
-      new RunIntakeTimed(m_intake, 1, 1),
+      new SetStageingRunning(m_staging, 1),
       new RunLauncherTimed(m_launcher, 0, 0.01)
            
       

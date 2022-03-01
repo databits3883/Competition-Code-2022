@@ -13,8 +13,10 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.RunIntake;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.DrivetrainCalibration;
+import frc.robot.subsystems.CargoStaging;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
@@ -28,40 +30,39 @@ public class RightTwoBallAutonomous extends SequentialCommandGroup {
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
-      new Translation2d(-0.6/2 ,-2.2/2)
+      new Translation2d(2.2/2 ,0.6/2)
     ),
 
-    new Pose2d(-0.6,-2.2,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(2.2,0.6,Rotation2d.fromDegrees(0.0)),
     DriveConstants.CONFIG);
 
     private final Trajectory originTrajectory = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
-      new Translation2d(0.6/2 ,2.2/2)
+      new Translation2d(2.2/2 ,0.6/2)
     ),
 
-    new Pose2d(0.6,2.2,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(2.2,0.6,Rotation2d.fromDegrees(0.0)),
     DriveConstants.CONFIG);
 
 
 
   /** Creates a new RightTwoBallAutonomous. */
-  public RightTwoBallAutonomous(Launcher m_launcher, Drivetrain m_drivetrain, Intake m_intake) {
+  public RightTwoBallAutonomous(Launcher m_launcher, Drivetrain m_drivetrain, Intake m_intake, CargoStaging m_staging) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new DrivetrainCalibration(m_drivetrain),
       new RunLauncherTimed(m_launcher, 1000, 1),
-      new SetIntakeRunning(m_intake, -1),
+      new SetStageingRunning(m_staging, 1),
       new RunLauncherTimed(m_launcher, 1000, 1),
       new RunLauncherTimed(m_launcher, 0, 0.01),
       new TrajectoryFollowRelative(cargoTwoTrajectory, m_drivetrain),
       new RunIntakeTimed(m_intake, 1,0.75),
       new TrajectoryFollowRelative(originTrajectory, m_drivetrain),
       new RunLauncherTimed(m_launcher, 1000, 1),
-      new RunIntakeTimed(m_intake, -1, 0.25),
-      new RunIntakeTimed(m_intake, 1, 1),
+      new SetStageingRunning(m_staging, 1),
       new RunLauncherTimed(m_launcher, 0, 0.01)
     );
   }

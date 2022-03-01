@@ -61,7 +61,7 @@ public class Intake extends SubsystemBase {
 
   }
   
-  public void takeInOurOut(double speed){
+  public void takeInOrOut(double speed){
     m_takeMotor.set(speed);
   }
 
