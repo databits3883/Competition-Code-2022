@@ -69,7 +69,9 @@ public class RobotContainer {
 
   private final JoystickButton m_calibrationButton = new JoystickButton(m_stick, 8);
 
-  private final JoystickButton m_basicLaunchToggle = new JoystickButton(m_copilot, 3);
+  private final JoystickButton m_lowerLaunchToggle = new JoystickButton(m_stick, 3);
+
+  private final JoystickButton m_upperLaunchToggle = new JoystickButton(m_stick, 4);
 
   
 
@@ -94,13 +96,13 @@ public class RobotContainer {
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
-      new Translation2d(1.5,1)
+      new Translation2d(1.5,0)
     ),
 
     new Pose2d(3,0,Rotation2d.fromDegrees(90)),
     DriveConstants.CONFIG);
 
-  private final TrajectoryFollowRelative m_followTrajectory = new TrajectoryFollowRelative(m_trajectory, m_drivetrain);
+  private final TrajectoryFollowRelative m_exitTarmacAutonomous = new TrajectoryFollowRelative(m_trajectory, m_drivetrain);
   private final RunIntake m_takeIn = new RunIntake(m_intake,1);
   private final RunIntake m_takeOut = new RunIntake(m_intake,-1);
 
@@ -112,7 +114,8 @@ public class RobotContainer {
       m_staging::runOut, m_staging::stop, m_staging);
   //end remove
 
-  private final Command m_basicShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.3),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.4),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.2),()->m_launcher.setDutyCycle(0), m_launcher);
 
 
   private final RaiseOverMid m_raiseClimbOverMid = new RaiseOverMid(m_climb);
@@ -175,7 +178,8 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_stageOutButton.whenHeld(m_manualStageOut);
 
     m_calibrationButton.whenPressed(m_calibrateDrivetrain);
-    m_basicLaunchToggle.toggleWhenPressed(m_basicShoot);
+    m_upperLaunchToggle.toggleWhenPressed(m_upperShoot);
+    m_lowerLaunchToggle.toggleWhenPressed(m_lowerShoot);
 
     m_toggleClimb.toggleWhenPressed(m_manualClimb, false);
 
@@ -189,7 +193,7 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
   /**Configures the autonomous sendable chooser */
   private void configureAutonomousRoutines(){
     m_autonomousChooser.setDefaultOption("NO AUTONOMOUS", m_defaultAutonomous);
-    m_autonomousChooser.addOption("Base Autonomous", m_followTrajectory);
+    m_autonomousChooser.addOption("Exit Tarmac", m_exitTarmacAutonomous);
     //m_autonomousChooser.addOption("Simple Autonomous", m_simpleAutonomous);
 
     Shuffleboard.getTab("Game Screen").add(m_autonomousChooser);
