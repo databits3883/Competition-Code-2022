@@ -63,7 +63,7 @@ public class Intake extends SubsystemBase {
     Shuffleboard.getTab("tab5").addNumber("Intake angle", m_raiseEncoder::getPosition);
   }
   
-  public void takeInOurOut(double speed){
+  public void takeInOrOut(double speed){
     m_takeMotor.set(speed);
   }
 
