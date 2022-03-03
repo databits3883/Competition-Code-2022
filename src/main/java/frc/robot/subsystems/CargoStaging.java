@@ -36,7 +36,7 @@ public class CargoStaging extends SubsystemBase {
   }
 
   public boolean cargoAtEntrance(){
-    return m_inSensor.get();
+    return !m_inSensor.get();
   }
 
   @Override

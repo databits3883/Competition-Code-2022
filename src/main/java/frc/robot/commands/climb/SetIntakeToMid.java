@@ -6,36 +6,37 @@ package frc.robot.commands.climb;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.NotifierCommand;
-import frc.robot.Constants;
-import frc.robot.subsystems.ClimbArm;
-import static frc.robot.Constants.ClimbConstants.*;
+import frc.robot.subsystems.Intake;
 
-public class ExtendClimbArm extends NotifierCommand {
-  final ClimbArm m_arm;
+import static frc.robot.Constants.IntakeConstants.*;
+
+public class SetIntakeToMid extends NotifierCommand {
+  /** Creates a new SetIntakeToMid. */
+  final Intake m_arm;
   /** Creates a new ClimbPull. */
-  public ExtendClimbArm(ClimbArm arm) {
+  public SetIntakeToMid(Intake arm) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     super(()->{
-      if(arm.measureArmLength() < FULL_EXTENSION_HEIGHT){
-        arm.setExtensionSpeed(ARM_EXTEND_SPEED);
+      if(arm.getDrawHeight() > MID_LEVEL){
+        arm.runDrawAtSpeed(0.5);
       }else{
-        arm.setExtensionSpeed(0);
+        arm.runDrawAtSpeed(0);
       }
-    }, AUTOCLIMB_CHECK_PERIOD, arm);
+    }, 5, arm);
     m_arm=arm;
     addRequirements(m_arm);
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_arm.setExtensionSpeed(0);
+    m_arm.runDrawAtSpeed(0);
     super.end(interrupted);
   }
 
   @Override
   public boolean isFinished(){
-    return m_arm.measureArmLength()>=FULL_EXTENSION_HEIGHT;
+    return m_arm.getDrawHeight()<=MID_LEVEL;
   }
-  
 }
+
