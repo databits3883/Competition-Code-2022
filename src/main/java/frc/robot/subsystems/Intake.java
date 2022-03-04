@@ -67,6 +67,14 @@ public class Intake extends SubsystemBase {
     m_takeMotor.set(speed);
   }
 
+  public double getEncoder(){
+   return m_raiseEncoder.getPosition();
+  }
+
+  public void setIntakeLowerSpeed(double speed){
+    m_raiseMotor.set(speed);
+  }
+
   private REVLibError setHeight(double height){
     if(height >=m_raiseEncoder.getPosition()){
       return m_raiseController.setReference(height, ControlType.kPosition, RAISE_SLOT);
@@ -75,12 +83,32 @@ public class Intake extends SubsystemBase {
     }
   }
 
-  public REVLibError extend(){
+  private void setHeightNew(double length){
+    
+    if (m_raiseEncoder.getPosition() < length){
+      m_raiseMotor.set(.2);
+
+
+    }
+    else{
+      m_raiseMotor.set(0);
+    }
+  }
+
+  /*public REVLibError extend(){
     return setHeight(EXTEND_LEVEL);
   }
   public REVLibError retract(){
     return setHeight(RETRACT_LEVEL);
   }
+  */
+  public void extend(){
+    setHeightNew(INTAKE_EXTENDED_DISTANCE);
+  }
+  public void retract(){
+    setHeightNew(INTAKE_RETRACTED_DISTANCE);
+  }
+
   public REVLibError setToMid(){
     return setHeight(MID_LEVEL);
   }

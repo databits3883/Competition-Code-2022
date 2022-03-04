@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.*;
+import frc.robot.commands.autonomous.AutoExtendIntake;
 import frc.robot.commands.autonomous.CenterTwoBallAutonomous;
 import frc.robot.commands.autonomous.LeftTwoBallAutonomous;
 import frc.robot.commands.autonomous.RightTwoBallAutonomous;
@@ -66,6 +67,9 @@ public class RobotContainer {
   private final Command m_middleTwoBallAutonomous = new CenterTwoBallAutonomous(m_launcher, m_drivetrain, m_intake,m_staging);
   private final Command m_rightTwoBallAutonomous = new RightTwoBallAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
 
+  private final Command m_extendIntake = new ExtendIntake(m_intake);
+  private final Command m_autLowerIntakeCommand = new AutoExtendIntake(m_intake);
+
 
 
   private final JoystickButton m_intakeButton = new JoystickButton(m_copilot, 1);
@@ -78,6 +82,7 @@ public class RobotContainer {
   private final JoystickButton m_lowerLaunchToggle = new JoystickButton(m_stick, 3);
 
   private final JoystickButton m_upperLaunchToggle = new JoystickButton(m_stick, 4);
+  private final JoystickButton m_testLowerIntake = new JoystickButton(m_copilot, 8);
 
   
 
@@ -195,6 +200,8 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_nextBarButton.whileActiveOnce(m_prepNextBar);
     m_zeroClimbButton.whileActiveOnce(m_pullClimbToZero);
     m_tiltOntoBarButton.whileActiveOnce(m_tiltOntoBar);
+
+    m_testLowerIntake.toggleWhenPressed(m_autLowerIntakeCommand);
   }
   /**Configures the autonomous sendable chooser */
   private void configureAutonomousRoutines(){

@@ -58,6 +58,7 @@ public class RightTwoBallAutonomous extends SequentialCommandGroup {
       new SetStageingRunning(m_staging, 1),
       new RunLauncherTimed(m_launcher, 1000, 1),
       new RunLauncherTimed(m_launcher, 0, 0.01),
+      new AutoExtendIntake(m_intake),
       new TrajectoryFollowRelative(cargoTwoTrajectory, m_drivetrain),
       new RunIntakeTimed(m_intake, 1,0.75),
       new TrajectoryFollowRelative(originTrajectory, m_drivetrain),

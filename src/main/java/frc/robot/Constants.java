@@ -79,6 +79,9 @@ public final class Constants {
 
         public static final double EXTEND_LEVEL = 1;
         public static final double RETRACT_LEVEL = 1;
+
+        public static final double INTAKE_EXTENDED_DISTANCE = 218; //change
+        public static final double INTAKE_RETRACTED_DISTANCE = 0; //change?
         public static final double MID_LEVEL = 145.06;
         public static final double MAX_LEVEL_STABLE_OUTPUT = 0.05;
 
