@@ -120,7 +120,7 @@ public class RobotContainer {
       m_staging::runOut, m_staging::stop, m_staging);
   //end remove
 
-  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.4),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.45),()->m_launcher.setDutyCycle(0), m_launcher);
   private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.2),()->m_launcher.setDutyCycle(0), m_launcher);
 
 
@@ -201,7 +201,7 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_autonomousChooser.setDefaultOption("NO AUTONOMOUS", m_defaultAutonomous);
 
 
-    m_autonomousChooser.addOption("Exit Tarmac", m_followTrajectory);
+    //m_autonomousChooser.addOption("Exit Tarmac", m_followTrajectory);
     m_autonomousChooser.addOption("Left Two Ball", m_leftTwoBallAutonomous);
     m_autonomousChooser.addOption("Center Two Ball", m_middleTwoBallAutonomous);
     m_autonomousChooser.addOption("Right Two Ball", m_rightTwoBallAutonomous);
