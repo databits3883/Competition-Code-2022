@@ -194,7 +194,7 @@ private final Field2d m_fieldTracker;
     }
 
     public void setState(SwerveModuleState state){
-      //state = SwerveModuleState.optimize(state, new Rotation2d(m_rotationEncoder.getPosition()));
+      state = SwerveModuleState.optimize(state, new Rotation2d(m_rotationEncoder.getPosition()));
       m_velocityController.setReference(state.speedMetersPerSecond, ControlType.kVelocity);
       m_rotationController.setReference(
         mapAngleToNearContinuous(state.angle.getRadians()),
