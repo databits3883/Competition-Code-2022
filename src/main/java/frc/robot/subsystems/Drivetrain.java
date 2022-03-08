@@ -55,7 +55,7 @@ private final Field2d m_fieldTracker;
     m_modules[2] = new Module(CANChannels.REAR_LEFT_VELOCITY, CANChannels.REAR_LEFT_ROTATION, CANChannels.REAR_LEFT_CALIBRATION);
     m_modules[3] = new Module(CANChannels.FRONT_LEFT_VELOCITY, CANChannels.FRONT_LEFT_ROTATION, CANChannels.FRONT_LEFT_CALIBRATION);
 
-    m_gyro = new AHRS(I2C.Port.kOnboard,(byte)200);
+    m_gyro = new AHRS(I2C.Port.kMXP,(byte)200);
 
     m_odometry = new SwerveDriveOdometry(m_kinematics, m_gyro.getRotation2d());
     m_fieldTracker = new Field2d();
