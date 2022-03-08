@@ -206,8 +206,7 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
 
     m_toggleClimb.toggleWhenPressed(m_manualClimb, false);
 
-    m_basicLaunchToggleLow.toggleWhenPressed(m_basicShootLow, false);
-    m_basicLaunchToggleHigh.toggleWhenPressed(m_basicShootHigh, false);
+    
     m_manualClimb.schedule();
     //m_toggleClimb.toggleWhenPressed(m_manualClimb, false);
 
