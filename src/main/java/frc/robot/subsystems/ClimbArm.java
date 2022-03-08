@@ -45,6 +45,7 @@ public class ClimbArm extends SubsystemBase {
     m_distributionBoard = new PowerDistribution();
 
     m_lengthEncoder.reset();
+    m_lengthEncoder.setDistancePerPulse(1);;
     m_angleEncoder.setPosition(0);
 
     Shuffleboard.getTab("tab 5").addNumber("angle winch", this::getAngleWinch);

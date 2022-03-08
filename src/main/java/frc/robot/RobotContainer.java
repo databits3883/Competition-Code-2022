@@ -27,6 +27,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.*;
+
+import frc.robot.commands.autonomous.AutoExtendIntake;
+
 import frc.robot.commands.autonomous.CenterTwoBallAutonomous;
 import frc.robot.commands.autonomous.LeftTwoBallAutonomous;
 import frc.robot.commands.autonomous.RightTwoBallAutonomous;
@@ -67,6 +70,11 @@ public class RobotContainer {
   private final Command m_rightTwoBallAutonomous = new RightTwoBallAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
 
 
+  private final Command m_extendIntake = new ExtendIntake(m_intake);
+  private final Command m_autLowerIntakeCommand = new AutoExtendIntake(m_intake);
+
+
+
 
   private final JoystickButton m_intakeButton = new JoystickButton(m_copilot, 1);
   private final JoystickButton m_outtakeButton = new JoystickButton(m_copilot, 2);
@@ -75,8 +83,15 @@ public class RobotContainer {
 
   private final JoystickButton m_calibrationButton = new JoystickButton(m_stick, 8);
 
+
+  private final JoystickButton m_lowerLaunchToggle = new JoystickButton(m_stick, 3);
+
+  private final JoystickButton m_upperLaunchToggle = new JoystickButton(m_stick, 4);
+  private final JoystickButton m_testLowerIntake = new JoystickButton(m_copilot, 8);
+
   private final JoystickButton m_basicLaunchToggleLow = new JoystickButton(m_copilot, 3);
   private final JoystickButton m_basicLaunchToggleHigh = new JoystickButton(m_copilot, 4);
+
 
   
 
@@ -107,7 +122,7 @@ public class RobotContainer {
     new Pose2d(3,0,Rotation2d.fromDegrees(90)),
     DriveConstants.CONFIG);
 
-  private final TrajectoryFollowRelative m_followTrajectory = new TrajectoryFollowRelative(m_trajectory, m_drivetrain);
+  private final TrajectoryFollowRelative m_exitTarmacAutonomous = new TrajectoryFollowRelative(m_trajectory, m_drivetrain);
   private final RunIntake m_takeIn = new RunIntake(m_intake,1);
   private final RunIntake m_takeOut = new RunIntake(m_intake,-1);
 
@@ -119,8 +134,10 @@ public class RobotContainer {
       m_staging::runOut, m_staging::stop, m_staging);
   //end remove
 
-  private final Command m_basicShootLow = new StartEndCommand(()->m_launcher.setDutyCycle(0.25),()->m_launcher.setDutyCycle(0), m_launcher);
-  private final Command m_basicShootHigh = new StartEndCommand(()->m_launcher.setDutyCycle(0.41),()->m_launcher.setDutyCycle(0), m_launcher);
+
+  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.45),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.2),()->m_launcher.setDutyCycle(0), m_launcher);
+
 
 
   private final RaiseOverMid m_raiseClimbOverMid = new RaiseOverMid(m_climb);
@@ -183,10 +200,17 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_stageOutButton.whenHeld(m_manualStageOut);
 
     m_calibrationButton.whenPressed(m_calibrateDrivetrain);
+
+    m_upperLaunchToggle.toggleWhenPressed(m_upperShoot);
+    m_lowerLaunchToggle.toggleWhenPressed(m_lowerShoot);
+
+    m_toggleClimb.toggleWhenPressed(m_manualClimb, false);
+
     m_basicLaunchToggleLow.toggleWhenPressed(m_basicShootLow, false);
     m_basicLaunchToggleHigh.toggleWhenPressed(m_basicShootHigh, false);
     m_manualClimb.schedule();
     //m_toggleClimb.toggleWhenPressed(m_manualClimb, false);
+
 
     m_raiseOverMidButton.whileActiveOnce(m_raiseClimbOverMid);
     m_raiseOverMidButton.whileActiveOnce(m_perpIntakeForClimb);
@@ -194,14 +218,21 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_nextBarButton.whileActiveOnce(m_prepNextBar);
     //m_zeroClimbButton.whileActiveOnce(m_pullClimbToZero);
     m_tiltOntoBarButton.whileActiveOnce(m_tiltOntoBar);
+
+    m_testLowerIntake.toggleWhenPressed(m_autLowerIntakeCommand);
   }
   /**Configures the autonomous sendable chooser */
   private void configureAutonomousRoutines(){
     m_autonomousChooser.setDefaultOption("NO AUTONOMOUS", m_defaultAutonomous);
-    m_autonomousChooser.addOption("Exit Tarmac", m_followTrajectory);
+
+
+
+    //m_autonomousChooser.addOption("Exit Tarmac", m_followTrajectory);
     m_autonomousChooser.addOption("Left Two Ball", m_leftTwoBallAutonomous);
     m_autonomousChooser.addOption("Center Two Ball", m_middleTwoBallAutonomous);
     m_autonomousChooser.addOption("Right Two Ball", m_rightTwoBallAutonomous);
+
+
     //m_autonomousChooser.addOption("Simple Autonomous", m_simpleAutonomous);
 
     Shuffleboard.getTab("Game Screen").add(m_autonomousChooser);

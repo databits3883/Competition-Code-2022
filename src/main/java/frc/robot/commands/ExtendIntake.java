@@ -27,6 +27,7 @@ public class ExtendIntake extends CommandBase {
   public void initialize(){
     m_intake.extend();
   }
+  
   @Override
   public boolean isFinished(){
     return m_intake.atTarget();

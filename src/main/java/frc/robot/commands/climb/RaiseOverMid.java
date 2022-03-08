@@ -19,9 +19,13 @@ public class RaiseOverMid extends NotifierCommand {
     super(()->{
       if(arm.measureArmLength() < OVER_MID_BAR_HEIGHT){
         arm.setExtensionSpeed(ARM_EXTEND_SPEED);
+        System.out.println(arm.measureArmLength());
       }else{
         arm.setExtensionSpeed(0);
       }
+      
+      
+
     }, AUTOCLIMB_CHECK_PERIOD, arm);
     m_arm=arm;
     addRequirements(m_arm);
@@ -31,6 +35,7 @@ public class RaiseOverMid extends NotifierCommand {
   public void end(boolean interrupted) {
     m_arm.setExtensionSpeed(0);
     super.end(interrupted);
+    System.out.println(m_arm.measureArmLength());
   }
 
   @Override
