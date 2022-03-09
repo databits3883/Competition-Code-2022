@@ -26,6 +26,7 @@ public class TurnToGoal extends CommandBase {
 
     m_controller = new ProfiledPIDController(0, 0, 0, 
     new TrapezoidProfile.Constraints(2*Math.PI, 2*Math.PI/5));
+    addRequirements(drivetrain, vision);
   }
   public ChassisSpeeds getTranslationalSpeed(){
     return new ChassisSpeeds();
