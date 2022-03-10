@@ -39,6 +39,6 @@ public class AutoExtendIntake extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !(m_intake.getEncoder() < Constants.IntakeConstants.INTAKE_EXTENDED_DISTANCE);
+    return !(m_intake.getEncoder() < Constants.IntakeConstants.INTAKE_EXTENDED_DISTANCE/2);
   }
 }
