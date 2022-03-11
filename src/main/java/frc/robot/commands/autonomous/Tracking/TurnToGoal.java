@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Vision.pipeline;
 
 public class TurnToGoal extends CommandBase {
   /** Creates a new TurnToGoal. */
@@ -34,18 +35,22 @@ public class TurnToGoal extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_vision.setMode(pipeline.hubAlternate);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     ChassisSpeeds speeds = getTranslationalSpeed();
-    if(m_vision.isTargetValid()) speeds.omegaRadiansPerSecond = m_controller.calculate(m_vision.getHorizontalOffset());
+    if(m_vision.getPipelineSetLazy() &&m_vision.isTargetValid()) speeds.omegaRadiansPerSecond = m_controller.calculate(m_vision.getHorizontalOffset());
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    if(!interrupted) m_vision.setMode(pipeline.driverCam);
+  }
 
   // Returns true when the command should end.
   @Override

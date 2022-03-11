@@ -20,7 +20,7 @@ public class AcquireTarget extends TurnToGoal {
     // Use addRequirements() here to declare subsystem dependencies.
     super(drivetrain, vision);
   }
-
+  
   @Override
   public ChassisSpeeds getTranslationalSpeed(){
     return JoystickDrive.StickFilter.getCurrentCommand();

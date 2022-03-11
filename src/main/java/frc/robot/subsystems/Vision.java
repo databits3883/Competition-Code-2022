@@ -10,9 +10,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
-  static NetworkTable table;
+  private static NetworkTable table;
+
+  private pipeline desiredPipeline;
+
+  private boolean pipelineSetLazy = false;
+
   public Vision() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
+    desiredPipeline = pipeline.driverCam;
     
   }
   public double getHorizontalOffset(){
@@ -28,8 +34,33 @@ public class Vision extends SubsystemBase {
     }
   }
 
+  public void setMode(pipeline p){
+    table.getEntry("pipeline").setNumber(p.pipeNumber);
+    pipelineSetLazy = false;
+  }
+  public boolean pipelineSet(){
+    boolean set = table.getEntry("getpipe").getNumber(-1).intValue() == desiredPipeline.pipeNumber;
+    pipelineSetLazy = set;
+    return set;
+  }
+  public boolean getPipelineSetLazy(){
+    return pipelineSetLazy? true:pipelineSet();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public enum pipeline{
+    driverCam(0),
+    hub(1),
+    hubAlternate(2);
+
+    public final int pipeNumber;
+
+    pipeline(int n){
+      pipeNumber = n;
+    }
   }
 }

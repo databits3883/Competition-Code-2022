@@ -42,6 +42,7 @@ import frc.robot.subsystems.ClimbArm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -63,7 +64,9 @@ public class RobotContainer {
   private final CargoStaging m_staging = new CargoStaging();
   private final Launcher m_launcher = new Launcher();
   private final Drivetrain m_drivetrain = new Drivetrain();
+  private final Vision m_vision = new Vision();
   private final ClimbArm m_climb = new ClimbArm();
+
 
   private final Command m_leftTwoBallAutonomous = new LeftTwoBallAutonomous(m_launcher, m_drivetrain, m_intake,m_staging);
   private final Command m_middleTwoBallAutonomous = new CenterTwoBallAutonomous(m_launcher, m_drivetrain, m_intake,m_staging);
@@ -75,6 +78,7 @@ public class RobotContainer {
 
 
 
+  private final JoystickButton m_aimButton = new JoystickButton(m_stick, 2);
 
   private final JoystickButton m_intakeButton = new JoystickButton(m_copilot, 1);
   private final JoystickButton m_outtakeButton = new JoystickButton(m_copilot, 2);
@@ -101,6 +105,7 @@ public class RobotContainer {
   
 
   private final Command m_manualDrive = new JoystickDrive(m_drivetrain, m_stick);
+  private final Command m_aimDrive = new AcquireTarget(m_stick, m_drivetrain, m_vision);
 
   private final Command m_manualClimb = new DigitalClimb(m_climb,
   ()->m_copilot.getRawButton(16),
@@ -193,6 +198,8 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_stick.setXChannel(0);
     m_stick.setTwistChannel(2);
     m_stick.setThrottleChannel(3);
+
+    m_aimButton.toggleWhenPressed(m_aimDrive);
 
     m_intakeButton.whenHeld(m_takeIn);
     m_outtakeButton.whenHeld(m_takeOut);
