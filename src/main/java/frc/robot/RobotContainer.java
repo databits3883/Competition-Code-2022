@@ -136,7 +136,7 @@ public class RobotContainer {
 
 
   private final Command m_upperShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.45),()->m_launcher.setDutyCycle(0), m_launcher);
-  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.2),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.setDutyCycle(-m_stick.getThrottle()),()->m_launcher.setDutyCycle(0), m_launcher);
 
 
 
@@ -236,6 +236,7 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
 
     Shuffleboard.getTab("Game Screen").add(m_autonomousChooser);
   }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

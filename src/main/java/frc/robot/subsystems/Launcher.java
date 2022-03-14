@@ -18,7 +18,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Launcher extends SubsystemBase {
   private final CANSparkMax m_launchMotor;
-  private final SparkMaxPIDController m_controller;
+  private final CANSparkMax m_secondaryMotor;
+  private final SparkMaxPIDController m_primaryController;
+  private final SparkMaxPIDController m_secondaryController;
   
   private final RelativeEncoder m_encoder;
 
@@ -31,33 +33,35 @@ public class Launcher extends SubsystemBase {
   /** Creates a new Launcher. */
   public Launcher() {
     m_launchMotor = new CANSparkMax(LEADER_CHANNEL, MotorType.kBrushless);
+    m_secondaryMotor = new CANSparkMax(FOLLOWER_CHANNEL, MotorType.kBrushless);
 
-    CANSparkMax follower = new CANSparkMax(FOLLOWER_CHANNEL, MotorType.kBrushless);
-    follower.follow(m_launchMotor,true);
+    m_secondaryMotor.setInverted(false);
 
     m_launchMotor.setIdleMode(IdleMode.kCoast);
-    follower.setIdleMode(IdleMode.kCoast);
+    m_secondaryMotor.setIdleMode(IdleMode.kCoast);
 
-    m_controller = m_launchMotor.getPIDController();
+    m_primaryController = m_launchMotor.getPIDController();
+    m_secondaryController = m_launchMotor.getPIDController();
     m_encoder = m_launchMotor.getEncoder();
 
 
     m_encoder.setVelocityConversionFactor(ENCODER_POSITIONAL_CONVERSION);
 
-    m_controller.setFF(0.0003);
-    m_controller.setP(0.001);
-    m_controller.setI(0);
-    m_controller.setD(0);
+    m_primaryController.setFF(0.0003);
+    m_primaryController.setP(0.001);
+    m_primaryController.setI(0);
+    m_primaryController.setD(0);
   }
 
   public void SetShooterSpeed(double rpm){
-    m_controller.setReference(rpm, ControlType.kVelocity);
+    m_primaryController.setReference(-rpm, ControlType.kVelocity);
+    m_secondaryController.setReference(-rpm/PRIMARY_SECONDARY_RATIO, ControlType.kVelocity);
     //setpointCopy = rpm;
   }
 
   public void setDutyCycle(double dutyCycle){
-
-    m_launchMotor.set(dutyCycle);
+    m_launchMotor.set(-dutyCycle);
+    m_secondaryMotor.set(-dutyCycle/PRIMARY_SECONDARY_RATIO);
   }
 
   /*@Override 
