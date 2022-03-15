@@ -55,7 +55,7 @@ public class Vision extends SubsystemBase {
   public enum pipeline{
     driverCam(0),
     hub(1),
-    hubAlternate(2);
+    hubAlternate(9);
 
     public final int pipeNumber;
 

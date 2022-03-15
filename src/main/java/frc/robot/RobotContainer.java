@@ -78,7 +78,7 @@ public class RobotContainer {
 
 
 
-  private final JoystickButton m_aimButton = new JoystickButton(m_stick, 2);
+  private final JoystickButton m_aimButton = new JoystickButton(m_copilot, 8); //mckinney said this was right
 
   private final JoystickButton m_intakeButton = new JoystickButton(m_copilot, 1);
   private final JoystickButton m_outtakeButton = new JoystickButton(m_copilot, 2);

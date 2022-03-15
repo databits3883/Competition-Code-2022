@@ -8,6 +8,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
@@ -17,6 +20,15 @@ public class TurnToGoal extends CommandBase {
   /** Creates a new TurnToGoal. */
 
   ProfiledPIDController m_controller;
+  private static NetworkTable table;
+  
+  
+  //NetworkTableEntry kPEntry = table.getEntry("kP");
+  //NetworkTableEntry kIEntry = table.getEntry("kI");
+  //NetworkTableEntry kDEntry = table.getEntry("kD");
+  double kP;
+  double kI;
+  double kD;
 
   Drivetrain m_drivetrain;
   Vision m_vision;
@@ -25,7 +37,13 @@ public class TurnToGoal extends CommandBase {
     m_drivetrain = drivetrain;
     m_vision = vision;
 
-    m_controller = new ProfiledPIDController(0, 0, 0, 
+    kP = table.getEntry("kP").getDouble(0.0);
+    kI = table.getEntry("kI").getDouble(0.0);
+    kD = table.getEntry("kD").getDouble(0.0);
+
+    table = NetworkTableInstance.getDefault().getTable("aiming");
+
+    m_controller = new ProfiledPIDController(kP, kI, kD, 
     new TrapezoidProfile.Constraints(2*Math.PI, 2*Math.PI/5));
     addRequirements(drivetrain, vision);
   }
@@ -37,6 +55,7 @@ public class TurnToGoal extends CommandBase {
   @Override
   public void initialize() {
     m_vision.setMode(pipeline.hubAlternate);
+    System.out.println("runningcmd");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
