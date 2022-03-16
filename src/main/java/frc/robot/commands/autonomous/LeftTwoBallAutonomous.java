@@ -60,15 +60,15 @@ public class LeftTwoBallAutonomous extends SequentialCommandGroup {
       //new TrajectoryFollowRelative(zeroTrajectory , m_drivetrain),
       new DrivetrainCalibration(m_drivetrain),
       new InstantCommand(() -> m_drivetrain.setGyroAngleAdjustment(30)),
-      new RunLauncherTimed(m_launcher, 1450, 1),
+      new RunLauncherTimed(m_launcher, 0.25, 1),
       new SetStageingRunning(m_staging, 1),
-      new RunLauncherTimed(m_launcher, 1450, 1),
+      new RunLauncherTimed(m_launcher, 0.25, 1),
       new RunLauncherTimed(m_launcher, 0, 0.01),
       new AutoExtendIntake(m_intake),
       new TrajectoryFollowRelative(cargoTwoTrajectory, m_drivetrain),
       new RunIntakeTimed(m_intake, 1,0.75),
       new TrajectoryFollowRelative(originTrajectory, m_drivetrain),
-      new RunLauncherTimed(m_launcher, 1450, 1),
+      new RunLauncherTimed(m_launcher, 0.25, 1),
       new SetStageingRunning(m_staging, 1),
       new RunLauncherTimed(m_launcher, 0, 0.01)
            

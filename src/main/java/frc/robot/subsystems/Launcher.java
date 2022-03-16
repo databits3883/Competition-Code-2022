@@ -17,12 +17,13 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Launcher extends SubsystemBase {
-  private final CANSparkMax m_launchMotor;
+  private final CANSparkMax m_primaryMotor;
   private final CANSparkMax m_secondaryMotor;
   private final SparkMaxPIDController m_primaryController;
   private final SparkMaxPIDController m_secondaryController;
   
-  private final RelativeEncoder m_encoder;
+  private final RelativeEncoder m_primaryEncoder;
+  private final RelativeEncoder m_secondaryEncoder;
 
   /*public double setpointCopy = 0;
   double pcopy=0;
@@ -32,25 +33,34 @@ public class Launcher extends SubsystemBase {
 
   /** Creates a new Launcher. */
   public Launcher() {
-    m_launchMotor = new CANSparkMax(LEADER_CHANNEL, MotorType.kBrushless);
+    m_primaryMotor = new CANSparkMax(LEADER_CHANNEL, MotorType.kBrushless);
     m_secondaryMotor = new CANSparkMax(FOLLOWER_CHANNEL, MotorType.kBrushless);
 
     m_secondaryMotor.setInverted(false);
-
-    m_launchMotor.setIdleMode(IdleMode.kCoast);
+    m_primaryMotor.setInverted(false);
+    
+    m_primaryMotor.setIdleMode(IdleMode.kCoast);
     m_secondaryMotor.setIdleMode(IdleMode.kCoast);
 
-    m_primaryController = m_launchMotor.getPIDController();
-    m_secondaryController = m_launchMotor.getPIDController();
-    m_encoder = m_launchMotor.getEncoder();
+    m_primaryController = m_primaryMotor.getPIDController();
+    m_secondaryController = m_secondaryMotor.getPIDController();
+    m_primaryEncoder = m_primaryMotor.getEncoder();
+    m_secondaryEncoder = m_primaryMotor.getEncoder();
 
 
-    m_encoder.setVelocityConversionFactor(ENCODER_POSITIONAL_CONVERSION);
+    m_primaryEncoder.setVelocityConversionFactor(ENCODER_POSITIONAL_CONVERSION);
+    m_secondaryEncoder.setVelocityConversionFactor(ENCODER_POSITIONAL_CONVERSION);
+
 
     m_primaryController.setFF(0.0003);
     m_primaryController.setP(0.001);
     m_primaryController.setI(0);
     m_primaryController.setD(0);
+
+    m_secondaryController.setFF(0.0003);
+    m_secondaryController.setP(0.001);
+    m_secondaryController.setI(0);
+    m_secondaryController.setD(0);
   }
 
   public void SetShooterSpeed(double rpm){
@@ -60,7 +70,7 @@ public class Launcher extends SubsystemBase {
   }
 
   public void setDutyCycle(double dutyCycle){
-    m_launchMotor.set(-dutyCycle);
+    m_primaryMotor.set(-dutyCycle);
     m_secondaryMotor.set(-dutyCycle/PRIMARY_SECONDARY_RATIO);
   }
 
