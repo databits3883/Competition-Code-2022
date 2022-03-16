@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
@@ -20,15 +21,13 @@ public class TurnToGoal extends CommandBase {
   /** Creates a new TurnToGoal. */
 
   ProfiledPIDController m_controller;
-  private static NetworkTable table;
+  
   
   
   //NetworkTableEntry kPEntry = table.getEntry("kP");
   //NetworkTableEntry kIEntry = table.getEntry("kI");
   //NetworkTableEntry kDEntry = table.getEntry("kD");
-  double kP;
-  double kI;
-  double kD;
+  
 
   Drivetrain m_drivetrain;
   Vision m_vision;
@@ -37,14 +36,13 @@ public class TurnToGoal extends CommandBase {
     m_drivetrain = drivetrain;
     m_vision = vision;
 
-    kP = table.getEntry("kP").getDouble(0.0);
-    kI = table.getEntry("kI").getDouble(0.0);
-    kD = table.getEntry("kD").getDouble(0.0);
+    
 
-    table = NetworkTableInstance.getDefault().getTable("aiming");
+    
 
-    m_controller = new ProfiledPIDController(kP, kI, kD, 
+    m_controller = new ProfiledPIDController(0, 0, 0, 
     new TrapezoidProfile.Constraints(2*Math.PI, 2*Math.PI/5));
+    Shuffleboard.getTab("Tracking Horizontal Tune").add("controller", m_controller);
     addRequirements(drivetrain, vision);
   }
   public ChassisSpeeds getTranslationalSpeed(){
@@ -63,6 +61,8 @@ public class TurnToGoal extends CommandBase {
   public void execute() {
     ChassisSpeeds speeds = getTranslationalSpeed();
     if(m_vision.getPipelineSetLazy() &&m_vision.isTargetValid()) speeds.omegaRadiansPerSecond = m_controller.calculate(m_vision.getHorizontalOffset());
+    m_drivetrain.setChassisSpeed(speeds);
+    System.out.println(m_controller.calculate(m_vision.getHorizontalOffset()));
   }
 
   // Called once the command ends or is interrupted.
