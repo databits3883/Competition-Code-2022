@@ -69,7 +69,7 @@ public class Vision extends SubsystemBase {
   }
 
   public double getDistanceVision(){
-    return Math.atan(45 + table.getEntry("ty").getDouble(0))*Constants.VisionConstants.TARGET_HEIGHT_FEET;
+    return (Constants.VisionConstants.TARGET_HEIGHT_FEET-2.0833)/Math.tan(Math.toRadians(45 + table.getEntry("ty").getDouble(0)));
   }
 
   
