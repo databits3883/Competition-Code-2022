@@ -40,7 +40,7 @@ public class TurnToGoal extends CommandBase {
 
     
 
-    m_controller = new ProfiledPIDController(0, 0, 0, 
+    m_controller = new ProfiledPIDController(0.1, 0, 0, 
     new TrapezoidProfile.Constraints(2*Math.PI, 2*Math.PI/5));
     Shuffleboard.getTab("Tracking Horizontal Tune").add("controller", m_controller).withWidget("pid controller");
     addRequirements(drivetrain, vision);
