@@ -135,8 +135,8 @@ public class RobotContainer {
   //end remove
 
 
-  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.45),()->m_launcher.setDutyCycle(0), m_launcher);
-  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.setDutyCycle(-m_stick.getThrottle()),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.setRawSpeed(0.25),()->m_launcher.setRawSpeed(0), m_launcher);
+  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.setRawSpeed(0.15),()->m_launcher.setRawSpeed(0), m_launcher);
 
 
 

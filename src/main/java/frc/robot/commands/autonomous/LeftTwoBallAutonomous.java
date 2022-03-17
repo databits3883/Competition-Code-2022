@@ -16,8 +16,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
-
-
+import frc.robot.commands.autonomous.drive.TrajectoryFollowBase;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.DrivetrainCalibration;
 import frc.robot.subsystems.CargoStaging;
@@ -39,17 +38,17 @@ public class LeftTwoBallAutonomous extends SequentialCommandGroup {
       new Translation2d(-0.5 , 1.0)
     ),
 
-    new Pose2d(1.35,0.8,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(1.65,1.1,Rotation2d.fromDegrees(0.0)),
     DriveConstants.CONFIG);
 
     private final Trajectory originTrajectory = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
-      new Translation2d(-0.75/2 ,-1.0)
+      new Translation2d(-0.75/2 ,-1)
     ),
 
-    new Pose2d(-1.35,-0.8,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(-1.65,-1.1,Rotation2d.fromDegrees(0.0)),
     DriveConstants.CONFIG);
 
   /** Creates a new BasicAutonomous. */
@@ -60,15 +59,16 @@ public class LeftTwoBallAutonomous extends SequentialCommandGroup {
       //new TrajectoryFollowRelative(zeroTrajectory , m_drivetrain),
       new DrivetrainCalibration(m_drivetrain),
       new InstantCommand(() -> m_drivetrain.setGyroAngleAdjustment(30)),
-      new RunLauncherTimed(m_launcher, 1450, 1),
+      new RunLauncherTimed(m_launcher, 0.15, 1),
       new SetStageingRunning(m_staging, 1),
-      new RunLauncherTimed(m_launcher, 1450, 1),
+      new RunLauncherTimed(m_launcher, 0.15, 1),
       new RunLauncherTimed(m_launcher, 0, 0.01),
-      new AutoExtendIntake(m_intake),
+      //new AutoExtendIntake(m_intake),
+      new SetIntakeRunning(m_intake, 1),
       new TrajectoryFollowRelative(cargoTwoTrajectory, m_drivetrain),
       new RunIntakeTimed(m_intake, 1,0.75),
       new TrajectoryFollowRelative(originTrajectory, m_drivetrain),
-      new RunLauncherTimed(m_launcher, 1450, 1),
+      new RunLauncherTimed(m_launcher, 0.15, 1),
       new SetStageingRunning(m_staging, 1),
       new RunLauncherTimed(m_launcher, 0, 0.01)
            
