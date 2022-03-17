@@ -6,7 +6,10 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
@@ -16,9 +19,12 @@ public class Vision extends SubsystemBase {
 
   private boolean pipelineSetLazy = false;
 
+  private Servo limelightServo = new Servo(Constants.VisionConstants.LIMELIGHT_SERVO_PWM_CHANNEL);
+
   public Vision() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
     desiredPipeline = pipeline.driverCam;
+    Shuffleboard.getTab("tab 6").addNumber("distance in feet", this::getDistanceVision);
     
   }
   public double getHorizontalOffset(){
@@ -39,27 +45,43 @@ public class Vision extends SubsystemBase {
     pipelineSetLazy = false;
   }
   public boolean pipelineSet(){
-    boolean set = table.getEntry("getpipe").getNumber(-1).intValue() == desiredPipeline.pipeNumber;
+    boolean set = table.getEntry("getpipe").getNumber(-1).equals(desiredPipeline.pipeNumber);
     pipelineSetLazy = set;
     return set;
   }
   public boolean getPipelineSetLazy(){
-    return pipelineSetLazy? true:pipelineSet();
+    //return pipelineSetLazy? true:pipelineSet();
+    //TODO:fix
+    return true;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    lockServo();
+    //System.out.println(getDistanceVision(getAngleOfElevation()));
+
   }
+
+
+  public void lockServo(){
+    limelightServo.set(0.73);
+  }
+
+  public double getDistanceVision(){
+    return Math.atan(45 + table.getEntry("ty").getDouble(0))*Constants.VisionConstants.TARGET_HEIGHT_FEET;
+  }
+
+  
 
   public enum pipeline{
     driverCam(0),
     hub(1),
-    hubAlternate(9);
+    hubAlternate(4);
 
-    public final int pipeNumber;
+    public final Number pipeNumber;
 
-    pipeline(int n){
+    pipeline(Number n){
       pipeNumber = n;
     }
   }

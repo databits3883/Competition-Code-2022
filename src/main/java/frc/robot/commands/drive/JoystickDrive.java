@@ -72,7 +72,7 @@ public class JoystickDrive extends CommandBase {
         xAxis/=mag;
       }
 
-      return new ChassisSpeeds(yAxis,xAxis, twist);
+      return new ChassisSpeeds(xAxis,yAxis, twist);
     }
 
     public static ChassisSpeeds getCurrentCommand(){

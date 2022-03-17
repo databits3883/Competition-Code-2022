@@ -42,7 +42,7 @@ public class TurnToGoal extends CommandBase {
 
     m_controller = new ProfiledPIDController(0, 0, 0, 
     new TrapezoidProfile.Constraints(2*Math.PI, 2*Math.PI/5));
-    Shuffleboard.getTab("Tracking Horizontal Tune").add("controller", m_controller);
+    Shuffleboard.getTab("Tracking Horizontal Tune").add("controller", m_controller).withWidget("pid controller");
     addRequirements(drivetrain, vision);
   }
   public ChassisSpeeds getTranslationalSpeed(){
@@ -61,14 +61,14 @@ public class TurnToGoal extends CommandBase {
   public void execute() {
     ChassisSpeeds speeds = getTranslationalSpeed();
     if(m_vision.getPipelineSetLazy() &&m_vision.isTargetValid()) speeds.omegaRadiansPerSecond = m_controller.calculate(m_vision.getHorizontalOffset());
-    m_drivetrain.setChassisSpeed(speeds);
-    System.out.println(m_controller.calculate(m_vision.getHorizontalOffset()));
+    m_drivetrain.setSpeedFieldRelative(speeds);
+    //System.out.println(m_controller.calculate(m_vision.getHorizontalOffset()));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if(!interrupted) m_vision.setMode(pipeline.driverCam);
+    m_vision.setMode(pipeline.driverCam);
   }
 
   // Returns true when the command should end.
