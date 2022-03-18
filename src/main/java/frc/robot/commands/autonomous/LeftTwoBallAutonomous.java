@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.autonomous.drive.StopDriving;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowBase;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.DrivetrainCalibration;
@@ -70,7 +71,7 @@ public class LeftTwoBallAutonomous extends SequentialCommandGroup {
       //new RunIntakeTimed(m_intake, 1,0.75),
       new WaitCommand(0.5),
       new TrajectoryFollowRelative(originTrajectory, m_drivetrain),
-      new InstantCommand(()-> m_drivetrain.setChassisSpeed(new ChassisSpeeds(0,0,0))),
+      new StopDriving(m_drivetrain),
       new RunLauncherTimed(m_launcher, 0.15, 0.5),
       new SetStageingRunning(m_staging, 1),
       new RunLauncherTimed(m_launcher, 0.15, 3),
