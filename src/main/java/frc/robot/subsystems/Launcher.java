@@ -34,6 +34,7 @@ public class Launcher extends SubsystemBase {
 
   /** Creates a new Launcher. */
   public Launcher() {
+
     m_launchMotor = new CANSparkMax(LEADER_CHANNEL, MotorType.kBrushless);
     m_launchMotor.setInverted(true);
 
@@ -52,7 +53,6 @@ public class Launcher extends SubsystemBase {
     m_secondaryEncoder = m_secondary.getEncoder();
     m_secondaryEncoder.setVelocityConversionFactor(1);
 
-    m_encoder.setVelocityConversionFactor(ENCODER_POSITIONAL_CONVERSION);
 
     m_controller.setP(0.0001);
     m_controller.setI(0);
@@ -76,6 +76,7 @@ public class Launcher extends SubsystemBase {
   }
   public double getSetSpeed(){
     return m_encoder.getVelocity();
+
   }
   // @Override 
   // public void initSendable(SendableBuilder builder){

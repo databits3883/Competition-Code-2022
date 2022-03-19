@@ -23,7 +23,7 @@ public class AutoExtendIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      m_intake.setIntakeLowerSpeed(.4);
+      m_intake.setIntakeLowerSpeed(1.0);
 
 
     
@@ -39,6 +39,6 @@ public class AutoExtendIntake extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !(m_intake.getEncoder() < Constants.IntakeConstants.INTAKE_EXTENDED_DISTANCE);
+    return !(m_intake.getEncoder() < Constants.IntakeConstants.INTAKE_EXTENDED_DISTANCE/2);
   }
 }

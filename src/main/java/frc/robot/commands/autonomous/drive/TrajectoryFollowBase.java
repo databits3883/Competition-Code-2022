@@ -17,6 +17,12 @@ import static frc.robot.Constants.DriveConstants.*;
 import java.util.function.Supplier;
 
 public abstract class TrajectoryFollowBase extends SwerveControllerCommand {
+  protected Pose2d m_finalPose;
+  protected Trajectory m_trajectory;
+  protected final Supplier<Pose2d> m_poseSupplier;
+
+  protected static double squaredTranslationalTolerance = 0.05;
+
   /** Creates a new TrajectoryFollowBase. */
   public TrajectoryFollowBase(Trajectory trajectory, Drivetrain drivetrain, Supplier<Pose2d> poseSupplier) {
     super(trajectory,
@@ -30,6 +36,18 @@ public abstract class TrajectoryFollowBase extends SwerveControllerCommand {
       drivetrain
       );
       drivetrain.setDisplayTrajectory(trajectory);
+      m_trajectory = trajectory;
+      m_finalPose = m_trajectory.sample(m_trajectory.getTotalTimeSeconds()).poseMeters;
+      m_poseSupplier = poseSupplier;
+  }
+
+  @Override
+  public boolean isFinished(){
+    Pose2d current = m_poseSupplier.get();
+    double xErr = current.getX() - m_finalPose.getX();
+    double yErr = current.getY() - m_finalPose.getY();
+    
+    return xErr*xErr + yErr*yErr < squaredTranslationalTolerance && super.isFinished();
   }
 
 }

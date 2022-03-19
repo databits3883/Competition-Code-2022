@@ -111,6 +111,10 @@ private final Field2d m_fieldTracker;
     m_odometry.resetPosition(new Pose2d(), m_gyro.getRotation2d());
   }
 
+  public void setGyroAngleAdjustment(double angle){
+    m_gyro.setAngleAdjustment(angle);
+  }
+
   public Pose2d getCurrentPoseEstimate(){
     return m_odometry.getPoseMeters();
   }
