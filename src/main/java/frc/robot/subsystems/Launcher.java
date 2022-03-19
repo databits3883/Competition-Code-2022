@@ -13,6 +13,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import static frc.robot.Constants.LauncherContants.*;
 
+import edu.wpi.first.networktables.EntryListenerFlags;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Launcher extends SubsystemBase {
@@ -25,11 +29,16 @@ public class Launcher extends SubsystemBase {
   private final RelativeEncoder m_encoder;
   private final RelativeEncoder m_secondaryEncoder;
 
+
+  private double ratio = 0.6;
+
   /** Creates a new Launcher. */
   public Launcher() {
     m_launchMotor = new CANSparkMax(LEADER_CHANNEL, MotorType.kBrushless);
+    m_launchMotor.setInverted(true);
 
     m_secondary = new CANSparkMax(FOLLOWER_CHANNEL, MotorType.kBrushless);
+    m_secondary.setInverted(true);
 
     m_launchMotor.setIdleMode(IdleMode.kCoast);
     m_secondary.setIdleMode(IdleMode.kCoast);
@@ -37,33 +46,37 @@ public class Launcher extends SubsystemBase {
 
     m_controller = m_launchMotor.getPIDController();
     m_encoder = m_launchMotor.getEncoder();
+    m_encoder.setVelocityConversionFactor(1);
 
     m_secondaryController = m_secondary.getPIDController();
     m_secondaryEncoder = m_secondary.getEncoder();
+    m_secondaryEncoder.setVelocityConversionFactor(1);
 
     m_encoder.setVelocityConversionFactor(ENCODER_POSITIONAL_CONVERSION);
 
     m_controller.setP(0.0001);
     m_controller.setI(0);
-    m_controller.setD(0);
-    m_controller.setFF(0.00027);
+    m_controller.setD(0.0001);
+    m_controller.setFF(0.00026);
 
-    m_secondaryController.setP(0.0003);
+    m_secondaryController.setP(0.0002);
     m_secondaryController.setI(0);
-    m_secondaryController.setD(0);
-    m_secondaryController.setFF(0.00009);
+    m_secondaryController.setD(0.0001);
+    m_secondaryController.setFF(0.000085);
   }
 
   public void SetShooterSpeed(double rpm){
     m_controller.setReference(rpm, ControlType.kVelocity);
-    m_secondaryController.setReference(rpm/2, ControlType.kVelocity);
+    m_secondaryController.setReference(rpm/ratio, ControlType.kVelocity);
   }
 
   public void setDutyCycle(double dutyCycle){
     m_launchMotor.set(dutyCycle);
-    m_secondary.set(dutyCycle/2);
+    m_secondary.set(dutyCycle/ratio);
   }
-
+  public double getSetSpeed(){
+    return m_encoder.getVelocity();
+  }
   // @Override 
   // public void initSendable(SendableBuilder builder){
   //   super.initSendable(builder);
@@ -104,6 +117,15 @@ public class Launcher extends SubsystemBase {
   //   builder.addDoubleProperty("main speed", m_encoder::getVelocity, null);
   //   builder.addDoubleProperty("secondary speed", m_secondaryEncoder::getVelocity, null);
 
+  //   table.getEntry("ratio").setNumber(ratio);
+  //   table.addEntryListener("ratio", (t,string,entry,value,i)->{ratio = value.getDouble();System.out.println(value.getDouble());}, EntryListenerFlags.kUpdate);
+  // }
+
+  // @Override 
+  // public void initSendable(SendableBuilder builder){
+  //   NetworkTable table = NetworkTableInstance.getDefault().getTable("launcher tuning");
+  //   table.getEntry("speed").setNumber(ratio);
+  //   table.addEntryListener("speed", (t,string,entry,value,i)->{SetShooterSpeed(value.getDouble());System.out.println(value.getDouble());}, EntryListenerFlags.kUpdate);
   // }
 
   
