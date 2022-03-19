@@ -70,6 +70,11 @@ public final class Constants {
         public static final double PRIMARY_SECONDARY_RATIO = 0.5;
     }
 
+    public final class VisionConstants{
+        public static final int LIMELIGHT_SERVO_PWM_CHANNEL = 1;
+        public static final double TARGET_HEIGHT_FEET = 8.6666;
+    }
+
     public static class IntakeConstants{
         public static final int INTAKE_CHANNEL = 16;
         public static final int RAISE_LOWER_CHANNEL = 15;

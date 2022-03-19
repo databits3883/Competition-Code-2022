@@ -11,6 +11,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -43,6 +47,7 @@ import frc.robot.subsystems.ClimbArm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -51,6 +56,10 @@ import frc.robot.subsystems.Launcher;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  // public static DoubleLogEntry speedEntry;
+  // public static DoubleLogEntry tyEntry;
+  // public static DoubleLogEntry distanceEntry;
+
   private SendableChooser<Command> m_autonomousChooser = new SendableChooser<>();
 
   // The robot's subsystems and commands are defined here...
@@ -64,7 +73,9 @@ public class RobotContainer {
   private final CargoStaging m_staging = new CargoStaging();
   private final Launcher m_launcher = new Launcher();
   private final Drivetrain m_drivetrain = new Drivetrain();
+  private final Vision m_vision = new Vision();
   private final ClimbArm m_climb = new ClimbArm();
+
 
   private final Command m_leftTwoBallAutonomous = new LeftTwoBallAutonomous(m_launcher, m_drivetrain, m_intake,m_staging);
   private final Command m_middleTwoBallAutonomous = new CenterTwoBallAutonomous(m_launcher, m_drivetrain, m_intake,m_staging);
@@ -77,6 +88,7 @@ public class RobotContainer {
 
 
 
+  private final JoystickButton m_aimButton = new JoystickButton(m_copilot, 8); //mckinney said this was right
 
   private final JoystickButton m_intakeButton = new JoystickButton(m_copilot, 1);
   private final JoystickButton m_outtakeButton = new JoystickButton(m_copilot, 2);
@@ -103,6 +115,7 @@ public class RobotContainer {
   
 
   private final Command m_manualDrive = new JoystickDrive(m_drivetrain, m_stick);
+  private final Command m_aimDrive = new AcquireTarget(m_stick, m_drivetrain, m_vision,m_launcher);
 
   private final Command m_manualClimb = new DigitalClimb(m_climb,
   ()->m_copilot.getRawButton(16),
@@ -137,9 +150,8 @@ public class RobotContainer {
   //end remove
 
 
-  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.setRawSpeed(0.25),()->m_launcher.setRawSpeed(0), m_launcher);
-  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.setRawSpeed(0.15),()->m_launcher.setRawSpeed(0), m_launcher);
-
+  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.45),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1750),()->m_launcher.setDutyCycle(0), m_launcher);
 
 
   private final RaiseOverMid m_raiseClimbOverMid = new RaiseOverMid(m_climb);
@@ -196,6 +208,8 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_stick.setTwistChannel(2);
     m_stick.setThrottleChannel(3);
 
+    m_aimButton.toggleWhenPressed(m_aimDrive);
+
     m_intakeButton.whenHeld(m_takeIn);
     m_outtakeButton.whenHeld(m_takeOut);
     m_stageInButton.whenHeld(m_manualStageIn);
@@ -221,6 +235,19 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_tiltOntoBarButton.whileActiveOnce(m_tiltOntoBar);
 
     m_testLowerIntake.toggleWhenPressed(m_autLowerIntakeCommand);
+
+
+    // NetworkTableEntry tyE = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty");
+    
+    // new JoystickButton(m_copilot, 3).whenPressed(new InstantCommand(()->{
+    //   double ty = tyE.getDouble(0);
+    //   double speed = m_launcher.getSetSpeed();
+    //   double distance = m_vision.getDistanceVision();
+    //   speedEntry.append(speed);
+    //   distanceEntry.append(distance);
+    //   tyEntry.append(ty);
+    //   System.out.println("logged shooting data, "+distance);
+    // }));
   }
   /**Configures the autonomous sendable chooser */
   private void configureAutonomousRoutines(){
