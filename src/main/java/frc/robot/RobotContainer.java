@@ -11,6 +11,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -51,6 +55,10 @@ import frc.robot.subsystems.Vision;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  // public static DoubleLogEntry speedEntry;
+  // public static DoubleLogEntry tyEntry;
+  // public static DoubleLogEntry distanceEntry;
+
   private SendableChooser<Command> m_autonomousChooser = new SendableChooser<>();
 
   // The robot's subsystems and commands are defined here...
@@ -105,7 +113,7 @@ public class RobotContainer {
   
 
   private final Command m_manualDrive = new JoystickDrive(m_drivetrain, m_stick);
-  private final Command m_aimDrive = new AcquireTarget(m_stick, m_drivetrain, m_vision);
+  private final Command m_aimDrive = new AcquireTarget(m_stick, m_drivetrain, m_vision,m_launcher);
 
   private final Command m_manualClimb = new DigitalClimb(m_climb,
   ()->m_copilot.getRawButton(16),
@@ -141,7 +149,7 @@ public class RobotContainer {
 
 
   private final Command m_upperShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.45),()->m_launcher.setDutyCycle(0), m_launcher);
-  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.2),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1750),()->m_launcher.setDutyCycle(0), m_launcher);
 
 
 
@@ -226,6 +234,19 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_tiltOntoBarButton.whileActiveOnce(m_tiltOntoBar);
 
     m_testLowerIntake.toggleWhenPressed(m_autLowerIntakeCommand);
+
+
+    // NetworkTableEntry tyE = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty");
+    
+    // new JoystickButton(m_copilot, 3).whenPressed(new InstantCommand(()->{
+    //   double ty = tyE.getDouble(0);
+    //   double speed = m_launcher.getSetSpeed();
+    //   double distance = m_vision.getDistanceVision();
+    //   speedEntry.append(speed);
+    //   distanceEntry.append(distance);
+    //   tyEntry.append(ty);
+    //   System.out.println("logged shooting data, "+distance);
+    // }));
   }
   /**Configures the autonomous sendable chooser */
   private void configureAutonomousRoutines(){

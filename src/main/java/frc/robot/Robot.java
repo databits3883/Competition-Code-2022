@@ -5,9 +5,15 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import edu.wpi.first.wpilibj.DataLogManager;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -29,6 +35,12 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    // DataLogManager.start();
+    // DataLog log = DataLogManager.getLog();
+    // m_robotContainer.speedEntry = new DoubleLogEntry(log, "/telemetry/speed");
+    // m_robotContainer.distanceEntry = new DoubleLogEntry(log, "/telemetry/distance");
+    // m_robotContainer.tyEntry = new DoubleLogEntry(log, "/telemetry/ty");
   }
 
   /**
