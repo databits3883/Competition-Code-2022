@@ -64,8 +64,8 @@ public final class Constants {
     }
 
     public final class LauncherContants{
-        public static final int LEADER_CHANNEL = 14;
-        public static final int FOLLOWER_CHANNEL = 13;
+        public static final int LEADER_CHANNEL = 13;
+        public static final int FOLLOWER_CHANNEL = 14;
         public static final double ENCODER_POSITIONAL_CONVERSION = 1.0/3.0;
         public static final double PRIMARY_SECONDARY_RATIO = 0.5;
     }

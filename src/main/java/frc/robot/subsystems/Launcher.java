@@ -57,7 +57,7 @@ public class Launcher extends SubsystemBase {
     m_controller.setP(0.0001);
     m_controller.setI(0);
     m_controller.setD(0.0001);
-    m_controller.setFF(0.00026);
+    m_controller.setFF(0.0007);
 
     m_secondaryController.setP(0.0002);
     m_secondaryController.setI(0);

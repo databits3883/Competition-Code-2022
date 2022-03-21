@@ -58,9 +58,9 @@ public class RightTwoBallAutonomous extends SequentialCommandGroup {
     addCommands(
       new DrivetrainCalibration(m_drivetrain),
       new InstantCommand(() -> m_drivetrain.setGyroAngleAdjustment(30)),
-      new RunLauncherTimed(m_launcher, 0.15, 1),
+      new RunLauncherTimed(m_launcher, 1200, 1),
       new SetStageingRunning(m_staging, 1),
-      new RunLauncherTimed(m_launcher, 0.15, 1),
+      new RunLauncherTimed(m_launcher, 1200, 1),
       //new AutoExtendIntake(m_intake),
       new SetStageingRunning(m_staging, 0),
       new SetIntakeRunning(m_intake, 1),
@@ -69,9 +69,9 @@ public class RightTwoBallAutonomous extends SequentialCommandGroup {
       new WaitCommand(0.5),
       new TrajectoryFollowRelative(originTrajectory, m_drivetrain),
       new StopDriving(m_drivetrain),
-      new RunLauncherTimed(m_launcher, 0.15, 0.5),
+      new RunLauncherTimed(m_launcher, 1200, 0.5),
       new SetStageingRunning(m_staging, 1),
-      new RunLauncherTimed(m_launcher, 0.15, 3),
+      new RunLauncherTimed(m_launcher, 1200, 3),
       new RunLauncherTimed(m_launcher, 0, 0.01)
     );
   }
