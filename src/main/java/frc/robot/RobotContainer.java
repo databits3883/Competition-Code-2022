@@ -151,7 +151,7 @@ public class RobotContainer {
 
 
   private final Command m_upperShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1750),()->m_launcher.setDutyCycle(0), m_launcher);
-  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1200),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1000),()->m_launcher.setDutyCycle(0), m_launcher);
 
 
   private final RaiseOverMid m_raiseClimbOverMid = new RaiseOverMid(m_climb);
