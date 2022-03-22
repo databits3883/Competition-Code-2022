@@ -13,7 +13,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class JoystickDrive extends CommandBase {
-  private final Drivetrain m_drivetrain;
+  protected final Drivetrain m_drivetrain;
 
 
   ChassisSpeeds m_target = new ChassisSpeeds();
