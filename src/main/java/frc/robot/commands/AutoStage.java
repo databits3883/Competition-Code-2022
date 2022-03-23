@@ -4,12 +4,14 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.NotifierCommand;
+import frc.robot.commands.StagingStateMachine.StagingState;
 import frc.robot.subsystems.CargoStaging;
 
 import static frc.robot.Constants.StagingConstants.*;
 public class AutoStage extends NotifierCommand{
     
-    CargoStaging m_staging;
+    volatile CargoStaging m_staging;
+    static volatile StagingState m_state;
 
     public AutoStage(CargoStaging mechanism){
         super((new StagingStateMachine(mechanism)), 0.001, mechanism);
@@ -22,6 +24,8 @@ public class AutoStage extends NotifierCommand{
     public void initialize(){
         super.initialize();
         m_staging.stop();
+        m_state = StagingState.waiting;
+        
     }
 
     
@@ -40,40 +44,44 @@ public class AutoStage extends NotifierCommand{
 }
 
 class StagingStateMachine implements Runnable{
-    enum StagingState{waiting,clearing,runningExtra};
+    enum StagingState{waiting,clearing,runningExtra,holding};
 
-    CargoStaging m_mechanism;
-        StagingState m_state;
-        Timer m_timer = new Timer();
+    volatile CargoStaging m_mechanism;
+    
+    private Timer m_timer = new Timer();
 
         public StagingStateMachine(CargoStaging mechanism){
-            m_state = StagingState.waiting;
+            AutoStage.m_state = StagingState.waiting;
             m_mechanism = mechanism;
         }
 
         public void run(){
-            switch (m_state){
+            switch (AutoStage.m_state){
                 case runningExtra:
                     if(m_timer.hasElapsed(RUN_TIME)){
-                        m_state = StagingState.waiting;
+                        AutoStage.m_state = StagingState.holding;
                         m_mechanism.stop();
                         m_timer.stop();
                     }
                     break;
                 case clearing:
                     if(!m_mechanism.cargoAtEntrance()){
-                        m_state = StagingState.runningExtra;
+                        AutoStage.m_state = StagingState.runningExtra;
                         m_timer.reset();
                         m_timer.start();
                     }
                     break;
                 case waiting:
                     if(m_mechanism.cargoAtEntrance()){
-                        m_state=StagingState.clearing;
+                        AutoStage.m_state=StagingState.clearing;
                         m_mechanism.runIn();
                         
                     }
                     break;
+                case holding:
+                    
+                    
+
             }
         }
 }
