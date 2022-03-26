@@ -19,11 +19,14 @@ import static frc.robot.Constants.ClimbConstants.*;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
 
 
-public class ClimbArm extends SubsystemBase {
-  final MotorController m_liftWinch;
+public class ClimbArm extends SubsystemBase implements SafetyOverridable {
+  final CANSparkMax m_liftLeader;
 
   final Encoder m_lengthEncoder;
 
@@ -36,11 +39,29 @@ public class ClimbArm extends SubsystemBase {
   final PowerDistribution m_distributionBoard;
   /** Creates a new ClimbArm. */
   public ClimbArm() {
-    m_liftWinch = new PWMSparkMax(LENGTH_WINCH_CHANNEL);
+    //m_liftWinch = new PWMSparkMax(LENGTH_WINCH_CHANNEL);
+    m_liftLeader = new CANSparkMax(LENGTH_WINCH_LEADER_CHANNEL, MotorType.kBrushed);
+    CANSparkMax liftFollower = new CANSparkMax(LENGTH_WINCH_FOLLOWER_CHANNEL,MotorType.kBrushed);
+    liftFollower.follow(m_liftLeader);
+    m_liftLeader.setInverted(false);
+    
+
+    liftFollower.getForwardLimitSwitch(Type.kNormallyOpen).enableLimitSwitch(true);
+    m_liftLeader.getForwardLimitSwitch(Type.kNormallyOpen).enableLimitSwitch(true);
+    liftFollower.getReverseLimitSwitch(Type.kNormallyOpen).enableLimitSwitch(true);
+    m_liftLeader.getReverseLimitSwitch(Type.kNormallyOpen).enableLimitSwitch(true);
+
+    m_liftLeader.setIdleMode(IdleMode.kBrake);
+    liftFollower.setIdleMode(IdleMode.kBrake);
 
     m_lengthEncoder = new Encoder(LENGTH_ENCODER_A, LENGTH_ENCODER_B);
 
     m_angleWinchMotor = new CANSparkMax(ANGLE_WINCH_CHANNEL, MotorType.kBrushless);
+    m_angleWinchMotor.setSoftLimit(SoftLimitDirection.kForward, 124.64f);
+    m_angleWinchMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+    m_angleWinchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    m_angleWinchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    m_angleWinchMotor.getReverseLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(true);
     m_angleEncoder = m_angleWinchMotor.getEncoder();
     m_distributionBoard = new PowerDistribution();
 
@@ -50,13 +71,15 @@ public class ClimbArm extends SubsystemBase {
 
     Shuffleboard.getTab("tab 5").addNumber("angle winch", this::getAngleWinch);
     Shuffleboard.getTab("tab 5").addNumber("length winch", this::measureArmLength);
+
+    SafetyOverrideRegistry.getInstance().register(this);
   }
 
   public void setExtensionSpeed(double speed){
-    m_liftWinch.set(speed);
+    m_liftLeader.set(-speed);
   }
   public void setAngleWinchSpeed(double speed){
-    m_angleWinchMotor.set(speed);
+    m_angleWinchMotor.set(-speed);
   }
 
   public double getAngleWinchCurrent(){
@@ -72,8 +95,12 @@ public class ClimbArm extends SubsystemBase {
     return m_lengthEncoder.get();
   }
 
-  @Override
-  public void periodic() {
-    
+  public void enableSafety(){
+    m_angleWinchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    m_angleWinchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+  }
+  public void disableSafety(){
+    m_angleWinchMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
+    m_angleWinchMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
   }
 }

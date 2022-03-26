@@ -20,7 +20,8 @@ import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
  */
 public final class Constants {
     public static class ClimbConstants{
-        public static final int LENGTH_WINCH_CHANNEL = 0;
+        public static final int LENGTH_WINCH_LEADER_CHANNEL = 17;
+        public static final int LENGTH_WINCH_FOLLOWER_CHANNEL = 18;
 
         public static final int LENGTH_ENCODER_A = 0;
         public static final int LENGTH_ENCODER_B = 1;
@@ -37,8 +38,8 @@ public final class Constants {
 
        
         
-        public static final double ARM_DROP_SPEED=-0.4;
-        public static final double ARM_IN_SPEED = 0.5;
+        public static final double ARM_DROP_SPEED=-0.2;
+        public static final double ARM_IN_SPEED = 0.4;
 
         public static final double WINCH_DESLACK_SPEED = 0.4;
         public static final double ARM_PULL_SPEED=-1;
@@ -67,6 +68,12 @@ public final class Constants {
         public static final int LEADER_CHANNEL = 13;
         public static final int FOLLOWER_CHANNEL = 14;
         public static final double ENCODER_POSITIONAL_CONVERSION = 1.0/3.0;
+        public static final double PRIMARY_SECONDARY_RATIO = 0.5;
+    }
+
+    public final class VisionConstants{
+        public static final int LIMELIGHT_SERVO_PWM_CHANNEL = 1;
+        public static final double TARGET_HEIGHT_FEET = 8.6666;
     }
 
     public static class IntakeConstants{
@@ -90,7 +97,7 @@ public final class Constants {
         public static final double MAX_LOWER_ACCEL = 0;
         public static final double MAX_LOWER_VEL = 0;
         
-
+        public static final float REVERSE_SOFT_LIMIT = -138f;
     }
 
     public static class StagingConstants{
@@ -124,7 +131,7 @@ public final class Constants {
         public static final double MAX_TURN_SPEED = MAX_WHEEL_SPEED * (Math.sqrt(DRIVE_TRACK_LENGTH*DRIVE_TRACK_LENGTH+DRIVE_TRACK_WIDTH*DRIVE_TRACK_WIDTH));
 
         public static final TrajectoryConstraint CONSTRAINT = new SwerveDriveKinematicsConstraint(KINEMATICS, MAX_WHEEL_SPEED);
-        public static final TrajectoryConfig CONFIG = new TrajectoryConfig(MAX_WHEEL_SPEED,4);
+        public static final TrajectoryConfig CONFIG = new TrajectoryConfig(MAX_WHEEL_SPEED,2);
 
         public static class CANChannels{
             public static final int FRONT_RIGHT_VELOCITY = 2;

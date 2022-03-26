@@ -97,6 +97,7 @@ public class CargoStaging extends SubsystemBase {
   }
   private void autoStop(){
     m_motor.set(0);
+    m_motor.setInverted(true);
   }
 
   public void runIn(){

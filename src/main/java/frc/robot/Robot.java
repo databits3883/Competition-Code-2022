@@ -5,9 +5,19 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.Joystick;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import edu.wpi.first.wpilibj.DataLogManager;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -17,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private final Joystick m_stick = new Joystick(0);
 
   private RobotContainer m_robotContainer;
 
@@ -29,7 +40,17 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    CameraServer.startAutomaticCapture();
+
+    // DataLogManager.start();
+    // DataLog log = DataLogManager.getLog();
+    // m_robotContainer.speedEntry = new DoubleLogEntry(log, "/telemetry/speed");
+    // m_robotContainer.distanceEntry = new DoubleLogEntry(log, "/telemetry/distance");
+    // m_robotContainer.tyEntry = new DoubleLogEntry(log, "/telemetry/ty");
+
+    // UsbCamera cam = CameraServer.startAutomaticCapture();
+    // cam.setFPS(15);
+    // cam.setResolution(640, 480);
+
   }
 
   /**
@@ -83,7 +104,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   @Override
   public void testInit() {

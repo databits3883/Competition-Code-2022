@@ -54,9 +54,9 @@ public class DigitalClimb extends CommandBase {
     }
 
     if(m_tiltForward.getAsBoolean()){
-      m_arm.setAngleWinchSpeed(MANUAL_TILT_SPEED);
+      m_arm.setAngleWinchSpeed(ARM_DROP_SPEED);
     }else if(m_tiltBack.getAsBoolean()){
-      m_arm.setAngleWinchSpeed(-MANUAL_TILT_SPEED);
+      m_arm.setAngleWinchSpeed(ARM_IN_SPEED);
     }else{
       m_arm.setAngleWinchSpeed(0);
     }

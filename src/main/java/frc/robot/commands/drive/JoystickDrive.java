@@ -13,20 +13,17 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class JoystickDrive extends CommandBase {
-  private final Drivetrain m_drivetrain;
+  protected final Drivetrain m_drivetrain;
 
-  private final DoubleSupplier m_forwardAxis;
-  private final DoubleSupplier m_sideAxis;
-  private final DoubleSupplier m_rotateAxis;
 
   ChassisSpeeds m_target = new ChassisSpeeds();
 
   /** Creates a new JoystickDrive. */
   public JoystickDrive(Drivetrain drivetrain, Joystick stick) {
     m_drivetrain = drivetrain;
-    m_forwardAxis = ()->-stick.getY();
-    m_sideAxis = ()->-stick.getX();
-    m_rotateAxis =()-> -stick.getTwist();
+    StickFilter.forwardAxis = ()->-stick.getY();
+    StickFilter.sideAxis = ()->-stick.getX();
+    StickFilter.twistAxis =()-> -stick.getTwist();
     addRequirements(drivetrain);
   }
 
@@ -35,41 +32,8 @@ public class JoystickDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vx = m_forwardAxis.getAsDouble();
-    double vy = m_sideAxis.getAsDouble();
-
-    //deadbanding at less than 7 percent usage
-    if(Math.abs(vx)<0.07){
-      vx=0;
-    }else{
-      vx = Math.copySign((Math.abs(vx)-0.07)/(1-0.07), vx);
-    }
-    if(Math.abs(vy)<0.07){
-      vy=0;
-    }else{
-      vy = Math.copySign((Math.abs(vy)-0.07)/(1-0.07), vy);
-    }
-
-
-    //cut off corner saturation but preserve direction
-    double squareMag = vx*vx+vy*vy;
-    if(squareMag > 1){
-      double mag = Math.sqrt(squareMag);
-      vx/=mag;
-      vy/=mag;
-    }
-
-    //command percentages to real speeds
-    vy*=Constants.DriveConstants.MAX_WHEEL_SPEED;
-    vx*=Constants.DriveConstants.MAX_WHEEL_SPEED;
-
-    double omega = m_rotateAxis.getAsDouble();
-    omega*=Constants.DriveConstants.MAX_TURN_SPEED;
-
-    m_target.vxMetersPerSecond = vx;
-    m_target.vyMetersPerSecond = vy;
-    m_target.omegaRadiansPerSecond = omega;
-    m_drivetrain.setSpeedFieldRelative(m_target);;
+    
+    m_drivetrain.setSpeedFieldRelative(StickFilter.getCurrentCommand());
   }
 
   // Called once the command ends or is interrupted.
@@ -80,5 +44,43 @@ public class JoystickDrive extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  public static class StickFilter{
+    public static DoubleSupplier forwardAxis;
+    public static DoubleSupplier sideAxis;
+    public static DoubleSupplier twistAxis;
+
+    public static ChassisSpeeds filter(double yAxis, double xAxis,double twist){
+      //deadbanding at less than 7 percent usage
+      if(Math.abs(yAxis)<0.07){
+        yAxis=0;
+      }else{
+        yAxis = Math.copySign((Math.abs(yAxis)-0.07)/(1-0.07), yAxis);
+      }
+      if(Math.abs(xAxis)<0.07){
+        xAxis=0;
+      }else{
+        xAxis = Math.copySign((Math.abs(xAxis)-0.07)/(1-0.07), xAxis);
+      }
+
+      //cut off corner saturation but preserve direction
+      double squareMag = xAxis*xAxis+yAxis*yAxis;
+      if(squareMag > 1){
+        double mag = Math.sqrt(squareMag);
+        yAxis/=mag;
+        xAxis/=mag;
+      }
+
+      return new ChassisSpeeds(xAxis,yAxis, twist);
+    }
+
+    public static ChassisSpeeds getCurrentCommand(){
+      ChassisSpeeds s = filter(sideAxis.getAsDouble(), forwardAxis.getAsDouble(), twistAxis.getAsDouble());
+      s.vxMetersPerSecond*=Constants.DriveConstants.MAX_WHEEL_SPEED;
+      s.vyMetersPerSecond*=Constants.DriveConstants.MAX_WHEEL_SPEED;
+      s.omegaRadiansPerSecond*=Constants.DriveConstants.MAX_TURN_SPEED;
+      return s;
+    }
   }
 }

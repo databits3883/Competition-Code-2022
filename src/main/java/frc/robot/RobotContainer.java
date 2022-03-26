@@ -11,6 +11,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -31,6 +35,7 @@ import frc.robot.commands.*;
 import frc.robot.commands.autonomous.AutoExtendIntake;
 
 import frc.robot.commands.autonomous.CenterTwoBallAutonomous;
+import frc.robot.commands.autonomous.LaunchAndExitAutonomous;
 import frc.robot.commands.autonomous.LeftTwoBallAutonomous;
 import frc.robot.commands.autonomous.RightTwoBallAutonomous;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowBase;
@@ -42,6 +47,8 @@ import frc.robot.subsystems.ClimbArm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.SafetyOverrideRegistry;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -50,6 +57,10 @@ import frc.robot.subsystems.Launcher;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  // public static DoubleLogEntry speedEntry;
+  // public static DoubleLogEntry tyEntry;
+  // public static DoubleLogEntry distanceEntry;
+
   private SendableChooser<Command> m_autonomousChooser = new SendableChooser<>();
 
   // The robot's subsystems and commands are defined here...
@@ -63,11 +74,14 @@ public class RobotContainer {
   private final CargoStaging m_staging = new CargoStaging();
   private final Launcher m_launcher = new Launcher();
   private final Drivetrain m_drivetrain = new Drivetrain();
+  private final Vision m_vision = new Vision();
   private final ClimbArm m_climb = new ClimbArm();
+
 
   private final Command m_leftTwoBallAutonomous = new LeftTwoBallAutonomous(m_launcher, m_drivetrain, m_intake,m_staging);
   private final Command m_middleTwoBallAutonomous = new CenterTwoBallAutonomous(m_launcher, m_drivetrain, m_intake,m_staging);
   private final Command m_rightTwoBallAutonomous = new RightTwoBallAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
+  private final Command m_launchAndExitAutonomous = new LaunchAndExitAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
 
 
   private final Command m_extendIntake = new ExtendIntake(m_intake);
@@ -75,11 +89,12 @@ public class RobotContainer {
 
 
 
+  private final JoystickButton m_aimButton = new JoystickButton(m_copilot, 1); //mckinney said this was right
 
-  private final JoystickButton m_intakeButton = new JoystickButton(m_copilot, 1);
-  private final JoystickButton m_outtakeButton = new JoystickButton(m_copilot, 2);
-  private final JoystickButton m_stageInButton = new JoystickButton(m_copilot, 7);
-  private final JoystickButton m_stageOutButton = new JoystickButton(m_copilot, 2);
+  private final JoystickButton m_intakeButton = new JoystickButton(m_copilot, 10);
+  private final JoystickButton m_outtakeButton = new JoystickButton(m_copilot, 8);
+  private final JoystickButton m_stageInButton = new JoystickButton(m_copilot, 9);
+  private final JoystickButton m_stageOutButton = new JoystickButton(m_copilot, 8);
 
   private final JoystickButton m_calibrationButton = new JoystickButton(m_stick, 8);
 
@@ -87,7 +102,7 @@ public class RobotContainer {
   private final JoystickButton m_lowerLaunchToggle = new JoystickButton(m_stick, 3);
 
   private final JoystickButton m_upperLaunchToggle = new JoystickButton(m_stick, 4);
-  private final JoystickButton m_testLowerIntake = new JoystickButton(m_copilot, 8);
+  //private final JoystickButton m_testLowerIntake = new JoystickButton(m_copilot, 8);
 
   private final JoystickButton m_basicLaunchToggleLow = new JoystickButton(m_copilot, 3);
   private final JoystickButton m_basicLaunchToggleHigh = new JoystickButton(m_copilot, 4);
@@ -101,12 +116,13 @@ public class RobotContainer {
   
 
   private final Command m_manualDrive = new JoystickDrive(m_drivetrain, m_stick);
+  private final Command m_aimDrive = new AcquireTarget(m_stick, m_drivetrain, m_vision,m_launcher);
 
   private final Command m_manualClimb = new DigitalClimb(m_climb,
-  ()->m_copilot.getRawButton(16),
-  ()->m_copilot.getRawButton(11),
-  ()->m_copilot.getRawButton(15),
-  ()->m_copilot.getRawButton(12));
+  ()->m_copilot.getRawButton(6),
+  ()->m_copilot.getRawButton(7),
+  ()->m_copilot.getRawButton(4),
+  ()->m_copilot.getRawButton(5));
 
   private final Command m_calibrateDrivetrain = new DrivetrainCalibration(m_drivetrain);
   //private final Command m_simpleAutonomous = new BasicAutonomous(m_launcher, m_drivetrain, m_intake);
@@ -134,9 +150,8 @@ public class RobotContainer {
   //end remove
 
 
-  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.45),()->m_launcher.setDutyCycle(0), m_launcher);
-  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.setDutyCycle(0.2),()->m_launcher.setDutyCycle(0), m_launcher);
-
+  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1750),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1000),()->m_launcher.setDutyCycle(0), m_launcher);
 
 
   private final RaiseOverMid m_raiseClimbOverMid = new RaiseOverMid(m_climb);
@@ -155,14 +170,14 @@ public class RobotContainer {
 
   private final JoystickButton m_toggleClimb = new JoystickButton(m_copilot, 5);
 
-  private final Trigger m_raiseOverMidButton= new JoystickButton(m_copilot, 11).and(
-    new Trigger(m_manualClimb::isScheduled).negate());;
-  private final Trigger m_pullOntoNextBarButton = new JoystickButton(m_copilot,12).and(
-    new Trigger(m_manualClimb::isScheduled).negate());;
-  private final Trigger m_nextBarButton = new JoystickButton(m_copilot, 13).and(
-    new Trigger(m_manualClimb::isScheduled).negate());;
-  private final Trigger m_tiltOntoBarButton = new JoystickButton(m_copilot, 14).and(
-    new Trigger(m_manualClimb::isScheduled).negate());;
+  // private final Trigger m_raiseOverMidButton= new JoystickButton(m_copilot, 11).and(
+  //   new Trigger(m_manualClimb::isScheduled).negate());;
+  // private final Trigger m_pullOntoNextBarButton = new JoystickButton(m_copilot,12).and(
+  //   new Trigger(m_manualClimb::isScheduled).negate());;
+  // private final Trigger m_nextBarButton = new JoystickButton(m_copilot, 13).and(
+  //   new Trigger(m_manualClimb::isScheduled).negate());;
+  // private final Trigger m_tiltOntoBarButton = new JoystickButton(m_copilot, 14).and(
+  //   new Trigger(m_manualClimb::isScheduled).negate());;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -172,11 +187,12 @@ public class RobotContainer {
     configureAutonomousRoutines();
 
     m_drivetrain.setDefaultCommand(m_manualDrive);
+    m_climb.setDefaultCommand(m_manualClimb);
   }
 
-private final Button m_drawIntakeInButton = new JoystickButton(m_copilot, 9)
+private final Button m_drawIntakeInButton = new JoystickButton(m_copilot, 12)
 .whileHeld(new StartEndCommand(()->m_intake.runDrawAtSpeed(0.3), ()->m_intake.runDrawAtSpeed(0), m_intake));
-private final Button m_drawIntakeOutButton = new JoystickButton(m_copilot, 10)
+private final Button m_drawIntakeOutButton = new JoystickButton(m_copilot, 11)
 .whileHeld(new StartEndCommand(()->m_intake.runDrawAtSpeed(-0.3), ()->m_intake.runDrawAtSpeed(0), m_intake));
 private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake);
   /**
@@ -192,6 +208,8 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_stick.setTwistChannel(2);
     m_stick.setThrottleChannel(3);
 
+    m_aimButton.whileActiveOnce(m_aimDrive);
+
     m_intakeButton.whenHeld(m_takeIn);
     m_outtakeButton.whenHeld(m_takeOut);
     m_stageInButton.whenHeld(m_manualStageIn);
@@ -202,21 +220,30 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_upperLaunchToggle.toggleWhenPressed(m_upperShoot);
     m_lowerLaunchToggle.toggleWhenPressed(m_lowerShoot);
 
-    m_toggleClimb.toggleWhenPressed(m_manualClimb, false);
+    new JoystickButton(m_copilot, 3)
+      .whenPressed(new InstantCommand(SafetyOverrideRegistry.getInstance()::disableSafety))
+      .whenReleased(new InstantCommand(SafetyOverrideRegistry.getInstance()::enableSafety))  
+    ;
+
+    //m_toggleClimb.toggleWhenPressed(m_manualClimb, false);
 
     
-    m_manualClimb.schedule();
     //m_toggleClimb.toggleWhenPressed(m_manualClimb, false);
 
 
-    m_raiseOverMidButton.whileActiveOnce(m_raiseClimbOverMid);
-    m_raiseOverMidButton.whileActiveOnce(m_perpIntakeForClimb);
-    m_pullOntoNextBarButton.whileActiveOnce(m_pullOntoBar);
-    m_nextBarButton.whileActiveOnce(m_prepNextBar);
-    //m_zeroClimbButton.whileActiveOnce(m_pullClimbToZero);
-    m_tiltOntoBarButton.whileActiveOnce(m_tiltOntoBar);
+    // d
 
-    m_testLowerIntake.toggleWhenPressed(m_autLowerIntakeCommand);
+    // NetworkTableEntry tyE = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty");
+    
+    // new JoystickButton(m_copilot, 3).whenPressed(new InstantCommand(()->{
+    //   double ty = tyE.getDouble(0);
+    //   double speed = m_launcher.getSetSpeed();
+    //   double distance = m_vision.getDistanceVision();
+    //   speedEntry.append(speed);
+    //   distanceEntry.append(distance);
+    //   tyEntry.append(ty);
+    //   System.out.println("logged shooting data, "+distance);
+    // }));
   }
   /**Configures the autonomous sendable chooser */
   private void configureAutonomousRoutines(){
@@ -228,12 +255,14 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_autonomousChooser.addOption("Left Two Ball", m_leftTwoBallAutonomous);
     m_autonomousChooser.addOption("Center Two Ball", m_middleTwoBallAutonomous);
     m_autonomousChooser.addOption("Right Two Ball", m_rightTwoBallAutonomous);
+    m_autonomousChooser.addOption("Launch And Exit", m_launchAndExitAutonomous);
 
 
     //m_autonomousChooser.addOption("Simple Autonomous", m_simpleAutonomous);
 
     Shuffleboard.getTab("Game Screen").add(m_autonomousChooser);
   }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
