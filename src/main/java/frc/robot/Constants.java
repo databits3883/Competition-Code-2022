@@ -20,7 +20,8 @@ import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
  */
 public final class Constants {
     public static class ClimbConstants{
-        public static final int LENGTH_WINCH_CHANNEL = 0;
+        public static final int LENGTH_WINCH_LEADER_CHANNEL = 17;
+        public static final int LENGTH_WINCH_FOLLOWER_CHANNEL = 18;
 
         public static final int LENGTH_ENCODER_A = 0;
         public static final int LENGTH_ENCODER_B = 1;
@@ -37,8 +38,8 @@ public final class Constants {
 
        
         
-        public static final double ARM_DROP_SPEED=-0.4;
-        public static final double ARM_IN_SPEED = 0.5;
+        public static final double ARM_DROP_SPEED=-0.2;
+        public static final double ARM_IN_SPEED = 0.4;
 
         public static final double WINCH_DESLACK_SPEED = 0.4;
         public static final double ARM_PULL_SPEED=-1;
@@ -96,7 +97,7 @@ public final class Constants {
         public static final double MAX_LOWER_ACCEL = 0;
         public static final double MAX_LOWER_VEL = 0;
         
-
+        public static final float REVERSE_SOFT_LIMIT = -138f;
     }
 
     public static class StagingConstants{

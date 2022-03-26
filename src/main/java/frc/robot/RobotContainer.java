@@ -47,6 +47,7 @@ import frc.robot.subsystems.ClimbArm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.SafetyOverrideRegistry;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -88,12 +89,12 @@ public class RobotContainer {
 
 
 
-  private final JoystickButton m_aimButton = new JoystickButton(m_copilot, 8); //mckinney said this was right
+  private final JoystickButton m_aimButton = new JoystickButton(m_copilot, 1); //mckinney said this was right
 
-  private final JoystickButton m_intakeButton = new JoystickButton(m_copilot, 1);
-  private final JoystickButton m_outtakeButton = new JoystickButton(m_copilot, 2);
-  private final JoystickButton m_stageInButton = new JoystickButton(m_copilot, 7);
-  private final JoystickButton m_stageOutButton = new JoystickButton(m_copilot, 2);
+  private final JoystickButton m_intakeButton = new JoystickButton(m_copilot, 10);
+  private final JoystickButton m_outtakeButton = new JoystickButton(m_copilot, 8);
+  private final JoystickButton m_stageInButton = new JoystickButton(m_copilot, 9);
+  private final JoystickButton m_stageOutButton = new JoystickButton(m_copilot, 8);
 
   private final JoystickButton m_calibrationButton = new JoystickButton(m_stick, 8);
 
@@ -101,7 +102,7 @@ public class RobotContainer {
   private final JoystickButton m_lowerLaunchToggle = new JoystickButton(m_stick, 3);
 
   private final JoystickButton m_upperLaunchToggle = new JoystickButton(m_stick, 4);
-  private final JoystickButton m_testLowerIntake = new JoystickButton(m_copilot, 8);
+  //private final JoystickButton m_testLowerIntake = new JoystickButton(m_copilot, 8);
 
   private final JoystickButton m_basicLaunchToggleLow = new JoystickButton(m_copilot, 3);
   private final JoystickButton m_basicLaunchToggleHigh = new JoystickButton(m_copilot, 4);
@@ -118,10 +119,10 @@ public class RobotContainer {
   private final Command m_aimDrive = new AcquireTarget(m_stick, m_drivetrain, m_vision,m_launcher);
 
   private final Command m_manualClimb = new DigitalClimb(m_climb,
-  ()->m_copilot.getRawButton(16),
-  ()->m_copilot.getRawButton(11),
-  ()->m_copilot.getRawButton(15),
-  ()->m_copilot.getRawButton(12));
+  ()->m_copilot.getRawButton(6),
+  ()->m_copilot.getRawButton(7),
+  ()->m_copilot.getRawButton(4),
+  ()->m_copilot.getRawButton(5));
 
   private final Command m_calibrateDrivetrain = new DrivetrainCalibration(m_drivetrain);
   //private final Command m_simpleAutonomous = new BasicAutonomous(m_launcher, m_drivetrain, m_intake);
@@ -170,14 +171,14 @@ public class RobotContainer {
 
   private final JoystickButton m_toggleClimb = new JoystickButton(m_copilot, 5);
 
-  private final Trigger m_raiseOverMidButton= new JoystickButton(m_copilot, 11).and(
-    new Trigger(m_manualClimb::isScheduled).negate());;
-  private final Trigger m_pullOntoNextBarButton = new JoystickButton(m_copilot,12).and(
-    new Trigger(m_manualClimb::isScheduled).negate());;
-  private final Trigger m_nextBarButton = new JoystickButton(m_copilot, 13).and(
-    new Trigger(m_manualClimb::isScheduled).negate());;
-  private final Trigger m_tiltOntoBarButton = new JoystickButton(m_copilot, 14).and(
-    new Trigger(m_manualClimb::isScheduled).negate());;
+  // private final Trigger m_raiseOverMidButton= new JoystickButton(m_copilot, 11).and(
+  //   new Trigger(m_manualClimb::isScheduled).negate());;
+  // private final Trigger m_pullOntoNextBarButton = new JoystickButton(m_copilot,12).and(
+  //   new Trigger(m_manualClimb::isScheduled).negate());;
+  // private final Trigger m_nextBarButton = new JoystickButton(m_copilot, 13).and(
+  //   new Trigger(m_manualClimb::isScheduled).negate());;
+  // private final Trigger m_tiltOntoBarButton = new JoystickButton(m_copilot, 14).and(
+  //   new Trigger(m_manualClimb::isScheduled).negate());;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -188,11 +189,12 @@ public class RobotContainer {
 
     m_drivetrain.setDefaultCommand(m_manualDrive);
     m_staging.setDefaultCommand(m_autoStage);
+    m_climb.setDefaultCommand(m_manualClimb);
   }
 
-private final Button m_drawIntakeInButton = new JoystickButton(m_copilot, 9)
+private final Button m_drawIntakeInButton = new JoystickButton(m_copilot, 12)
 .whileHeld(new StartEndCommand(()->m_intake.runDrawAtSpeed(0.3), ()->m_intake.runDrawAtSpeed(0), m_intake));
-private final Button m_drawIntakeOutButton = new JoystickButton(m_copilot, 10)
+private final Button m_drawIntakeOutButton = new JoystickButton(m_copilot, 11)
 .whileHeld(new StartEndCommand(()->m_intake.runDrawAtSpeed(-0.3), ()->m_intake.runDrawAtSpeed(0), m_intake));
 private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake);
   /**
@@ -208,7 +210,7 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_stick.setTwistChannel(2);
     m_stick.setThrottleChannel(3);
 
-    m_aimButton.toggleWhenPressed(m_aimDrive);
+    m_aimButton.whileActiveOnce(m_aimDrive);
 
     m_intakeButton.whenHeld(m_takeIn);
     m_outtakeButton.whenHeld(m_takeOut);
@@ -220,22 +222,18 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_upperLaunchToggle.toggleWhenPressed(m_upperShoot);
     m_lowerLaunchToggle.toggleWhenPressed(m_lowerShoot);
 
-    m_toggleClimb.toggleWhenPressed(m_manualClimb, false);
+    new JoystickButton(m_copilot, 3)
+      .whenPressed(new InstantCommand(SafetyOverrideRegistry.getInstance()::disableSafety))
+      .whenReleased(new InstantCommand(SafetyOverrideRegistry.getInstance()::enableSafety))  
+    ;
+
+    //m_toggleClimb.toggleWhenPressed(m_manualClimb, false);
 
     
-    m_manualClimb.schedule();
     //m_toggleClimb.toggleWhenPressed(m_manualClimb, false);
 
 
-    m_raiseOverMidButton.whileActiveOnce(m_raiseClimbOverMid);
-    m_raiseOverMidButton.whileActiveOnce(m_perpIntakeForClimb);
-    m_pullOntoNextBarButton.whileActiveOnce(m_pullOntoBar);
-    m_nextBarButton.whileActiveOnce(m_prepNextBar);
-    //m_zeroClimbButton.whileActiveOnce(m_pullClimbToZero);
-    m_tiltOntoBarButton.whileActiveOnce(m_tiltOntoBar);
-
-    m_testLowerIntake.toggleWhenPressed(m_autLowerIntakeCommand);
-
+    // d
 
     // NetworkTableEntry tyE = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty");
     

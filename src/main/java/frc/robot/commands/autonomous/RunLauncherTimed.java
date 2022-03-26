@@ -47,7 +47,7 @@ public class RunLauncherTimed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println("Launched: " + m_timer.hasElapsed(m_time));
+    //System.out.println("Launched: " + m_timer.hasElapsed(m_time));
 
     return m_timer.hasElapsed(m_time);
   }

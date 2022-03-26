@@ -18,9 +18,10 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-public class Intake extends SubsystemBase {
+public class Intake extends SubsystemBase implements SafetyOverridable {
   private final CANSparkMax m_takeMotor;
   
   private final CANSparkMax m_raiseMotor;
@@ -39,6 +40,11 @@ public class Intake extends SubsystemBase {
 
 
     m_raiseMotor = new CANSparkMax(RAISE_LOWER_CHANNEL, MotorType.kBrushless);
+    m_raiseMotor.setSoftLimit(SoftLimitDirection.kForward, 0.0f);
+    m_raiseMotor.setSoftLimit(SoftLimitDirection.kReverse, REVERSE_SOFT_LIMIT);
+    m_raiseMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    m_raiseMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    m_raiseMotor.setInverted(true);
     m_raiseEncoder = m_raiseMotor.getEncoder();
     m_raiseController = m_raiseMotor.getPIDController();
 
@@ -62,6 +68,8 @@ public class Intake extends SubsystemBase {
     m_raiseController.setFF(0,LOWER_SLOT);
     
     Shuffleboard.getTab("tab5").addNumber("Intake angle", m_raiseEncoder::getPosition);
+
+    SafetyOverrideRegistry.getInstance().register(this);
   }
   
   public void takeInOrOut(double speed){
@@ -96,6 +104,11 @@ public class Intake extends SubsystemBase {
     }
   }
 
+  public void EnableSoftLimits(boolean enabled){
+    m_raiseMotor.enableSoftLimit(SoftLimitDirection.kForward, enabled);
+    m_raiseMotor.enableSoftLimit(SoftLimitDirection.kReverse, enabled);
+  }
+
   /*public REVLibError extend(){
     return setHeight(EXTEND_LEVEL);
   }
@@ -128,6 +141,15 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void enableSafety(){
+    m_raiseMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    m_raiseMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+  }
+  public void disableSafety(){
+    m_raiseMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
+    m_raiseMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
   }
 
 

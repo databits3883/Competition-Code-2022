@@ -64,7 +64,7 @@ public class LeftTwoBallAutonomous extends SequentialCommandGroup {
       new RunLauncherTimed(m_launcher, 1000, 1),
       new SetStageingRunning(m_staging, 1),
       new RunLauncherTimed(m_launcher, 1000, 1),
-      //new AutoExtendIntake(m_intake),
+      new AutoExtendIntake(m_intake),
       new SetStageingRunning(m_staging, 0),
       new SetIntakeRunning(m_intake, 1),
       new TrajectoryFollowRelative(cargoTwoTrajectory, m_drivetrain),

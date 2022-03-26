@@ -33,20 +33,20 @@ public class RightTwoBallAutonomous extends SequentialCommandGroup {
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
-      new Translation2d(1.1/2 ,-0.8/2)
+      new Translation2d(1.1/2 ,-1.1/2)
     ),
 
-    new Pose2d(1.1,-0.8,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(1.1,-1.1,Rotation2d.fromDegrees(0.0)),
     DriveConstants.CONFIG);
 
     private final Trajectory originTrajectory = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
-      new Translation2d(-1.1/2 ,0.8/2)
+      new Translation2d(-1.1/2 ,1.1/2)
     ),
 
-    new Pose2d(-1.1,0.8,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(-1.1,1.1,Rotation2d.fromDegrees(0.0)),
     DriveConstants.CONFIG);
 
 
@@ -61,7 +61,7 @@ public class RightTwoBallAutonomous extends SequentialCommandGroup {
       new RunLauncherTimed(m_launcher, 1000, 1),
       new SetStageingRunning(m_staging, 1),
       new RunLauncherTimed(m_launcher, 1000, 1),
-      //new AutoExtendIntake(m_intake),
+      new AutoExtendIntake(m_intake),
       new SetStageingRunning(m_staging, 0),
       new SetIntakeRunning(m_intake, 1),
       new TrajectoryFollowRelative(cargoTwoTrajectory, m_drivetrain),
