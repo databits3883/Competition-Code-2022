@@ -38,6 +38,7 @@ import frc.robot.commands.autonomous.CenterTwoBallAutonomous;
 import frc.robot.commands.autonomous.LaunchAndExitAutonomous;
 import frc.robot.commands.autonomous.LeftTwoBallAutonomous;
 import frc.robot.commands.autonomous.RightTwoBallAutonomous;
+import frc.robot.commands.autonomous.ThreeOrFourBallAutonomous;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowBase;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.*;
@@ -82,6 +83,7 @@ public class RobotContainer {
   private final Command m_middleTwoBallAutonomous = new CenterTwoBallAutonomous(m_launcher, m_drivetrain, m_intake,m_staging);
   private final Command m_rightTwoBallAutonomous = new RightTwoBallAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
   private final Command m_launchAndExitAutonomous = new LaunchAndExitAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
+  private final Command m_threeOrFourBallAutonomous = new ThreeOrFourBallAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
 
 
   private final Command m_extendIntake = new ExtendIntake(m_intake);
@@ -258,6 +260,7 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_autonomousChooser.addOption("Center Two Ball", m_middleTwoBallAutonomous);
     m_autonomousChooser.addOption("Right Two Ball", m_rightTwoBallAutonomous);
     m_autonomousChooser.addOption("Launch And Exit", m_launchAndExitAutonomous);
+    m_autonomousChooser.addOption("3/4 Ball", m_threeOrFourBallAutonomous);
 
 
     //m_autonomousChooser.addOption("Simple Autonomous", m_simpleAutonomous);
