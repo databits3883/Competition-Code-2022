@@ -35,7 +35,7 @@ public class CargoStaging extends SubsystemBase {
   /** Creates a new CargoStaging. */
   public CargoStaging() {
     m_motor  = new CANSparkMax(MOTOR_CHANNEL, MotorType.kBrushless);
-
+    m_motor.setInverted(true);
 
     holding = new StagingState(){
       public void enterState(){
@@ -97,7 +97,6 @@ public class CargoStaging extends SubsystemBase {
   }
   private void autoStop(){
     m_motor.set(0);
-    m_motor.setInverted(true);
   }
 
   public void runIn(){

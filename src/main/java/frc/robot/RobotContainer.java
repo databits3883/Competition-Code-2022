@@ -144,9 +144,9 @@ public class RobotContainer {
 
   //TODO:remove
   private final StartEndCommand m_manualStageIn = new StartEndCommand(
-    m_staging::runIn, m_staging::stop, m_staging);
+    m_staging::runIn, ()->{m_staging.stop();m_staging.resetAutoStaging();}, m_staging);
   private final StartEndCommand m_manualStageOut = new StartEndCommand(
-      m_staging::runOut, m_staging::stop, m_staging);
+      m_staging::runOut,()->{m_staging.stop();m_staging.resetAutoStaging();}, m_staging);
   //end remove
 
 
