@@ -6,9 +6,11 @@ package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+/**Use this as you would a {@link SequentialCommandGroup}
+ * except it will automatically be added to the 
+ * {@link AutonomousRoutineRegistry} to be selectable
+ * by a Shuffleboard user
+ */
 public abstract class AutonomousRoutine extends SequentialCommandGroup {
   /** Creates a new AutonomousRoutine. */
   public AutonomousRoutine() {
