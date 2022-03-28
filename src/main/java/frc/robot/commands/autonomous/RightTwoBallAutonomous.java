@@ -27,7 +27,7 @@ import frc.robot.subsystems.Launcher;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class RightTwoBallAutonomous extends SequentialCommandGroup {
+public class RightTwoBallAutonomous extends AutonomousRoutine {
 
   private final Trajectory cargoTwoTrajectory = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0,0, new Rotation2d(0)), 
@@ -74,5 +74,10 @@ public class RightTwoBallAutonomous extends SequentialCommandGroup {
       new RunLauncherTimed(m_launcher, 1000, 3),
       new RunLauncherTimed(m_launcher, 0, 0.01)
     );
+  }
+
+  @Override
+  public String getName(){
+    return "Right Two Ball";
   }
 }

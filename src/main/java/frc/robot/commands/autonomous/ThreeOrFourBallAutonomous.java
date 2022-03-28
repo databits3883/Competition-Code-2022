@@ -26,7 +26,7 @@ import frc.robot.subsystems.Launcher;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ThreeOrFourBallAutonomous extends SequentialCommandGroup {
+public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
 
 
   private final Trajectory cargoTwoTrajectory = TrajectoryGenerator.generateTrajectory(
@@ -80,5 +80,10 @@ public class ThreeOrFourBallAutonomous extends SequentialCommandGroup {
     new RunLauncherTimed(m_launcher, 1000, 1)
     //new TrajectoryFollowRelative(cargoThreeOrFourTrajectory, m_drivetrain)
     );
+  }
+
+  @Override
+  public String getName(){
+    return "Three/Four Ball Auto";
   }
 }

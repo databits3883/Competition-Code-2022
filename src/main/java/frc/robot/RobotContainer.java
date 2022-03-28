@@ -33,7 +33,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.*;
 
 import frc.robot.commands.autonomous.AutoExtendIntake;
-
+import frc.robot.commands.autonomous.AutonomousRoutineRegistry;
 import frc.robot.commands.autonomous.CenterTwoBallAutonomous;
 import frc.robot.commands.autonomous.LaunchAndExitAutonomous;
 import frc.robot.commands.autonomous.LeftTwoBallAutonomous;
@@ -187,7 +187,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    configureAutonomousRoutines();
 
     m_drivetrain.setDefaultCommand(m_manualDrive);
     m_staging.setDefaultCommand(m_autoStage);
@@ -248,25 +247,7 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     //   tyEntry.append(ty);
     //   System.out.println("logged shooting data, "+distance);
     // }));
-  }
-  /**Configures the autonomous sendable chooser */
-  private void configureAutonomousRoutines(){
-    m_autonomousChooser.setDefaultOption("NO AUTONOMOUS", m_defaultAutonomous);
-
-
-
-    //m_autonomousChooser.addOption("Exit Tarmac", m_followTrajectory);
-    m_autonomousChooser.addOption("Left Two Ball", m_leftTwoBallAutonomous);
-    m_autonomousChooser.addOption("Center Two Ball", m_middleTwoBallAutonomous);
-    m_autonomousChooser.addOption("Right Two Ball", m_rightTwoBallAutonomous);
-    m_autonomousChooser.addOption("Launch And Exit", m_launchAndExitAutonomous);
-    m_autonomousChooser.addOption("3/4 Ball", m_threeOrFourBallAutonomous);
-
-
-    //m_autonomousChooser.addOption("Simple Autonomous", m_simpleAutonomous);
-
-    Shuffleboard.getTab("Game Screen").add(m_autonomousChooser);
-  }
+    }
 
 
   /**
@@ -276,6 +257,6 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autonomousChooser.getSelected();
+    return AutonomousRoutineRegistry.getInstance().getSelected();
   }
 }

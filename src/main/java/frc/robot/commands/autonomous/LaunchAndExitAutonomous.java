@@ -29,7 +29,7 @@ import frc.robot.subsystems.Launcher;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class LaunchAndExitAutonomous extends SequentialCommandGroup {
+public class LaunchAndExitAutonomous extends AutonomousRoutine {
 
 
 
@@ -62,5 +62,10 @@ public class LaunchAndExitAutonomous extends SequentialCommandGroup {
       //new RunIntakeTimed(m_intake, 1,0.75),
 
     );
+  }
+
+  @Override
+  public String getName(){
+    return "Launch and Exit";
   }
 }
