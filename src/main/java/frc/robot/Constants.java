@@ -59,7 +59,7 @@ public final class Constants {
 
 
         public static final double MANUAL_PULL_SPEED = -1;
-        public static final double MANUAL_EXTEND_SPEED = 0.4;
+        public static final double MANUAL_EXTEND_SPEED = 1.0;//0.4
         public static final double MANUAL_TILT_SPEED = -0.4;
 
     }

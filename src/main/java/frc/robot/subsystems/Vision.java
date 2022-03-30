@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -70,6 +71,16 @@ public class Vision extends SubsystemBase {
 
   public double getDistanceVision(){
     return (Constants.VisionConstants.TARGET_HEIGHT_FEET-2.0833)/Math.tan(Math.toRadians(45 + table.getEntry("ty").getDouble(0)));
+  }
+  public double getShooterSpeedFromDistance(double distance, boolean isTargetValid){
+    
+    double setSpeed = 86.7*distance + 1318;
+
+    double correctedSpeed = Math.min(1900, Math.max(1500, setSpeed));
+    
+    if(isTargetValid) return correctedSpeed;
+    else{return 0;}
+
   }
 
   

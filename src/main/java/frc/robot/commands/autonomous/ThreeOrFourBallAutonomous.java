@@ -22,6 +22,7 @@ import frc.robot.subsystems.CargoStaging;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.Vision;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -90,7 +91,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
         DriveConstants.CONFIG);
   
   /** Creates a new ThreeOrFourBallAutonomous. */
-  public ThreeOrFourBallAutonomous(Launcher m_launcher, Drivetrain m_drivetrain, Intake m_intake, CargoStaging m_staging) {
+  public ThreeOrFourBallAutonomous(Launcher m_launcher, Drivetrain m_drivetrain, Intake m_intake, CargoStaging m_staging, Vision m_vision) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -104,14 +105,17 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     new TrajectoryFollowRelative(cargoTwoTrajectory, m_drivetrain),
     //new RunIntakeTimed(m_intake, 1,0.75),
     new RunLauncherTimed(m_launcher, 1000, 0.5),
+    //new AutonomousShoot(m_vision, m_launcher),
     new SetStageingRunning(m_staging, 1),
     new StopDriving(m_drivetrain),
     new RunLauncherTimed(m_launcher, 1000, 1),
+    //new AutonomousShoot(m_vision, m_launcher),
     new SetStageingRunning(m_staging, 0),
     new TrajectoryFollowRelative(cargoThreeTrajectory, m_drivetrain),
     new StopDriving(m_drivetrain),
   
     new RunLauncherTimed(m_launcher, 1000, 0.25),
+    //new AutonomousShoot(m_vision, m_launcher),
     new SetStageingRunning(m_staging, 1),
     new RunLauncherTimed(m_launcher, 1000, 1),
     new TrajectoryFollowRelative(toHumanPlayer, m_drivetrain),
@@ -124,6 +128,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     new SetIntakeRunning(m_intake, 1),
     new SetStageingRunning(m_staging, 1),
     new RunLauncherTimed(m_launcher, 1000, 1.d)
+    //new AutonomousShoot(m_vision, m_launcher)
     
     );
   }
