@@ -76,10 +76,19 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
           new Translation2d(3.9/2 ,-1.7/2)
         ),
     
-        new Pose2d(3.9,-1.7,Rotation2d.fromDegrees(0)),
+        new Pose2d(3.7,-1.7,Rotation2d.fromDegrees(10)),
         DriveConstants.CONFIG);
 
-
+      private final Trajectory toFinalLaunch = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0,0, new Rotation2d(0)), 
+    
+        List.of(
+          new Translation2d(-4.0/2 ,2.25/2)
+        ),
+    
+        new Pose2d(-3.5,2.25,Rotation2d.fromDegrees(-10)),
+        DriveConstants.CONFIG);
+  
   /** Creates a new ThreeOrFourBallAutonomous. */
   public ThreeOrFourBallAutonomous(Launcher m_launcher, Drivetrain m_drivetrain, Intake m_intake, CargoStaging m_staging) {
     // Add your commands in the addCommands() call, e.g.
@@ -101,10 +110,20 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     new SetStageingRunning(m_staging, 0),
     new TrajectoryFollowRelative(cargoThreeTrajectory, m_drivetrain),
     new StopDriving(m_drivetrain),
+  
     new RunLauncherTimed(m_launcher, 1000, 0.25),
     new SetStageingRunning(m_staging, 1),
     new RunLauncherTimed(m_launcher, 1000, 1),
-    new TrajectoryFollowRelative(toHumanPlayer, m_drivetrain)
+    new TrajectoryFollowRelative(toHumanPlayer, m_drivetrain),
+    new WaitCommand(0.25),
+    new SetStageingRunning(m_staging, 0),
+    new WaitCommand(0.3),
+    new SetIntakeRunning(m_intake, 0),
+    new TrajectoryFollowRelative(toFinalLaunch, m_drivetrain),
+    new StopDriving(m_drivetrain),
+    new SetIntakeRunning(m_intake, 1),
+    new SetStageingRunning(m_staging, 1),
+    new RunLauncherTimed(m_launcher, 1000, 1.d)
     
     );
   }
