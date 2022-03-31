@@ -57,8 +57,8 @@ public class ClimbArm extends SubsystemBase implements SafetyOverridable {
     m_lengthEncoder = new Encoder(LENGTH_ENCODER_A, LENGTH_ENCODER_B);
 
     m_angleWinchMotor = new CANSparkMax(ANGLE_WINCH_CHANNEL, MotorType.kBrushless);
-    m_angleWinchMotor.setSoftLimit(SoftLimitDirection.kForward, 124.64f);
-    m_angleWinchMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+    m_angleWinchMotor.setSoftLimit(SoftLimitDirection.kForward, 120f); // was 124.64
+    m_angleWinchMotor.setSoftLimit(SoftLimitDirection.kReverse, -1); // was 0
     m_angleWinchMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     m_angleWinchMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
     m_angleWinchMotor.getReverseLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(true);
