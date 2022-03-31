@@ -38,8 +38,8 @@ public final class Constants {
 
        
         
-        public static final double ARM_DROP_SPEED=-0.2;
-        public static final double ARM_IN_SPEED = 0.4;
+        public static final double ARM_DROP_SPEED=-0.6; // was -0.2
+        public static final double ARM_IN_SPEED = 1.0; // was 0.4
 
         public static final double WINCH_DESLACK_SPEED = 0.4;
         public static final double ARM_PULL_SPEED=-1;

@@ -101,27 +101,29 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     //new SetStageingRunning(m_staging, 1),
     new DrivetrainCalibration(m_drivetrain),
     new InstantCommand(() -> m_drivetrain.setGyroAngleAdjustment(30)),
+    new RunLauncherTimed(m_launcher, 1000, 0),
     new AutoExtendIntake(m_intake),
     new SetStageingRunning(m_staging, 0),
     new SetIntakeRunning(m_intake, 1),
     new TrajectoryFollowRelative(cargoTwoTrajectory, m_drivetrain),
     //new RunIntakeTimed(m_intake, 1,0.75),
-    new RunLauncherTimed(m_launcher, 1000, 0.5),
+    //new RunLauncherTimed(m_launcher, 1000, 0.5),
     //new AutonomousShoot(m_vision, m_launcher),
     new SetStageingRunning(m_staging, 1),
     new StopDriving(m_drivetrain),
-    new RunLauncherTimed(m_launcher, 1000, 0.25),
+    new WaitCommand(0.75),
+    // new RunLauncherTimed(m_launcher, 1000, 0.5),
     //new AutonomousShoot(m_vision, m_launcher),
     //new SetStageingRunning(m_staging, 0), h
     new TrajectoryFollowRelative(cargoThreeTrajectory, m_drivetrain),
     new StopDriving(m_drivetrain),
   
-    new RunLauncherTimed(m_launcher, 1000, 0.25),
+    // new RunLauncherTimed(m_launcher, 1000, 0.25),
     //new AutonomousShoot(m_vision, m_launcher),
     //new SetStageingRunning(m_staging, 1), h
     //new RunLauncherTimed(m_launcher, 1000, 0.25),
     new TrajectoryFollowRelative(toHumanPlayer, m_drivetrain),
-    new WaitCommand(0.25),
+    new WaitCommand(0.15), //20
     new SetStageingRunning(m_staging, 0),
     new WaitCommand(0.3),
     new SetIntakeRunning(m_intake, 0),
@@ -129,7 +131,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     new StopDriving(m_drivetrain),
     new SetIntakeRunning(m_intake, 1),
     new SetStageingRunning(m_staging, 1),
-    new RunLauncherTimed(m_launcher, 1000, 0.25)
+    new RunLauncherTimed(m_launcher, 1000, 1.0)
     //new AutonomousShoot(m_vision, m_launcher)
     
     );
