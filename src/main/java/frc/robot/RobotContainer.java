@@ -144,7 +144,6 @@ public class RobotContainer {
   private final RunIntake m_takeIn = new RunIntake(m_intake,1);
   private final RunIntake m_takeOut = new RunIntake(m_intake,-1);
 
-  private final AutoStage m_autoStage = new AutoStage(m_staging);
   //TODO:remove
   private final StartEndCommand m_manualStageIn = new StartEndCommand(
     m_staging::runIn, m_staging::stop, m_staging);
@@ -189,7 +188,6 @@ public class RobotContainer {
     configureButtonBindings();
 
     m_drivetrain.setDefaultCommand(m_manualDrive);
-    m_staging.setDefaultCommand(m_autoStage);
     m_climb.setDefaultCommand(m_manualClimb);
   }
 

@@ -102,11 +102,11 @@ public final class Constants {
 
     public static class StagingConstants{
         public static final int MOTOR_CHANNEL = 19;
-        public static final int SENSOR_CHANNEL = 2;
+        public static final int SENSOR_CHANNEL = 16;
         public static final double IN_SPEED = 1;
         public static final double OUT_SPEED = -1;
 
-        public static final double RUN_TIME = 0.5;
+        public static final double RUN_TIME = 0.1;
 
     }
 
