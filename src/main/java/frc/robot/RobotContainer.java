@@ -83,7 +83,7 @@ public class RobotContainer {
   private final Command m_middleTwoBallAutonomous = new CenterTwoBallAutonomous(m_launcher, m_drivetrain, m_intake,m_staging);
   private final Command m_rightTwoBallAutonomous = new RightTwoBallAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
   private final Command m_launchAndExitAutonomous = new LaunchAndExitAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
-  private final Command m_threeOrFourBallAutonomous = new ThreeOrFourBallAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
+  private final Command m_threeOrFourBallAutonomous = new ThreeOrFourBallAutonomous(m_launcher, m_drivetrain, m_intake, m_staging, m_vision);
 
 
   private final Command m_extendIntake = new ExtendIntake(m_intake);

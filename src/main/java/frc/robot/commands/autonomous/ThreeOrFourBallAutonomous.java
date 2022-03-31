@@ -64,6 +64,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
       new Pose2d(0,0, new Rotation2d(0)), 
   
       List.of(
+        new Translation2d(-0.3, 0),
         new Translation2d(-1.0 ,-2.5/2)
       ),
   
@@ -84,6 +85,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
         new Pose2d(0,0, new Rotation2d(0)), 
     
         List.of(
+          new Translation2d(-0.3, 0),
           new Translation2d(-4.0/2 ,2.25/2)
         ),
     
@@ -95,8 +97,8 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    new RunLauncherTimed(m_launcher, 1000, 0.5),
-    new SetStageingRunning(m_staging, 1),
+    //new RunLauncherTimed(m_launcher, 1000, 0.5),
+    //new SetStageingRunning(m_staging, 1),
     new DrivetrainCalibration(m_drivetrain),
     new InstantCommand(() -> m_drivetrain.setGyroAngleAdjustment(30)),
     new AutoExtendIntake(m_intake),
@@ -108,16 +110,16 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     //new AutonomousShoot(m_vision, m_launcher),
     new SetStageingRunning(m_staging, 1),
     new StopDriving(m_drivetrain),
-    new RunLauncherTimed(m_launcher, 1000, 1),
+    new RunLauncherTimed(m_launcher, 1000, 0.25),
     //new AutonomousShoot(m_vision, m_launcher),
-    new SetStageingRunning(m_staging, 0),
+    //new SetStageingRunning(m_staging, 0), h
     new TrajectoryFollowRelative(cargoThreeTrajectory, m_drivetrain),
     new StopDriving(m_drivetrain),
   
     new RunLauncherTimed(m_launcher, 1000, 0.25),
     //new AutonomousShoot(m_vision, m_launcher),
-    new SetStageingRunning(m_staging, 1),
-    new RunLauncherTimed(m_launcher, 1000, 1),
+    //new SetStageingRunning(m_staging, 1), h
+    //new RunLauncherTimed(m_launcher, 1000, 0.25),
     new TrajectoryFollowRelative(toHumanPlayer, m_drivetrain),
     new WaitCommand(0.25),
     new SetStageingRunning(m_staging, 0),
@@ -127,7 +129,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     new StopDriving(m_drivetrain),
     new SetIntakeRunning(m_intake, 1),
     new SetStageingRunning(m_staging, 1),
-    new RunLauncherTimed(m_launcher, 1000, 1.d)
+    new RunLauncherTimed(m_launcher, 1000, 0.25)
     //new AutonomousShoot(m_vision, m_launcher)
     
     );
