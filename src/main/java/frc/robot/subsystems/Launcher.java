@@ -17,6 +17,7 @@ import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Launcher extends SubsystemBase {
@@ -63,6 +64,8 @@ public class Launcher extends SubsystemBase {
     m_secondaryController.setI(0);
     m_secondaryController.setD(0.0001);
     m_secondaryController.setFF(0.000085);
+
+    Shuffleboard.getTab("Debug").addNumber("launcher speed", m_encoder::getVelocity);
   }
 
   public void SetShooterSpeed(double rpm){
