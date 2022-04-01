@@ -30,7 +30,7 @@ import frc.robot.subsystems.Vision;
 public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
 
 
-  private final Trajectory cargoTwoTrajectory = TrajectoryGenerator.generateTrajectory(
+  static final Trajectory cargoTwoTrajectory = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
@@ -50,7 +50,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     new Pose2d(-1.3,-0.8,Rotation2d.fromDegrees(0.0)),
     DriveConstants.CONFIG);
 
-    private final Trajectory cargoThreeOrFourTrajectory = TrajectoryGenerator.generateTrajectory(
+    static final Trajectory cargoThreeOrFourTrajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0, new Rotation2d(0)), 
   
       List.of(
@@ -60,7 +60,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
       new Pose2d(-1.3,-0.8,Rotation2d.fromDegrees(0.0)),
       DriveConstants.CONFIG);
 
-    private final Trajectory cargoThreeTrajectory = TrajectoryGenerator.generateTrajectory(
+    static final Trajectory cargoThreeTrajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0, new Rotation2d(0)), 
   
       List.of(
@@ -71,7 +71,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
       new Pose2d(-1.2,-2.5,Rotation2d.fromDegrees(-60.d)),
       DriveConstants.CONFIG);
     
-      private final Trajectory toHumanPlayer = TrajectoryGenerator.generateTrajectory(
+      static final Trajectory toHumanPlayer = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0,0, new Rotation2d(0)), 
     
         List.of(
@@ -81,7 +81,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
         new Pose2d(3.7,-1.7,Rotation2d.fromDegrees(10)),
         DriveConstants.CONFIG);
 
-      private final Trajectory toFinalLaunch = TrajectoryGenerator.generateTrajectory(
+      static final Trajectory toFinalLaunch = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0,0, new Rotation2d(0)), 
     
         List.of(

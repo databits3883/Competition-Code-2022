@@ -19,6 +19,9 @@ import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    public static final boolean DEBUG = true;
+
     public static class ClimbConstants{
         public static final int LENGTH_WINCH_LEADER_CHANNEL = 17;
         public static final int LENGTH_WINCH_FOLLOWER_CHANNEL = 18;

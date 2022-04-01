@@ -7,8 +7,10 @@ package frc.robot.commands.autonomous;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Vision.pipeline;
 
 public class AutonomousShoot extends CommandBase {
   /** Creates a new AutonomousShoot. */
@@ -28,16 +30,24 @@ public class AutonomousShoot extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_vision.setMode(pipeline.hubAlternate);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double setSpeed = 86.7*m_vision.getDistanceVision() + 1318;
+    if(!m_vision.getPipelineSetLazy()) return;
+    if(!Constants.DEBUG){
+      double setSpeed = 86.7*m_vision.getDistanceVision() + 1318;
 
-    correctedSpeed = Math.min(1900, Math.max(1500, setSpeed));
-    m_validSpeedEntry.setBoolean(correctedSpeed == setSpeed);
-    if(m_vision.isTargetValid()) m_launcher.SetShooterSpeed(correctedSpeed);
+      correctedSpeed = Math.min(1900, Math.max(1500, setSpeed));
+      m_validSpeedEntry.setBoolean(correctedSpeed == setSpeed);
+      if(m_vision.isTargetValid()) m_launcher.SetShooterSpeed(correctedSpeed);
+    }
+    else{
+      m_launcher.SetShooterSpeed(1000);
+    }
   }
 
   // Called once the command ends or is interrupted.
