@@ -126,12 +126,12 @@ public class Launcher extends SubsystemBase {
   //   table.addEntryListener("ratio", (t,string,entry,value,i)->{ratio = value.getDouble();System.out.println(value.getDouble());}, EntryListenerFlags.kUpdate);
   // }
 
-  // @Override 
-  // public void initSendable(SendableBuilder builder){
-  //   NetworkTable table = NetworkTableInstance.getDefault().getTable("launcher tuning");
-  //   table.getEntry("speed").setNumber(ratio);
-  //   table.addEntryListener("speed", (t,string,entry,value,i)->{SetShooterSpeed(value.getDouble());System.out.println(value.getDouble());}, EntryListenerFlags.kUpdate);
-  // }
+  @Override 
+  public void initSendable(SendableBuilder builder){
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("launcher tuning");
+    table.getEntry("speed").setNumber(0);
+    table.addEntryListener("speed", (t,string,entry,value,i)->{SetShooterSpeed(value.getDouble());System.out.println(value.getDouble());}, EntryListenerFlags.kUpdate);
+  }
 
   
 }

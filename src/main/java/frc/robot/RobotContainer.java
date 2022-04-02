@@ -108,8 +108,7 @@ public class RobotContainer {
   private final JoystickButton m_upperLaunchToggle = new JoystickButton(m_stick, 4);
   //private final JoystickButton m_testLowerIntake = new JoystickButton(m_copilot, 8);
 
-  private final JoystickButton m_basicLaunchToggleLow = new JoystickButton(m_copilot, 3);
-  private final JoystickButton m_basicLaunchToggleHigh = new JoystickButton(m_copilot, 4);
+  
 
 
   
@@ -238,7 +237,7 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
 
     // NetworkTableEntry tyE = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty");
     
-    // new JoystickButton(m_copilot, 3).whenPressed(new InstantCommand(()->{
+    // new JoystickButton(m_stick, 7).whenPressed(new InstantCommand(()->{
     //   double ty = tyE.getDouble(0);
     //   double speed = m_launcher.getSetSpeed();
     //   double distance = m_vision.getDistanceVision();

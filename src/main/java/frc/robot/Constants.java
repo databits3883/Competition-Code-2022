@@ -20,7 +20,7 @@ import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
  */
 public final class Constants {
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public static class ClimbConstants{
         public static final int LENGTH_WINCH_LEADER_CHANNEL = 17;
@@ -129,7 +129,7 @@ public final class Constants {
           );
         
         
-        public static final double MAX_WHEEL_SPEED = 4.28;
+        public static final double MAX_WHEEL_SPEED = 4.38;
 
         public static final double MAX_TURN_SPEED = MAX_WHEEL_SPEED * (Math.sqrt(DRIVE_TRACK_LENGTH*DRIVE_TRACK_LENGTH+DRIVE_TRACK_WIDTH*DRIVE_TRACK_WIDTH));
 

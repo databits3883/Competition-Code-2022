@@ -68,11 +68,11 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
         new Translation2d(-1.0 ,-2.5/2)
       ),
   
-      new Pose2d(-1.2,-2.5,Rotation2d.fromDegrees(-60.d)),
+      new Pose2d(-1.2,-2.5,Rotation2d.fromDegrees(-50.d)),
       DriveConstants.CONFIG);
     
       static final Trajectory toHumanPlayer = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0,0, new Rotation2d(0)), 
+        new Pose2d(0,0, Rotation2d.fromDegrees(10)), 
     
         List.of(
           new Translation2d(3.9/2 ,-1.7/2)
@@ -101,7 +101,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     //new SetStageingRunning(m_staging, 1),
     new DrivetrainCalibration(m_drivetrain),
     new InstantCommand(() -> m_drivetrain.setGyroAngleAdjustment(30)),
-    new RunLauncherTimed(m_launcher, 1906, 0),
+    new RunLauncherTimed(m_launcher, 1950, 0),
     new AutoExtendIntake(m_intake),
     new SetStageingRunning(m_staging, 0),
     new SetIntakeRunning(m_intake, 1),
@@ -111,13 +111,14 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     //new AutonomousShoot(m_vision, m_launcher),
     new SetStageingRunning(m_staging, 1),
     new StopDriving(m_drivetrain),
-    new WaitCommand(0.75),
-    new RunLauncherTimed(m_launcher, 1906, 0),
+    new WaitCommand(0.95),
+    new RunLauncherTimed(m_launcher, 1880, 0),
     // new RunLauncherTimed(m_launcher, 1000, 0.5),
     //new AutonomousShoot(m_vision, m_launcher),
     //new SetStageingRunning(m_staging, 0), h
     new TrajectoryFollowRelative(cargoThreeTrajectory, m_drivetrain),
     new StopDriving(m_drivetrain),
+    new WaitCommand(0.5),
     
   
     // new RunLauncherTimed(m_launcher, 1000, 0.25),
@@ -125,16 +126,16 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     //new SetStageingRunning(m_staging, 1), h
     //new RunLauncherTimed(m_launcher, 1000, 0.25),
     new TrajectoryFollowRelative(toHumanPlayer, m_drivetrain),
-    new RunLauncherTimed(m_launcher, 1905, 0),
-    new WaitCommand(0.15), //20
+    new RunLauncherTimed(m_launcher, 1880, 0),
+    new WaitCommand(0.1), //20
     new SetStageingRunning(m_staging, 0),
-    new WaitCommand(0.3),
+    new WaitCommand(0.5),
     new SetIntakeRunning(m_intake, 0),
     new TrajectoryFollowRelative(toFinalLaunch, m_drivetrain),
     new StopDriving(m_drivetrain),
     new SetIntakeRunning(m_intake, 1),
     new SetStageingRunning(m_staging, 1),
-    new RunLauncherTimed(m_launcher, 1905, 1.0)
+    new RunLauncherTimed(m_launcher, 1880, 1.0)
     //new AutonomousShoot(m_vision, m_launcher)
     
     );

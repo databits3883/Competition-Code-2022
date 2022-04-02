@@ -42,7 +42,7 @@ public class TurnToGoal extends CommandBase {
 
     m_controller = new ProfiledPIDController(0.1, 0, 0, 
     new TrapezoidProfile.Constraints(2*Math.PI, 2*Math.PI/5));
-    Shuffleboard.getTab("Tracking Horizontal Tune").add("controller", m_controller).withWidget("pid controller");
+    //Shuffleboard.getTab("Tracking Horizontal Tune").add("controller", m_controller).withWidget("pid controller");
     addRequirements(drivetrain, vision);
   }
   public ChassisSpeeds getTranslationalSpeed(){
@@ -58,10 +58,11 @@ public class TurnToGoal extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
+  public void execute() {//TODO:fix
     ChassisSpeeds speeds = getTranslationalSpeed();
     if(m_vision.getPipelineSetLazy() &&m_vision.isTargetValid()) speeds.omegaRadiansPerSecond = m_controller.calculate(m_vision.getHorizontalOffset());
     m_drivetrain.setSpeedFieldRelative(speeds);
+    //m_drivetrain.setSpeedFieldRelative(new ChassisSpeeds());
     //System.out.println(m_controller.calculate(m_vision.getHorizontalOffset()));
   }
 

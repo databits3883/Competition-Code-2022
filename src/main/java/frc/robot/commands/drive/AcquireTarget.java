@@ -36,7 +36,7 @@ public class AcquireTarget extends TurnToGoal {
   @Override
   public void execute(){
     super.execute();
-    double setSpeed = 86.7*m_vision.getDistanceVision() + 1318;
+    double setSpeed = 120*m_vision.getDistanceVision() + 964;
 
     double correctedSpeed = Math.min(1900, Math.max(1500, setSpeed));
     m_validSpeeEntry.setBoolean(correctedSpeed == setSpeed);
