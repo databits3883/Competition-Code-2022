@@ -22,6 +22,8 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Intake extends SubsystemBase implements SafetyOverridable {
+  public static boolean IntakeDisableFlag = false;
+
   private final CANSparkMax m_takeMotor;
   
   private final CANSparkMax m_raiseMotor;
@@ -73,6 +75,7 @@ public class Intake extends SubsystemBase implements SafetyOverridable {
   }
   
   public void takeInOrOut(double speed){
+    if(speed!=0) IntakeDisableFlag = false;
     m_takeMotor.set(speed);
   }
 
@@ -141,6 +144,10 @@ public class Intake extends SubsystemBase implements SafetyOverridable {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(IntakeDisableFlag){
+      m_takeMotor.set(0);
+    }
+
   }
 
   public void enableSafety(){

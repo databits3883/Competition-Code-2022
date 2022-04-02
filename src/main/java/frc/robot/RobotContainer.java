@@ -39,6 +39,7 @@ import frc.robot.commands.autonomous.LaunchAndExitAutonomous;
 import frc.robot.commands.autonomous.LeftTwoBallAutonomous;
 import frc.robot.commands.autonomous.RightTwoBallAutonomous;
 import frc.robot.commands.autonomous.ThreeOrFourBallAutonomous;
+import frc.robot.commands.autonomous.Vision5Ball;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowBase;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.*;
@@ -84,6 +85,7 @@ public class RobotContainer {
   private final Command m_rightTwoBallAutonomous = new RightTwoBallAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
   private final Command m_launchAndExitAutonomous = new LaunchAndExitAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
   private final Command m_threeOrFourBallAutonomous = new ThreeOrFourBallAutonomous(m_launcher, m_drivetrain, m_intake, m_staging, m_vision);
+  private final Command m_visionAuto = new Vision5Ball(m_launcher, m_drivetrain, m_intake, m_staging, m_vision);
 
 
   private final Command m_extendIntake = new ExtendIntake(m_intake);
@@ -146,9 +148,9 @@ public class RobotContainer {
 
   //TODO:remove
   private final StartEndCommand m_manualStageIn = new StartEndCommand(
-    m_staging::runIn, m_staging::stop, m_staging);
+    m_staging::runIn, ()->{m_staging.stop();m_staging.resetAutoStaging();}, m_staging);
   private final StartEndCommand m_manualStageOut = new StartEndCommand(
-      m_staging::runOut, m_staging::stop, m_staging);
+      m_staging::runOut, ()->{m_staging.stop();m_staging.resetAutoStaging();}, m_staging);
   //end remove
 
 

@@ -30,11 +30,9 @@ public class RunIntake extends CommandBase {
   }
 
   // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    m_intake.takeInOrOut(Constants.IntakeConstants.spinSpeed * m_direction);
-
-  }
+  // @Override
+  // public void execute() {
+  // }
 
   // Called once the command ends or is interrupted.
   @Override

@@ -32,6 +32,7 @@ public class Vision5Ball extends AutonomousRoutine {
       // new RunLauncherTimed(m_launcher, 1000, 0.5),
       //new AutonomousShoot(m_vision, m_launcher),
       //new SetStageingRunning(m_staging, 0), h
+      new SetIntakeRunning(m_intake, 1),
       new TrajectoryFollowRelative(ThreeOrFourBallAutonomous.cargoThreeTrajectory, m_drivetrain),
       new StopDriving(m_drivetrain),
     
@@ -41,11 +42,13 @@ public class Vision5Ball extends AutonomousRoutine {
       //new RunLauncherTimed(m_launcher, 1000, 0.25),
       parallel( 
         new TrajectoryFollowRelative(ThreeOrFourBallAutonomous.toHumanPlayer, m_drivetrain),
+        new SetIntakeRunning(m_intake, 1),
         new WaitCommand(0.45),
         sequence(
           new WaitCommand(0.3),
-        new SetStageingRunning(m_staging, 0),
-        new InstantCommand(m_staging::resetAutoStaging)
+          new SetStageingRunning(m_staging, 0),
+          new InstantCommand(m_staging::resetAutoStaging,m_staging),
+          new InstantCommand(m_staging::resetAutoStaging)
         )
       ),
        //20
@@ -55,11 +58,9 @@ public class Vision5Ball extends AutonomousRoutine {
       new SetIntakeRunning(m_intake, 1),
       new SetStageingRunning(m_staging, 1),
       new WaitCommand(1)
+      )
 
     , new AutonomousShoot(m_vision,m_launcher).perpetually())
-    
-    )
-    
 
     );
   }

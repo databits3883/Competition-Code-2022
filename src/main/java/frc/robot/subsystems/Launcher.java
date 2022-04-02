@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Launcher extends SubsystemBase {
+
   private final CANSparkMax m_launchMotor;
   private final SparkMaxPIDController m_controller;
 

@@ -29,6 +29,7 @@ public class CargoStaging extends SubsystemBase {
   StagingState waiting;
   StagingState clearing;
   StagingState running;
+  StagingState frozen;
 
   private Notifier m_autoRunner;
 
@@ -37,9 +38,20 @@ public class CargoStaging extends SubsystemBase {
     m_motor  = new CANSparkMax(MOTOR_CHANNEL, MotorType.kBrushless);
 
 
+
+    frozen = new StagingState(){
+      public void enterState(){
+        autoStop();
+        Intake.IntakeDisableFlag = true;
+      }
+    };
     holding = new StagingState(){
       public void enterState(){
         autoStop();
+      }
+      public StagingState nextState(){
+        if(cargoAtEntrance()) return frozen;
+        else return this;
       }
     };
     waiting = new StagingState(){
