@@ -4,10 +4,16 @@
 
 package frc.robot.commands.autonomous;
 
+import java.util.List;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.autonomous.Tracking.TurnToGoal;
 import frc.robot.commands.autonomous.drive.StopDriving;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowAbsolute;
@@ -17,22 +23,78 @@ import frc.robot.commands.drive.DrivetrainCalibration;
 import frc.robot.subsystems.*;
 
 public class Vision5Ball extends AutonomousRoutine {
-  Trajectory cargoTwoTrajectory = ThreeOrFourBallAutonomous.cargoTwoTrajectory;
-  Trajectory cargoThreeTrajectory = ThreeOrFourBallAutonomous.cargoThreeTrajectory.transformBy(
+
+  static final Trajectory robotCargoTwoTrajectory = TrajectoryGenerator.generateTrajectory(
+    new Pose2d(0,0, new Rotation2d(0)), 
+
+    List.of(
+      new Translation2d(1.11/2 , -0.01)
+    ),
+
+    new Pose2d(1.11,-0.01,Rotation2d.fromDegrees(0.0)),
+    DriveConstants.CONFIG);
+
+    static final Trajectory robotCargoThreeOrFourTrajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0,0, new Rotation2d(0)), 
+  
+      List.of(
+        new Translation2d(-1/3/2 ,-0.8/2)
+      ),
+  
+      new Pose2d(-1.3,-0.8,Rotation2d.fromDegrees(0.0)),
+      DriveConstants.CONFIG);
+
+    static final Trajectory robotCargoThreeTrajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0,0, new Rotation2d(0)), 
+  
+      List.of(
+        new Translation2d(-0.3, 0),
+        new Translation2d(-1.0 ,-2.5/2)
+      ),
+  
+      new Pose2d(-1.2,-2.5,Rotation2d.fromDegrees(-50.d)),
+      DriveConstants.CONFIG);
+    
+      static final Trajectory robotToHumanPlayer = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0,0, Rotation2d.fromDegrees(10)), 
+    
+        List.of(
+          new Translation2d(3.5/2 ,-1.25/2)
+        ),
+    
+        new Pose2d(3.7,-1.25,Rotation2d.fromDegrees(10)),
+        DriveConstants.CONFIG);
+
+      static final Trajectory robotToFinalLaunch = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0,0, new Rotation2d(0)), 
+    
+        List.of(
+          new Translation2d(-0.3, 0),
+          new Translation2d(-4.0/2 ,2.25/2)
+        ),
+    
+        new Pose2d(-3.3,2.0,Rotation2d.fromDegrees(-10)),
+        DriveConstants.CONFIG);
+  
+
+  Trajectory cargoTwoTrajectory = robotCargoTwoTrajectory;
+  Trajectory cargoThreeTrajectory = robotCargoThreeTrajectory.transformBy(
     cargoTwoTrajectory.sample(cargoTwoTrajectory.getTotalTimeSeconds()).poseMeters.minus( 
-    ThreeOrFourBallAutonomous.cargoThreeTrajectory.getInitialPose())
+    robotCargoThreeTrajectory.getInitialPose())
       
   );
-  Trajectory toHumanPlayer = ThreeOrFourBallAutonomous.toHumanPlayer.transformBy(
+  Trajectory toHumanPlayer = robotToHumanPlayer.transformBy(
     cargoThreeTrajectory.sample(cargoThreeTrajectory.getTotalTimeSeconds()).poseMeters.minus(
-    ThreeOrFourBallAutonomous.toHumanPlayer.getInitialPose()
+    robotToHumanPlayer.getInitialPose()
     )
   );
-  Trajectory toFinal = ThreeOrFourBallAutonomous.toFinalLaunch.transformBy(
+  Trajectory toFinal = robotToFinalLaunch.transformBy(
     toHumanPlayer.sample(toHumanPlayer.getTotalTimeSeconds()).poseMeters.minus(
-      ThreeOrFourBallAutonomous.toFinalLaunch.getInitialPose()
+      robotToFinalLaunch.getInitialPose()
     )
   );
+
+  
     
 
   /** Creates a new Vision5Ball. */
@@ -42,7 +104,7 @@ public class Vision5Ball extends AutonomousRoutine {
     
     new DrivetrainCalibration(m_drivetrain),
     new InstantCommand(() -> m_drivetrain.resetGyro()),
-    deadline(
+    parallel(
       sequence(
         new AutoExtendIntake(m_intake),
         new SetIntakeRunning(m_intake, 1),
@@ -69,18 +131,13 @@ public class Vision5Ball extends AutonomousRoutine {
         ),
         
         new TrajectoryFollowAbsolute(toFinal, m_drivetrain),
-        new SetStageingRunning(m_staging, 1)
-
-        
-        
-        
-        
-
+        new SetStageingRunning(m_staging, 1),
+        new TurnToGoal(m_drivetrain, m_vision)
 
 
       )
-    , new AutonomousShoot(m_vision,m_launcher).perpetually())
-
+    , new AutonomousShoot(m_vision,m_launcher).perpetually()
+    )
     );
   }
 

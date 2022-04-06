@@ -68,17 +68,17 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
         new Translation2d(-1.0 ,-2.5/2)
       ),
   
-      new Pose2d(-1.2,-2.5,Rotation2d.fromDegrees(-50.d)),
+      new Pose2d(-1.2,-2.5,Rotation2d.fromDegrees(-60.d)),
       DriveConstants.CONFIG);
     
       static final Trajectory toHumanPlayer = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0,0, Rotation2d.fromDegrees(10)), 
+        new Pose2d(0,0, new Rotation2d(0)), 
     
         List.of(
-          new Translation2d(3.5/2 ,-1.25/2)
+          new Translation2d(3.9/2 ,-1.7/2)
         ),
     
-        new Pose2d(3.5,-1.25,Rotation2d.fromDegrees(10)),
+        new Pose2d(3.7,-1.52,Rotation2d.fromDegrees(10)),
         DriveConstants.CONFIG);
 
       static final Trajectory toFinalLaunch = TrajectoryGenerator.generateTrajectory(
@@ -89,7 +89,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
           new Translation2d(-4.0/2 ,2.25/2)
         ),
     
-        new Pose2d(-3.3,2.0,Rotation2d.fromDegrees(-10)),
+        new Pose2d(-3.5,2.25,Rotation2d.fromDegrees(-10)),
         DriveConstants.CONFIG);
   
   /** Creates a new ThreeOrFourBallAutonomous. */
