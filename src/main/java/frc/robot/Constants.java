@@ -20,7 +20,7 @@ import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
  */
 public final class Constants {
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public static class ClimbConstants{
         public static final int LENGTH_WINCH_LEADER_CHANNEL = 17;
