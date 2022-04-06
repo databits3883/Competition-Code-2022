@@ -110,6 +110,7 @@ public class Vision5Ball extends AutonomousRoutine {
         new SetIntakeRunning(m_intake, 1),
         new TrajectoryFollowAbsolute(cargoTwoTrajectory, m_drivetrain),
         new SetStageingRunning(m_staging, 1),
+        new SetIntakeRunning(m_intake, 1),
         new TurnToGoal(m_drivetrain, m_vision).withTimeout(0.75),
 
         new TrajectoryFollowAbsolute(cargoThreeTrajectory, m_drivetrain),
