@@ -18,7 +18,8 @@ public class RunLauncherTimed extends CommandBase {
   private double m_time;
 
 
-  public RunLauncherTimed(Launcher launcher, double rpm, double time) {
+  public 
+  RunLauncherTimed(Launcher launcher, double rpm, double time) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_launcher = launcher;
     m_rpm = rpm;

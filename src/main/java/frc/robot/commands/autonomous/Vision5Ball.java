@@ -109,9 +109,11 @@ public class Vision5Ball extends AutonomousRoutine {
         new AutoExtendIntake(m_intake),
         new SetIntakeRunning(m_intake, 1),
         new TrajectoryFollowAbsolute(cargoTwoTrajectory, m_drivetrain),
-        new SetStageingRunning(m_staging, 1),
+        
         new SetIntakeRunning(m_intake, 1),
         new TurnToGoal(m_drivetrain, m_vision).withTimeout(0.75),
+        new WaitCommand(0.1),
+        new SetStageingRunning(m_staging, 1),
 
         new TrajectoryFollowAbsolute(cargoThreeTrajectory, m_drivetrain),
         deadline(
@@ -124,6 +126,7 @@ public class Vision5Ball extends AutonomousRoutine {
         ),
         parallel(
           sequence(
+            new WaitCommand(0.1),
             new SetStageingRunning(m_staging, 0),
             new InstantCommand(m_staging::resetAutoStaging),
             new SetIntakeRunning(m_intake, 1)
@@ -137,7 +140,7 @@ public class Vision5Ball extends AutonomousRoutine {
 
 
       )
-    , new AutonomousShoot(m_vision,m_launcher).perpetually()
+    , new RunLauncherTimed(m_launcher, 1850, 16)
     )
     );
   }

@@ -61,9 +61,9 @@ public class LeftTwoBallAutonomous extends AutonomousRoutine {
       //new TrajectoryFollowRelative(zeroTrajectory , m_drivetrain),
       new DrivetrainCalibration(m_drivetrain),
       new InstantCommand(() -> m_drivetrain.setGyroAngleAdjustment(30)),
-      new RunLauncherTimed(m_launcher, 6450, 1),
+      new RunLauncherTimed(m_launcher, 1775, 1),
       new SetStageingRunning(m_staging, 1),
-      new RunLauncherTimed(m_launcher, 6450, 1),
+      new RunLauncherTimed(m_launcher, 1775, 1),
       new AutoExtendIntake(m_intake),
       new SetStageingRunning(m_staging, 0),
       new SetIntakeRunning(m_intake, 1),
@@ -72,9 +72,9 @@ public class LeftTwoBallAutonomous extends AutonomousRoutine {
       new WaitCommand(0.5),
       new TrajectoryFollowRelative(originTrajectory, m_drivetrain),
       new StopDriving(m_drivetrain),
-      new RunLauncherTimed(m_launcher, 6450, 0.5),
+      new RunLauncherTimed(m_launcher, 1775, 0.5),
       new SetStageingRunning(m_staging, 1),
-      new RunLauncherTimed(m_launcher, 6450, 3),
+      new RunLauncherTimed(m_launcher, 1775, 3),
       new RunLauncherTimed(m_launcher, 0, 0.01)
            
       

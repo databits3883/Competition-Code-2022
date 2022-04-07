@@ -13,8 +13,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
+//import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
+//import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -93,7 +93,7 @@ public class RobotContainer {
 
 
 
-  private final JoystickButton m_aimButton = new JoystickButton(m_copilot, 1); //mckinney said this was right
+  private final JoystickButton m_aimButton = new JoystickButton(m_stick, 1); //Ralph said this was right blame him not McKinney
 
   private final JoystickButton m_intakeButton = new JoystickButton(m_copilot, 10);
   private final JoystickButton m_outtakeButton = new JoystickButton(m_copilot, 8);
@@ -153,7 +153,7 @@ public class RobotContainer {
   //end remove
 
 
-  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1750),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1550),()->m_launcher.setDutyCycle(0), m_launcher);
   private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1000),()->m_launcher.setDutyCycle(0), m_launcher);
 
 

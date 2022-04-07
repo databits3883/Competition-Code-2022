@@ -36,11 +36,12 @@ public class AcquireTarget extends TurnToGoal {
   @Override
   public void execute(){
     super.execute();
-    double setSpeed = 120*m_vision.getDistanceVision() + 964;
+    //double setSpeed = 120*m_vision.getDistanceVision() + 964;
 
-    double correctedSpeed = Math.min(1900, Math.max(1500, setSpeed));
-    m_validSpeeEntry.setBoolean(correctedSpeed == setSpeed);
-    if(m_vision.isTargetValid()) m_launcher.SetShooterSpeed(correctedSpeed);
+    //double correctedSpeed = Math.min(1900, Math.max(1500, setSpeed));
+    //m_validSpeeEntry.setBoolean(correctedSpeed == setSpeed);
+    //if(m_vision.isTargetValid()) m_launcher.SetShooterSpeed(correctedSpeed);
+    m_launcher.SetShooterSpeed(1650);
   }
   @Override
   public ChassisSpeeds getTranslationalSpeed(){
