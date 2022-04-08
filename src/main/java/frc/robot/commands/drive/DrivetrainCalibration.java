@@ -23,6 +23,11 @@ public class DrivetrainCalibration extends CommandBase {
     }
 
   }
+
+  @Override
+  public void execute(){
+    return;
+  }
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

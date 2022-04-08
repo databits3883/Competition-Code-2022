@@ -140,7 +140,7 @@ public class Vision5Ball extends AutonomousRoutine {
 
 
       )
-    , new RunLauncherTimed(m_launcher, 1875, 16)
+    , new RunLauncherTimed(m_launcher, 2000, 16)
     )
     );
   }

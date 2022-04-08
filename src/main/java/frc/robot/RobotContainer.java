@@ -32,15 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.*;
 
-import frc.robot.commands.autonomous.AutoExtendIntake;
-import frc.robot.commands.autonomous.AutonomousRoutineRegistry;
-import frc.robot.commands.autonomous.CenterTwoBallAutonomous;
-import frc.robot.commands.autonomous.LaunchAndExitAutonomous;
-import frc.robot.commands.autonomous.LeftTwoBallAutonomous;
-import frc.robot.commands.autonomous.RightTwoBallAutonomous;
-import frc.robot.commands.autonomous.ThreeOrFourBallAutonomous;
-import frc.robot.commands.autonomous.Vision5Ball;
-import frc.robot.commands.autonomous.drive.TrajectoryFollowBase;
+import frc.robot.commands.autonomous.*;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.*;
 import frc.robot.commands.climb.*;
@@ -86,6 +78,7 @@ public class RobotContainer {
   private final Command m_launchAndExitAutonomous = new LaunchAndExitAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
   private final Command m_threeOrFourBallAutonomous = new ThreeOrFourBallAutonomous(m_launcher, m_drivetrain, m_intake, m_staging, m_vision);
   private final Command m_visionAuto = new Vision5Ball(m_launcher, m_drivetrain, m_intake, m_staging, m_vision);
+  private final Command m_leftVisionTwoball = new LeftTwoBallVision(m_launcher, m_drivetrain, m_intake, m_staging,m_vision);
 
 
   private final Command m_extendIntake = new ExtendIntake(m_intake);

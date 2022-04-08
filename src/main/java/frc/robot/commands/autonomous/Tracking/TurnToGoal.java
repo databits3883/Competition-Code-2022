@@ -52,7 +52,7 @@ public class TurnToGoal extends CommandBase {
   @Override
   public void initialize() {
     m_vision.setMode(pipeline.hubAlternate);
-    System.out.println("runningcmd");
+    //System.out.println("runningcmd");
   }
 
   // Called every time the scheduler runs while the command is scheduled.

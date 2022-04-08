@@ -21,15 +21,12 @@ public class AcquireTarget extends TurnToGoal {
   Launcher m_launcher;
   Vision m_vision;
 
-  NetworkTableEntry m_validSpeeEntry;
   /** Creates a new AcquireTarget. */
   public AcquireTarget(Joystick stick, Drivetrain drivetrain, Vision vision, Launcher launcher) {
     // Use addRequirements() here to declare subsystem dependencies.
     super(drivetrain, vision);
     m_launcher = launcher;
     m_vision = vision;
-    m_validSpeeEntry = NetworkTableInstance.getDefault().getTable("autoAim").getEntry("speed valid");
-    m_validSpeeEntry.setBoolean(false);
     addRequirements(launcher);
   }
   @Override
