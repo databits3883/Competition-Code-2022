@@ -41,6 +41,14 @@ public class Vision extends SubsystemBase {
     }
   }
 
+  public void takeSnapshot(){
+    table.getEntry("snapshot").setNumber(1);
+  }
+
+  public void resetSnapshot(){
+    table.getEntry("snapshot").setNumber(0);
+  }
+
   public void setMode(pipeline p){
     table.getEntry("pipeline").setNumber(p.pipeNumber);
     pipelineSetLazy = false;

@@ -32,7 +32,11 @@ public class AcquireTarget extends TurnToGoal {
     m_validSpeeEntry.setBoolean(false);
     addRequirements(launcher);
   }
-  
+  @Override
+  public void initialize(){
+    super.initialize();
+    m_vision.resetSnapshot();
+  }
   @Override
   public void execute(){
     super.execute();
@@ -51,5 +55,11 @@ public class AcquireTarget extends TurnToGoal {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  @Override
+  public void end(boolean interrupted){
+    m_vision.takeSnapshot();
+    super.end(interrupted);
   }
 }
