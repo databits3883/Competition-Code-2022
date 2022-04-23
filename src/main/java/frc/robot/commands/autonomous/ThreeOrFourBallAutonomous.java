@@ -75,10 +75,10 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
         new Pose2d(0,0, new Rotation2d(0)), 
     
         List.of(
-          new Translation2d(3.9/2 ,-1.7/2)
+          new Translation2d(3.9/2 ,-1.3/2)
         ),
     
-        new Pose2d(3.7,-1.52,Rotation2d.fromDegrees(10)),
+        new Pose2d(3.7,-1.12,Rotation2d.fromDegrees(10)),
         DriveConstants.CONFIG);
 
       static final Trajectory toFinalLaunch = TrajectoryGenerator.generateTrajectory(
@@ -89,7 +89,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
           new Translation2d(-4.0/2 ,2.25/2)
         ),
     
-        new Pose2d(-3.5,2.25,Rotation2d.fromDegrees(-10)),
+        new Pose2d(-3.5,2.25,Rotation2d.fromDegrees(10)),
         DriveConstants.CONFIG);
   
   /** Creates a new ThreeOrFourBallAutonomous. */
@@ -101,18 +101,18 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     //new SetStageingRunning(m_staging, 1),
     new DrivetrainCalibration(m_drivetrain),
     new InstantCommand(() -> m_drivetrain.setGyroAngleAdjustment(30)),
-    new RunLauncherTimed(m_launcher, 1950, 0),
+    new RunLauncherTimed(m_launcher, 1550, 0),
     new AutoExtendIntake(m_intake),
     new SetStageingRunning(m_staging, 0),
     new SetIntakeRunning(m_intake, 1),
     new TrajectoryFollowRelative(cargoTwoTrajectory, m_drivetrain),
     //new RunIntakeTimed(m_intake, 1,0.75),
-    //new RunLauncherTimed(m_launcher, 1000, 0.5),
+    //new RunLauncherTimed(m_launcher, 1000, 0.5),  
     //new AutonomousShoot(m_vision, m_launcher),
     new SetStageingRunning(m_staging, 1),
     new StopDriving(m_drivetrain),
     new WaitCommand(0.95),
-    new RunLauncherTimed(m_launcher, 1880, 0),
+    new RunLauncherTimed(m_launcher, 1600, 0),
     // new RunLauncherTimed(m_launcher, 1000, 0.5),
     //new AutonomousShoot(m_vision, m_launcher),
     //new SetStageingRunning(m_staging, 0), h
@@ -126,7 +126,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     //new SetStageingRunning(m_staging, 1), h
     //new RunLauncherTimed(m_launcher, 1000, 0.25),
     new TrajectoryFollowRelative(toHumanPlayer, m_drivetrain),
-    new RunLauncherTimed(m_launcher, 1880, 0),
+    new RunLauncherTimed(m_launcher, 1600, 0),
     new WaitCommand(0.1), //20
     new SetStageingRunning(m_staging, 0),
     new WaitCommand(0.5),
@@ -135,7 +135,7 @@ public class ThreeOrFourBallAutonomous extends AutonomousRoutine {
     new StopDriving(m_drivetrain),
     new SetIntakeRunning(m_intake, 1),
     new SetStageingRunning(m_staging, 1),
-    new RunLauncherTimed(m_launcher, 1880, 1.0)
+    new RunLauncherTimed(m_launcher, 1550, 1.0)
     //new AutonomousShoot(m_vision, m_launcher)
     
     );

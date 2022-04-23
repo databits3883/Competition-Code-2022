@@ -38,10 +38,10 @@ public class Vision5Ball extends AutonomousRoutine {
       new Pose2d(0,0, new Rotation2d(0)), 
   
       List.of(
-        new Translation2d(-1/3/2 ,-0.8/2)
+        new Translation2d(-1/3/2 ,-0.4/2)
       ),
   
-      new Pose2d(-1.3,-0.8,Rotation2d.fromDegrees(0.0)),
+      new Pose2d(-1.3,-0.4,Rotation2d.fromDegrees(0.0)),
       DriveConstants.CONFIG);
 
     static final Trajectory robotCargoThreeTrajectory = TrajectoryGenerator.generateTrajectory(
