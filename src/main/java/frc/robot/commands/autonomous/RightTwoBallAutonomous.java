@@ -36,7 +36,7 @@ public class RightTwoBallAutonomous extends AutonomousRoutine {
       new Translation2d(1.1/2 ,-1.1/2)
     ),
 
-    new Pose2d(1.1,-1.1,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(1.1,-1.1,Rotation2d.fromDegrees(-10.0)),
     DriveConstants.CONFIG);
 
     private final Trajectory originTrajectory = TrajectoryGenerator.generateTrajectory(
@@ -58,20 +58,20 @@ public class RightTwoBallAutonomous extends AutonomousRoutine {
     addCommands(
       new DrivetrainCalibration(m_drivetrain),
       new InstantCommand(() -> m_drivetrain.setGyroAngleAdjustment(30)),
-      new RunLauncherTimed(m_launcher, 1725, 1),
-      new SetStageingRunning(m_staging, 1),
-      new RunLauncherTimed(m_launcher, 1725, 1),
+      //new RunLauncherTimed(m_launcher, 1725, 1),
+      //new SetStageingRunning(m_staging, 1),
+      //new RunLauncherTimed(m_launcher, 1725, 1),
       new AutoExtendIntake(m_intake),
       new SetStageingRunning(m_staging, 0),
       new SetIntakeRunning(m_intake, 1),
       new TrajectoryFollowRelative(cargoTwoTrajectory, m_drivetrain),
       //new RunIntakeTimed(m_intake, 1,0.75),
       new WaitCommand(0.5),
-      new TrajectoryFollowRelative(originTrajectory, m_drivetrain),
+      //new TrajectoryFollowRelative(originTrajectory, m_drivetrain),
       new StopDriving(m_drivetrain),
-      new RunLauncherTimed(m_launcher, 1725, 0.5),
+      new RunLauncherTimed(m_launcher, 1600, 0.5),
       new SetStageingRunning(m_staging, 1),
-      new RunLauncherTimed(m_launcher, 1725, 3),
+      new RunLauncherTimed(m_launcher, 1600, 3),
       new RunLauncherTimed(m_launcher, 0, 0.01)
     );
   }
