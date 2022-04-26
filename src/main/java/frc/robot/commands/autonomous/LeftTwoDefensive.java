@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands.autonomous;
 
 import java.util.List;
@@ -29,8 +25,9 @@ import frc.robot.subsystems.Launcher;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class LeftTwoBallAutonomous extends AutonomousRoutine {
+public class LeftTwoDefensive extends AutonomousRoutine {
 
+  
 
 
   private final Trajectory cargoTwoTrajectory = TrajectoryGenerator.generateTrajectory(
@@ -43,18 +40,38 @@ public class LeftTwoBallAutonomous extends AutonomousRoutine {
     new Pose2d(1.3,0.65,Rotation2d.fromDegrees(0.0)),
     DriveConstants.CONFIG);
 
-    private final Trajectory originTrajectory = TrajectoryGenerator.generateTrajectory(
+    private final Trajectory redBallOneTrajectory = TrajectoryGenerator.generateTrajectory(
     new Pose2d(0,0, new Rotation2d(0)), 
 
     List.of(
-      new Translation2d(-1/3/2 ,-0.8/2)
+      new Translation2d(-0.01/2 ,-1.3/2)
     ),
 
-    new Pose2d(-1.3,-0.8,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(-0.01,-1.3,Rotation2d.fromDegrees(-40)),
+    DriveConstants.CONFIG);
+
+    private final Trajectory redBallOneDropOffTrajectory = TrajectoryGenerator.generateTrajectory(
+    new Pose2d(0,0, new Rotation2d(0)), 
+
+    List.of(
+      new Translation2d(-1.25/2 ,0.5/2)
+    ),
+
+    new Pose2d(-1.25,0.5,Rotation2d.fromDegrees(65)),
+    DriveConstants.CONFIG);
+
+    private final Trajectory toCalibrateTrajectory = TrajectoryGenerator.generateTrajectory(
+    new Pose2d(0,0, new Rotation2d(0)), 
+
+    List.of(
+      new Translation2d(0.01/2 ,0.01/2)
+    ),
+
+    new Pose2d(-0.01,0.01,Rotation2d.fromDegrees(-150)),
     DriveConstants.CONFIG);
 
   /** Creates a new BasicAutonomous. */
-  public LeftTwoBallAutonomous(Launcher m_launcher, Drivetrain m_drivetrain, Intake m_intake, CargoStaging m_staging) {
+  public LeftTwoDefensive(Launcher m_launcher, Drivetrain m_drivetrain, Intake m_intake, CargoStaging m_staging) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -71,15 +88,24 @@ public class LeftTwoBallAutonomous extends AutonomousRoutine {
       new WaitCommand(0.5),
       //new TrajectoryFollowRelative(originTrajectory, m_drivetrain),
       new StopDriving(m_drivetrain),
-      new RunLauncherTimed(m_launcher, 1600, 0.5),
+      new RunLauncherTimed(m_launcher, /*1825*/0, 0.5),
       new SetStageingRunning(m_staging, 1),
-      new RunLauncherTimed(m_launcher, 1600, 3),
-      new RunLauncherTimed(m_launcher, 0, 0.01)
+      new RunLauncherTimed(m_launcher, /*1825*/0, 3),
+      new RunLauncherTimed(m_launcher, 0, 0.01),
+      new TrajectoryFollowRelative(redBallOneTrajectory, m_drivetrain),
+      new SetStageingRunning(m_staging, -1),
+      new WaitCommand(0.25),
+      new SetIntakeRunning(m_intake, 0),
+      new TrajectoryFollowRelative(redBallOneDropOffTrajectory, m_drivetrain),
+      new SetIntakeRunning(m_intake, -1),
+      new TrajectoryFollowRelative(toCalibrateTrajectory, m_drivetrain)
     );
   }
 
   @Override
   public String getName(){
-    return "Left Two Ball";
+
+    return "Left Two Defensive";
+
   }
 }
