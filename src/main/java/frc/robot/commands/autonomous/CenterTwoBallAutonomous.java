@@ -35,7 +35,7 @@ public class CenterTwoBallAutonomous extends AutonomousRoutine {
       new Translation2d(1.2/2 ,-0.7/2)
     ),
 
-    new Pose2d(1.2,-0.7,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(1.5,-0.7,Rotation2d.fromDegrees(-10.0)),
     DriveConstants.CONFIG);
 
 
@@ -60,20 +60,21 @@ public class CenterTwoBallAutonomous extends AutonomousRoutine {
     addCommands(
       new DrivetrainCalibration(m_drivetrain),
       new InstantCommand(() -> m_drivetrain.setGyroAngleAdjustment(30)),
-      new RunLauncherTimed(m_launcher, 1825, 1),
-      new SetStageingRunning(m_staging, 1),
-      new RunLauncherTimed(m_launcher, 1825, 1),
+      //new RunLauncherTimed(m_launcher, 1000, 1),
+      //new SetStageingRunning(m_staging, 1),
+      //new RunLauncherTimed(m_launcher, 1000, 1),
       new AutoExtendIntake(m_intake),
-      new SetStageingRunning(m_staging, 0),
+      //new SetStageingRunning(m_staging, 0),
       new SetIntakeRunning(m_intake, 1),
       new TrajectoryFollowRelative(cargoTwoTrajectory, m_drivetrain),
       //new RunIntakeTimed(m_intake, 1,0.75),
-      new WaitCommand(0.5),
-      new TrajectoryFollowRelative(originTrajectory, m_drivetrain),
-      new StopDriving(m_drivetrain),
-      new RunLauncherTimed(m_launcher, 1825, 0.5),
+      //new WaitCommand(0.5),
+      //new TrajectoryFollowRelative(originTrajectory, m_drivetrain),
+      //new StopDriving(m_drivetrain),
+      new RunLauncherTimed(m_launcher, 1650, 0.5),
       new SetStageingRunning(m_staging, 1),
-      new RunLauncherTimed(m_launcher, 1825, 3),
+      new SetIntakeRunning(m_intake, 1),
+      new RunLauncherTimed(m_launcher, 1650, 3),
       new RunLauncherTimed(m_launcher, 0, 0.01)
     );
   }

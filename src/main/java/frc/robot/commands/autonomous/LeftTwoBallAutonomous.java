@@ -40,7 +40,7 @@ public class LeftTwoBallAutonomous extends AutonomousRoutine {
       new Translation2d(0.0 , 0.65)
     ),
 
-    new Pose2d(1.3,0.65,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(1.8,0.65,Rotation2d.fromDegrees(10.0)),
     DriveConstants.CONFIG);
 
     private final Trajectory originTrajectory = TrajectoryGenerator.generateTrajectory(
@@ -50,7 +50,7 @@ public class LeftTwoBallAutonomous extends AutonomousRoutine {
       new Translation2d(-1/3/2 ,-0.8/2)
     ),
 
-    new Pose2d(-1.3,-0.8,Rotation2d.fromDegrees(0.0)),
+    new Pose2d(-1.8,-0.8,Rotation2d.fromDegrees(-10)),
     DriveConstants.CONFIG);
 
   /** Creates a new BasicAutonomous. */
@@ -64,16 +64,17 @@ public class LeftTwoBallAutonomous extends AutonomousRoutine {
       //new SetStageingRunning(m_staging, 1),
       //new RunLauncherTimed(m_launcher, 1725, 1),
       new AutoExtendIntake(m_intake),
-      new SetStageingRunning(m_staging, 0),
+      //new SetStageingRunning(m_staging, 0),
       new SetIntakeRunning(m_intake, 1),
       new TrajectoryFollowRelative(cargoTwoTrajectory, m_drivetrain),
       //new RunIntakeTimed(m_intake, 1,0.75),
-      new WaitCommand(0.5),
+      //new WaitCommand(0.5),
       //new TrajectoryFollowRelative(originTrajectory, m_drivetrain),
       new StopDriving(m_drivetrain),
-      new RunLauncherTimed(m_launcher, 1600, 0.5),
+      new RunLauncherTimed(m_launcher, 1650, 0.5),
       new SetStageingRunning(m_staging, 1),
-      new RunLauncherTimed(m_launcher, 1600, 3),
+      new SetIntakeRunning(m_intake, 1),
+      new RunLauncherTimed(m_launcher, 1650, 3),
       new RunLauncherTimed(m_launcher, 0, 0.01)
     );
   }

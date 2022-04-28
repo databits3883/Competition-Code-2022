@@ -146,7 +146,7 @@ public class RobotContainer {
   //end remove
 
 
-  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1550),()->m_launcher.setDutyCycle(0), m_launcher);
+  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1650),()->m_launcher.setDutyCycle(0), m_launcher);//1550
   private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1000),()->m_launcher.setDutyCycle(0), m_launcher);
 
 
