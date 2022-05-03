@@ -43,6 +43,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.SafetyOverrideRegistry;
 import frc.robot.subsystems.Vision;
+import frc.robot.util.DemoJoystick;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -60,8 +61,10 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   
   private final Command m_defaultAutonomous = new PrintCommand("No Autonomous Selected");
-  private final Joystick m_stick = new Joystick(0);
+  private final Joystick m_demoLeaderStick = new Joystick(0);
   private final Joystick m_copilot = new Joystick(1);
+
+  private final Joystick m_stick = new DemoJoystick(2, m_demoLeaderStick, 16,11);
 
 
   private final Intake m_intake = new Intake();
