@@ -33,6 +33,7 @@ public class CargoStaging extends SubsystemBase {
   StagingState frozen;
 
   private Notifier m_autoRunner;
+  private double m_lastSet =0;
 
   /** Creates a new CargoStaging. */
   public CargoStaging() {
@@ -40,6 +41,7 @@ public class CargoStaging extends SubsystemBase {
     m_motor.setInverted(true);
     m_motor.setIdleMode(IdleMode.kBrake);
 
+    
 
 
     frozen = new StagingState(){
@@ -106,26 +108,39 @@ public class CargoStaging extends SubsystemBase {
 
   private void autoRunIn(){
     m_motor.set(IN_SPEED);
+    m_lastSet = IN_SPEED;
   }
   private void autoRunOut(){
     m_motor.set(OUT_SPEED);
+    m_lastSet = OUT_SPEED;
   }
   private void autoStop(){
     m_motor.set(0);
     m_motor.setInverted(true);
+    m_lastSet =0;
   }
 
   public void runIn(){
     leaveAutoStage();
-    m_motor.set(IN_SPEED);
+    if(m_lastSet != IN_SPEED){
+      m_motor.set(IN_SPEED);
+      m_lastSet = IN_SPEED;
+    }
   }
   public void runOut(){
     leaveAutoStage();
-    m_motor.set(OUT_SPEED);
+    if(m_lastSet != OUT_SPEED){
+      m_motor.set(OUT_SPEED);
+      m_lastSet = OUT_SPEED;
+    }
   }
   public void stop(){
     leaveAutoStage();
-    m_motor.set(0);
+    if(m_lastSet !=0){
+      m_motor.set(0);
+      m_lastSet =0;
+    }
+    
   }
 
   public void leaveAutoStage(){

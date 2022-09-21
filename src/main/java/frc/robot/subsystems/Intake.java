@@ -34,6 +34,9 @@ public class Intake extends SubsystemBase implements SafetyOverridable {
   static final int RAISE_SLOT = 0;
   static final int LOWER_SLOT =1;
 
+  private double lastInSpeed =0;
+  private double lastLiftSpeed =0;
+
 
   public Intake() {
     m_takeMotor  = new CANSparkMax(INTAKE_CHANNEL,MotorType.kBrushless);
@@ -76,7 +79,10 @@ public class Intake extends SubsystemBase implements SafetyOverridable {
   
   public void takeInOrOut(double speed){
     if(speed!=0) IntakeDisableFlag = false;
-    m_takeMotor.set(speed);
+    if(speed != lastInSpeed){ 
+      m_takeMotor.set(speed);
+      lastInSpeed = speed;
+    }
   }
 
   public double getEncoder(){
@@ -84,7 +90,10 @@ public class Intake extends SubsystemBase implements SafetyOverridable {
   }
 
   public void setIntakeLowerSpeed(double speed){
-    m_raiseMotor.set(speed);
+    if(speed != lastLiftSpeed){
+      m_raiseMotor.set(speed);
+      lastLiftSpeed = speed;
+    }
   }
 
   private REVLibError setHeight(double height){

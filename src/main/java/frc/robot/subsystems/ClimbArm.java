@@ -37,6 +37,10 @@ public class ClimbArm extends SubsystemBase implements SafetyOverridable {
 
   
   final PowerDistribution m_distributionBoard;
+
+
+  private double m_lastLiftSpeed =0;
+  private double m_lastTiltSpeed =0;
   /** Creates a new ClimbArm. */
   public ClimbArm() {
     //m_liftWinch = new PWMSparkMax(LENGTH_WINCH_CHANNEL);
@@ -76,10 +80,16 @@ public class ClimbArm extends SubsystemBase implements SafetyOverridable {
   }
 
   public void setExtensionSpeed(double speed){
-    m_liftLeader.set(-speed);
+    if(m_lastLiftSpeed != speed){
+      m_liftLeader.set(-speed);
+      m_lastLiftSpeed = speed;
+    }
   }
   public void setAngleWinchSpeed(double speed){
-    m_angleWinchMotor.set(-speed);
+    if(m_lastTiltSpeed != speed){
+      m_angleWinchMotor.set(-speed);
+      m_lastTiltSpeed = speed;
+    }
   }
 
   public double getAngleWinchCurrent(){

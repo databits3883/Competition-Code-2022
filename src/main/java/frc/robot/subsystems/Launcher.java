@@ -34,6 +34,9 @@ public class Launcher extends SubsystemBase {
 
   private double ratio = 0.6;
 
+
+  private double lastSpeed =0;
+
   /** Creates a new Launcher. */
   public Launcher() {
 
@@ -70,13 +73,24 @@ public class Launcher extends SubsystemBase {
   }
 
   public void SetShooterSpeed(double rpm){
-    m_controller.setReference(rpm, ControlType.kVelocity);
-    m_secondaryController.setReference(rpm/ratio, ControlType.kVelocity);
+    if(rpm != lastSpeed){
+      m_controller.setReference(rpm, ControlType.kVelocity);
+      m_secondaryController.setReference(rpm/ratio, ControlType.kVelocity);
+      lastSpeed = rpm;
+    }
   }
 
   public void setDutyCycle(double dutyCycle){
-    m_launchMotor.set(dutyCycle);
-    m_secondary.set(dutyCycle/ratio);
+    if(-dutyCycle != lastSpeed){
+      m_launchMotor.set(dutyCycle/ratio);
+      m_secondary.set(dutyCycle);
+      lastSpeed = -dutyCycle;
+    }
+  }
+
+  public  void  SetMaxSpeed() {
+    m_launchMotor.set(1.00);
+    m_secondary.set(1.00);    
   }
   public double getSetSpeed(){
     return m_encoder.getVelocity();

@@ -92,6 +92,7 @@ public class RobotContainer {
   private final JoystickButton m_outtakeButton = new JoystickButton(m_copilot, 8);
   private final JoystickButton m_stageInButton = new JoystickButton(m_copilot, 9);
   private final JoystickButton m_stageOutButton = new JoystickButton(m_copilot, 8);
+  private final JoystickButton m_setShooterMax = new JoystickButton(m_stick,12);
 
   private final JoystickButton m_calibrationButton = new JoystickButton(m_stick, 8);
 
@@ -209,6 +210,7 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_outtakeButton.whenHeld(m_takeOut);
     m_stageInButton.whenHeld(m_manualStageIn);
     m_stageOutButton.whenHeld(m_manualStageOut);
+    m_setShooterMax.whileActiveOnce(new InstantCommand(() ->m_launcher.SetMaxSpeed()));
 
     m_calibrationButton.whenPressed(m_calibrateDrivetrain);
 

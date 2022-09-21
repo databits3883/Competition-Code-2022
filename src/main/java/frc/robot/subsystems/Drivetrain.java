@@ -155,6 +155,9 @@ private final Field2d m_fieldTracker;
 
     private CANCoder m_calibrateEncoder;
 
+    private double lastAngleSP = 0;
+    private double lastSpeedSP =0;
+
     Module(int velocityChannel,int rotationChannel, int calibrationChannel){
       m_rotationMotor = new CANSparkMax(rotationChannel, MotorType.kBrushless);
       m_rotationEncoder = m_rotationMotor.getEncoder();
@@ -200,10 +203,16 @@ private final Field2d m_fieldTracker;
 
     public void setState(SwerveModuleState state){
       state = SwerveModuleState.optimize(state, new Rotation2d(m_rotationEncoder.getPosition()));
-      m_velocityController.setReference(state.speedMetersPerSecond, ControlType.kVelocity);
-      m_rotationController.setReference(
-        mapAngleToNearContinuous(state.angle.getRadians()),
-        ControlType.kPosition);
+      if(state.speedMetersPerSecond != lastSpeedSP){
+        m_velocityController.setReference(state.speedMetersPerSecond, ControlType.kVelocity);
+        lastSpeedSP = state.speedMetersPerSecond;
+      }
+
+      double angle = mapAngleToNearContinuous(state.angle.getRadians());
+      if(angle != lastAngleSP){
+        m_rotationController.setReference(angle,ControlType.kPosition);
+        lastAngleSP = angle;
+      }
     }
 
     public void calibrate(){

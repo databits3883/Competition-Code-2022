@@ -70,13 +70,13 @@ public class LeftTwoBallVision extends AutonomousRoutine {
       //new TrajectoryFollowRelative(zeroTrajectory , m_drivetrain),
       new DrivetrainCalibration(m_drivetrain),
       new InstantCommand(() -> m_drivetrain.resetGyro()),
-      new RunLauncherTimed(m_launcher, 1825, 1),
+      new RunLauncherTimed(m_launcher, 1800, 1),
       parallel(
           new TurnToGoal(m_drivetrain,m_vision),
           new WaitCommand(2)
       ),
       new SetStageingRunning(m_staging, 1),
-      new RunLauncherTimed(m_launcher, 1825, 1),
+      new RunLauncherTimed(m_launcher, 1800, 1),
       new AutoExtendIntake(m_intake),
       new SetStageingRunning(m_staging, 0),
       new SetIntakeRunning(m_intake, 1),
@@ -85,13 +85,13 @@ public class LeftTwoBallVision extends AutonomousRoutine {
       new WaitCommand(0.5),
       new TrajectoryFollowAbsolute(originTrajectoryAbsolute, m_drivetrain),
       new StopDriving(m_drivetrain),
-      new RunLauncherTimed(m_launcher, 1825, 0.5),
+      new RunLauncherTimed(m_launcher, 1800, 0.5),
       new SetStageingRunning(m_staging, 1),
       parallel(
           new TurnToGoal(m_drivetrain,m_vision),
           new WaitCommand(2)
       ),
-      new RunLauncherTimed(m_launcher, 1825, 3),
+      new RunLauncherTimed(m_launcher, 1800, 3),
       new RunLauncherTimed(m_launcher, 0, 0.01)
            
       
