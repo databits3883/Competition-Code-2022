@@ -71,7 +71,7 @@ public class Launcher extends SubsystemBase {
 
     Shuffleboard.getTab("Debug").addNumber("launcher speed", m_encoder::getVelocity);
   }
-
+//set shooter speed
   public void SetShooterSpeed(double rpm){
     if(rpm != lastSpeed){
       m_controller.setReference(rpm, ControlType.kVelocity);
