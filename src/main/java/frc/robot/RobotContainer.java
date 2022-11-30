@@ -36,11 +36,7 @@ import frc.robot.commands.autonomous.*;
 import frc.robot.commands.autonomous.drive.TrajectoryFollowRelative;
 import frc.robot.commands.drive.*;
 import frc.robot.commands.climb.*;
-import frc.robot.subsystems.CargoStaging;
-import frc.robot.subsystems.ClimbArm;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.SafetyOverrideRegistry;
 import frc.robot.subsystems.Vision;
 
@@ -64,25 +60,9 @@ public class RobotContainer {
   private final Joystick m_copilot = new Joystick(1);
 
 
-  private final Intake m_intake = new Intake();
-  private final CargoStaging m_staging = new CargoStaging();
-  private final Launcher m_launcher = new Launcher();
+
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final Vision m_vision = new Vision();
-  private final ClimbArm m_climb = new ClimbArm();
-
-
-  private final Command m_leftTwoBallAutonomous = new LeftTwoBallAutonomous(m_launcher, m_drivetrain, m_intake,m_staging);
-  private final Command m_middleTwoBallAutonomous = new CenterTwoBallAutonomous(m_launcher, m_drivetrain, m_intake,m_staging);
-  private final Command m_rightTwoBallAutonomous = new RightTwoBallAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
-  private final Command m_launchAndExitAutonomous = new LaunchAndExitAutonomous(m_launcher, m_drivetrain, m_intake, m_staging);
-  private final Command m_threeOrFourBallAutonomous = new ThreeOrFourBallAutonomous(m_launcher, m_drivetrain, m_intake, m_staging, m_vision);
-  private final Command m_visionAuto = new Vision5Ball(m_launcher, m_drivetrain, m_intake, m_staging, m_vision);
-  private final Command m_leftVisionTwoball = new LeftTwoBallVision(m_launcher, m_drivetrain, m_intake, m_staging,m_vision);
-
-
-  private final Command m_extendIntake = new ExtendIntake(m_intake);
-  private final Command m_autLowerIntakeCommand = new AutoExtendIntake(m_intake);
 
 
 
@@ -113,13 +93,7 @@ public class RobotContainer {
   
 
   private final Command m_manualDrive = new JoystickDrive(m_drivetrain, m_stick);
-  private final Command m_aimDrive = new AcquireTarget(m_stick, m_drivetrain, m_vision,m_launcher);
-
-  private final Command m_manualClimb = new DigitalClimb(m_climb,
-  ()->m_copilot.getRawButton(6),
-  ()->m_copilot.getRawButton(7),
-  ()->m_copilot.getRawButton(4),
-  ()->m_copilot.getRawButton(5));
+  
 
   private final Command m_calibrateDrivetrain = new DrivetrainCalibration(m_drivetrain);
   //private final Command m_simpleAutonomous = new BasicAutonomous(m_launcher, m_drivetrain, m_intake);
@@ -136,29 +110,11 @@ public class RobotContainer {
     DriveConstants.CONFIG);
 
   private final TrajectoryFollowRelative m_exitTarmacAutonomous = new TrajectoryFollowRelative(m_trajectory, m_drivetrain);
-  private final RunIntake m_takeIn = new RunIntake(m_intake,1);
-  private final RunIntake m_takeOut = new RunIntake(m_intake,-1);
-
-  //TODO:remove
-  private final StartEndCommand m_manualStageIn = new StartEndCommand(
-    m_staging::runIn, ()->{m_staging.stop();m_staging.resetAutoStaging();}, m_staging);
-  private final StartEndCommand m_manualStageOut = new StartEndCommand(
-      m_staging::runOut, ()->{m_staging.stop();m_staging.resetAutoStaging();}, m_staging);
-  //end remove
 
 
-  private final Command m_upperShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1550),()->m_launcher.setDutyCycle(0), m_launcher);
-  private final Command m_lowerShoot = new StartEndCommand(()->m_launcher.SetShooterSpeed(1000),()->m_launcher.setDutyCycle(0), m_launcher);
 
 
-  private final RaiseOverMid m_raiseClimbOverMid = new RaiseOverMid(m_climb);
-  private final ClimbPull m_pullOntoBar = new ClimbPull(m_climb);
-  private final Command m_prepNextBar = new SequentialCommandGroup(
-    new ReleaseOffBar(m_climb),
-    new DropArmForward(m_climb),
-    new ExtendClimbArm(m_climb)
-  );
-  private final Command m_tiltOntoBar = new RetractIntoBar(m_climb);
+
 
   /*private final Command m_pullClimbToZero = new StartEndCommand(()->{m_climb.setAngleWinchSpeed(0.5);m_climb.setExtensionSpeed(-0.4);},
   ()->{m_climb.setAngleWinchSpeed(0);m_climb.setExtensionSpeed(0);}, m_climb);*/
@@ -183,14 +139,10 @@ public class RobotContainer {
     configureButtonBindings();
 
     m_drivetrain.setDefaultCommand(m_manualDrive);
-    m_climb.setDefaultCommand(m_manualClimb);
+    
   }
 
-private final Button m_drawIntakeInButton = new JoystickButton(m_copilot, 12)
-.whileHeld(new StartEndCommand(()->m_intake.runDrawAtSpeed(0.3), ()->m_intake.runDrawAtSpeed(0), m_intake));
-private final Button m_drawIntakeOutButton = new JoystickButton(m_copilot, 11)
-.whileHeld(new StartEndCommand(()->m_intake.runDrawAtSpeed(-0.3), ()->m_intake.runDrawAtSpeed(0), m_intake));
-private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake);
+
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -204,18 +156,11 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
     m_stick.setTwistChannel(2);
     m_stick.setThrottleChannel(3);
 
-    m_aimButton.whileActiveOnce(m_aimDrive);
 
-    m_intakeButton.whenHeld(m_takeIn);
-    m_outtakeButton.whenHeld(m_takeOut);
-    m_stageInButton.whenHeld(m_manualStageIn);
-    m_stageOutButton.whenHeld(m_manualStageOut);
-    m_setShooterMax.whileActiveOnce(new InstantCommand(() ->m_launcher.SetMaxSpeed()));
 
     m_calibrationButton.whenPressed(m_calibrateDrivetrain);
 
-    m_upperLaunchToggle.toggleWhenPressed(m_upperShoot);
-    m_lowerLaunchToggle.toggleWhenPressed(m_lowerShoot);
+
 
     new JoystickButton(m_copilot, 3)
       .whenPressed(new InstantCommand(SafetyOverrideRegistry.getInstance()::disableSafety))
@@ -251,6 +196,6 @@ private final SetIntakeToMid m_perpIntakeForClimb = new SetIntakeToMid(m_intake)
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return AutonomousRoutineRegistry.getInstance().getSelected();
+    return null;
   }
 }

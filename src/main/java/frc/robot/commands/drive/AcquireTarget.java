@@ -13,21 +13,21 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.commands.autonomous.Tracking.TurnToGoal;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Launcher;
+
 import frc.robot.subsystems.Vision;
 
 public class AcquireTarget extends TurnToGoal {
 
-  Launcher m_launcher;
+
   Vision m_vision;
 
   /** Creates a new AcquireTarget. */
-  public AcquireTarget(Joystick stick, Drivetrain drivetrain, Vision vision, Launcher launcher) {
+  public AcquireTarget(Joystick stick, Drivetrain drivetrain, Vision vision) {
     // Use addRequirements() here to declare subsystem dependencies.
     super(drivetrain, vision);
-    m_launcher = launcher;
+
     m_vision = vision;
-    addRequirements(launcher);
+    
   }
   @Override
   public void initialize(){
@@ -37,12 +37,7 @@ public class AcquireTarget extends TurnToGoal {
   @Override
   public void execute(){
     super.execute();
-    //double setSpeed = 120*m_vision.getDistanceVision() + 964;
 
-    //double correctedSpeed = Math.min(1900, Math.max(1500, setSpeed));
-    //m_validSpeeEntry.setBoolean(correctedSpeed == setSpeed);
-    //if(m_vision.isTargetValid()) m_launcher.SetShooterSpeed(correctedSpeed);
-    m_launcher.SetShooterSpeed(1650);
   }
   @Override
   public ChassisSpeeds getTranslationalSpeed(){
